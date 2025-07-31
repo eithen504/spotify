@@ -147,3 +147,15 @@
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
   background: #888;
 }
+
+@media (max-height: 633px) {
+  .track-art-size {
+    max-width: 18rem;
+  }
+}
+
+@media (min-height: 634px) {
+  .track-art-size {
+    max-width: 27rem;
+  }
+}
