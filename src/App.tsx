@@ -1,11 +1,11 @@
 // App.tsx
 import { Routes, Route } from 'react-router-dom';
-import DesktopMainLayout from './layouts/DesktopMainLayout/DesktopMainLayout';
+import AppLayout from './layouts/AppLayout';
 
 function App() {
   return (
     <Routes>
-      <Route element={<DesktopMainLayout />}>
+      <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
       </Route>

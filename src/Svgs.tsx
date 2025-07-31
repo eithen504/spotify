@@ -689,23 +689,36 @@ const CrossIcon = ({ width = "24", height = "24" }) => (
 )
 
 const LeftArrowIcon = ({ width = "24", height = "24" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width={`${width}`} height={`${height}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6" /></svg>
+    <svg
+        width={`${width}`}
+        height={`${height}`}
+        data-encore-id="icon"
+        role="img"
+        aria-hidden="true"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        className="rotate-180"
+    >
+        <path
+            d="M5.5 1.5a.5.5 0 0 0 0 1l5.5 5.5-5.5 5.5a.5.5 0 1 0 1 1l6-6a.5.5 0 0 0 0-1l-6-6a.5.5 0 0 0-1 0"
+        ></path>
+    </svg>
 )
 
 const RightArrowIcon = ({ width = "24", height = "24" }) => (
     <svg
-    width={`${width}`}
-    height={`${height}`}
-    data-encore-id="icon"
-    role="img"
-    aria-hidden="true"
-    viewBox="0 0 16 16"
-    fill="currentColor"
->
-    <path
-        d="M5.5 1.5a.5.5 0 0 0 0 1l5.5 5.5-5.5 5.5a.5.5 0 1 0 1 1l6-6a.5.5 0 0 0 0-1l-6-6a.5.5 0 0 0-1 0"
-    ></path>
-</svg>
+        width={`${width}`}
+        height={`${height}`}
+        data-encore-id="icon"
+        role="img"
+        aria-hidden="true"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+    >
+        <path
+            d="M5.5 1.5a.5.5 0 0 0 0 1l5.5 5.5-5.5 5.5a.5.5 0 1 0 1 1l6-6a.5.5 0 0 0 0-1l-6-6a.5.5 0 0 0-1 0"
+        ></path>
+    </svg>
 )
 
 const InstagramIcon = ({ width = "24", height = "24" }) => (
