@@ -86,7 +86,7 @@ const TrackInfo = () => {
                 <img
                     src={'https://i.scdn.co/image/ab67616d000048513899712512f50a8d9e01e951'}
                     alt={'trackDetails.title'}
-                    className="w-14 h-14 min-w-[56px] min-h-[56px] flex-shrink-0 rounded object-cover group-hover:opacity-70 transition-opacity"
+                    className={`w-14 h-14 min-w-[56px] min-h-[56px] flex-shrink-0 rounded object-cover ${isTouchScreen ? "group-active:opacity-70" : "group-hover:opacity-70"} transition-opacity`}
                 />
 
                 <button className={`absolute cursor-pointer text-gray-400 hover:text-white bg-black/60 rounded-full top-0 right-0 opacity-0 ${isTouchScreen ? "group-active:opacity-100" : "group-hover:opacity-100"} transition-opacity p-1`}

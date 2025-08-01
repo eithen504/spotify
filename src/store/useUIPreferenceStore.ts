@@ -7,6 +7,7 @@ interface Preferences {
   showNowPlayingView: boolean;
   isNowPlayingViewExpanded: boolean;
   isNowPlayingViewFullScreen: boolean;
+  isMiniPlayerWindowOpen: boolean;
 }
 
 interface UIPreferencesStore {
@@ -22,6 +23,7 @@ export const useUIPreferencesStore = create<UIPreferencesStore>((set) => ({
     showNowPlayingView: false,
     isNowPlayingViewExpanded: false,
     isNowPlayingViewFullScreen: false,
+    isMiniPlayerWindowOpen: false,
   },
   setPreferences: (newPreferences) =>
     set((state) => ({
