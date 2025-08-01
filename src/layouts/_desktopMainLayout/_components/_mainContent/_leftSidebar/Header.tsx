@@ -1,10 +1,12 @@
 import useBreakPoint from "../../../../../hooks/useBreakPoint";
+import useIsTouchScreen from "../../../../../hooks/useIsTouchScreen";
 import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore";
 import { CollapsedIcon, ExpandIcon, LibraryIcon, MinimizeIcon, PlusIcon, UnCollapsedIcon } from "../../../../../Svgs"
 
 const Header = () => {
     const { preferences: { leftPanelSize, isLeftSidebarExpanded }, setPreferences } = useUIPreferencesStore();
     const [breakpoint] = useBreakPoint();
+    const isTouchScreen = useIsTouchScreen();
 
     const handleCollapsedLibrary = () => {
         if (breakpoint == "lg") {
@@ -60,7 +62,7 @@ const Header = () => {
                             {
                                 !isLeftSidebarExpanded && (
                                     <button
-                                        className="text-[#8f8f8f] hover:text-[#ffffff] cursor-pointer transform -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition duration-300 ease-out"
+                                        className={`text-[#8f8f8f] hover:text-[#ffffff] cursor-pointer transform ${isTouchScreen ? "opacity-100 translate-x-0": " opacity-0 -translate-x-4"} group-hover:translate-x-0 group-hover:opacity-100 transition duration-300 ease-out`}
                                         title="Collapse Your library"
                                         onClick={handleCollapsedLibrary}
                                     >
@@ -69,7 +71,7 @@ const Header = () => {
                                 )
                             }
 
-                            <p className={`${isLeftSidebarExpanded ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
+                            <p className={`${isLeftSidebarExpanded || isTouchScreen ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
                                 Your Library
                             </p>
                         </div>

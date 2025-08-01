@@ -161,14 +161,14 @@
   }
 }
 
-@media (max-height: 500px) {
+@media (max-height: 600px) {
   .custom-img {
-    width: 10rem;
-    height: 10rem;
+    width: 11rem;
+    height: 11rem;
   }
 }
 
-@media (min-height: 501px) {
+@media (min-height: 601px) {
   .custom-img {
     width: 20rem;
     height: 20rem;
