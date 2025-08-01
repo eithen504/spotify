@@ -10,3 +10,14 @@ export type NavigationItem = {
     Icon: JSX.Element;
     ActiveIcon: JSX.Element;
 }
+
+export type LeftSidebarSortOption = "Recently Added" | "Alphabetical A To Z" | "Alphabetical Z To A";
+
+export type LeftSidebarViewLabel = 'Compact List' | 'Default List' | 'Compact Grid' | 'Default Grid';
+
+export type LeftSidebarViewOption = {
+    label: LeftSidebarViewLabel;
+    icon: JSX.Element;
+}
+
+export type LeftSidebarViewIcon = Record<LeftSidebarViewLabel, JSX.Element>

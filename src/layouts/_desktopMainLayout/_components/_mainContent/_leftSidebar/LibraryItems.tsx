@@ -1,4 +1,3 @@
-import useIsTouchScreen from '../../../../../hooks/useIsTouchScreen';
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
 import { PinIcon } from '../../../../../Svgs'
 
@@ -45,13 +44,17 @@ const items = [
 
 const LibraryItems = () => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-    const isTouchScreen = useIsTouchScreen();
 
     if (leftPanelSize <= 10) {
         return (
             <div className="mb-3">
                 <div className="flex justify-center group">
-                    <div className={`p-2 ${isTouchScreen ? "active:bg-[#1F1F1F]" : "hover:bg-[#1F1F1F]"} rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer`}>
+                    <div
+                        className="p-2 dynamic-bg-hover rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer"
+                        style={{
+                            '--bgHoverColor': '#1F1F1F',
+                        } as React.CSSProperties}
+                    >
                         <img
                             src={"https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da849d25907759522a25b86a3033"}
                             alt={"Liked Songs"}
@@ -67,7 +70,12 @@ const LibraryItems = () => {
                                 key={idx}
                                 className="flex justify-center group"
                             >
-                                <div className={`p-2 ${isTouchScreen ? "active:bg-[#1F1F1F]" : "hover:bg-[#1F1F1F]"} rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer`}>
+                                <div
+                                    className="p-2 dynamic-bg-hover rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer"
+                                    style={{
+                                        '--bgHoverColor': '#1F1F1F',
+                                    } as React.CSSProperties}
+                                >
                                     <img
                                         src={item.image}
                                         alt={item.title}
@@ -85,7 +93,12 @@ const LibraryItems = () => {
     return (
         <div className="flex-1 px-3 mb-4">
             {/* Liked Tracks */}
-            <div className={`flex items-center space-x-3 ${isTouchScreen ? "active:bg-[#1F1F1F]" : "hover:bg-[#1F1F1F]"} p-2 rounded cursor-pointer group`}>
+            <div
+                className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                style={{
+                    '--bgHoverColor': '#1F1F1F',
+                } as React.CSSProperties}
+            >
                 <div className="w-12 h-12 rounded overflow-hidden">
                     <img
                         src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
@@ -108,9 +121,11 @@ const LibraryItems = () => {
                 items.map((item, idx) => (
                     <div
                         key={idx}
-                        className={`flex items-center space-x-3 ${isTouchScreen ? "active:bg-[#1F1F1F]" : "hover:bg-[#1F1F1F]"} p-2 rounded cursor-pointer group`}
+                        className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                        style={{
+                            '--bgHoverColor': '#1F1F1F',
+                        } as React.CSSProperties}
                     >
-
                         <div className="w-12 h-12 rounded overflow-hidden">
                             <img
                                 src={item.image}

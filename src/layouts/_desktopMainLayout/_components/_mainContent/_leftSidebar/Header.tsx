@@ -1,12 +1,10 @@
 import useBreakPoint from "../../../../../hooks/useBreakPoint";
-import useIsTouchScreen from "../../../../../hooks/useIsTouchScreen";
 import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore";
 import { CollapsedIcon, ExpandIcon, LibraryIcon, MinimizeIcon, PlusIcon, UnCollapsedIcon } from "../../../../../Svgs"
 
 const Header = () => {
     const { preferences: { leftPanelSize, isLeftSidebarExpanded }, setPreferences } = useUIPreferencesStore();
     const [breakpoint] = useBreakPoint();
-    const isTouchScreen = useIsTouchScreen();
 
     const handleCollapsedLibrary = () => {
         if (breakpoint == "lg") {
@@ -62,7 +60,10 @@ const Header = () => {
                             {
                                 !isLeftSidebarExpanded && (
                                     <button
-                                        className={`text-[#8f8f8f] hover:text-[#ffffff] cursor-pointer transform ${isTouchScreen ? "opacity-100 translate-x-0": " opacity-0 -translate-x-4"} group-hover:translate-x-0 group-hover:opacity-100 transition duration-300 ease-out`}
+                                        className="text-[#8f8f8f] dynamic-text-hover cursor-pointer transform -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition duration-300 ease-out"
+                                        style={{
+                                            '--textHoverColor': '#ffffff',
+                                        } as React.CSSProperties}
                                         title="Collapse Your library"
                                         onClick={handleCollapsedLibrary}
                                     >
@@ -71,16 +72,27 @@ const Header = () => {
                                 )
                             }
 
-                            <p className={`${(isLeftSidebarExpanded || isTouchScreen) ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
+                            <p className={`${isLeftSidebarExpanded ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
                                 Your Library
                             </p>
                         </div>
 
                         <div className="flex items-center space-x-2">
-                            <button className="p-[10px] rounded-full text-[#8f8f8f] hover:text-[#ffffff] bg-[#1f1f1f] hover:bg-[#282828] flex items-center justify-center transition cursor-pointer">
+                            <button
+                                className="p-[10px] rounded-full text-[#8f8f8f] dynamic-text-hover bg-[#1f1f1f] dynamic-bg-hover flex items-center justify-center transition cursor-pointer"
+                                style={{
+                                    '--textHoverColor': '#ffffff',
+                                    '--bgHoverColor': '#282828'
+                                } as React.CSSProperties}
+                            >
                                 <PlusIcon width="16" height="16" />
                             </button>
-                            <button className="p-[9.5px] rounded-full text-[#8f8f8f] hover:text-[#ffffff] hover:bg-[#1f1f1f] flex items-center justify-center transition cursor-pointer"
+                            <button
+                                className="p-[9.5px] rounded-full text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover flex items-center justify-center transition cursor-pointer"
+                                style={{
+                                    '--textHoverColor': '#ffffff',
+                                    '--bgHoverColor': '#1f1f1f'
+                                } as React.CSSProperties}
                                 title={isLeftSidebarExpanded ? "Minimize Your Library" : "Expand Your Library"}
                                 onClick={handleToggleExpandLibrary}
                             >
@@ -96,16 +108,12 @@ const Header = () => {
                     </>
                 ) : (
                     <>
-                        {/* <div className="flex flex-col items-center justify-center gap-4">
-                            <button className="text-[#8f8f8f] hover:text-[#ffffff] transition">
-                                <LibraryIcon width="16" height="16" />
-                            </button>
-                            <button className="text-[#8f8f8f] hover:text-[#ffffff] transition">
-                                <PlusIcon width="16" height="16" />
-                            </button>
-                        </div> */}
                         <div className="flex flex-col items-center justify-center gap-4 w-full h-full">
-                            <button className="text-[#8f8f8f] hover:text-[#ffffff] transition mt-[6px] cursor-pointer group/button"
+                            <button
+                                className="text-[#8f8f8f] dynamic-text-hover transition mt-[6px] cursor-pointer group/button"
+                                style={{
+                                    '--textHoverColor': '#ffffff',
+                                } as React.CSSProperties}
                                 title="Open Your library"
                                 onClick={handleOpenLibrary}
                             >
@@ -117,7 +125,13 @@ const Header = () => {
                                 </span>
                             </button>
 
-                            <button className="text-[#8f8f8f] hover:text-[#ffffff] bg-[#1f1f1f] hover:bg-[#2A2A2A] transition p-[10px] rounded-full cursor-pointer">
+                            <button
+                                className="text-[#8f8f8f] dynamic-text-hover bg-[#1f1f1f] dynamic-bg-hover transition p-[10px] rounded-full cursor-pointer"
+                                style={{
+                                    '--textHoverColor': '#ffffff',
+                                    '--bgHoverColor': '#282828'
+                                } as React.CSSProperties}
+                            >
                                 <PlusIcon width="16" height="16" />
                             </button>
                         </div>

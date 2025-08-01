@@ -42,8 +42,11 @@ function Slider({
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(
-            "bg-[#ffffff] group-hover:bg-[#1ED45F] absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+            "bg-[#ffffff] dynamic-bg-group-hover absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
           )}
+          style={{
+            '--bgGroupHoverColor': '#1ED45F',
+          } as React.CSSProperties}
         />
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (

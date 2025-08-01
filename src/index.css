@@ -175,6 +175,15 @@
   }
 }
 
-.test:hover {
-  color: black;
+/* hover */
+.dynamic-text-hover:hover {
+  color: var(--textHoverColor, #ffffff);
+}
+
+.dynamic-bg-hover:hover {
+  background-color: var(--bgHoverColor, #ffffff);
+}
+
+.group:hover .dynamic-bg-group-hover {
+  background-color: var(--bgGroupHoverColor, #ffffff);
 }

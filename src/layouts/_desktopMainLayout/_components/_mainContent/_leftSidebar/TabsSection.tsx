@@ -54,7 +54,12 @@ const TabsSection = () => {
                         {
                             canScroll.left && (
                                 <>
-                                    <button className="absolute left-5 top-0 text-[#8f8f8f] hover:text-[#ffffff] bg-[#1f1f1f] hover:bg-[#2A2A2A] cursor-pointer rounded-full p-[7px] pointer-events-auto z-20"
+                                    <button
+                                        className="absolute left-5 top-0 text-[#8f8f8f] dynamic-text-hover bg-[#1F1F1F] dynamic-bg-hover cursor-pointer rounded-full p-[7px] pointer-events-auto z-20"
+                                        style={{
+                                            '--textHoverColor': '#ffffff',
+                                            '--bgHoverColor': '#282828',
+                                        } as React.CSSProperties}
                                         onClick={() => scroll("left")}
                                     >
                                         <LeftArrowIcon width="18" height="18" />
@@ -72,7 +77,10 @@ const TabsSection = () => {
                                 LEFT_SIDEBAR_TABS.map((tab) => (
                                     <button
                                         key={tab}
-                                        className="bg-[#2a2a2a] hover:bg-[#303030] cursor-pointer px-3 py-[6px] rounded-full text-sm font-medium"
+                                        className="bg-[#2a2a2a] dynamic-bg-hover cursor-pointer px-3 py-[6px] rounded-full text-sm font-medium"
+                                        style={{
+                                            '--bgHoverColor': '#303030',
+                                        } as React.CSSProperties}
                                     >
                                         {tab}
                                     </button>
@@ -82,7 +90,12 @@ const TabsSection = () => {
                         {
                             canScroll.right && (
                                 <>
-                                    <button className="absolute right-5 top-0 text-[#8f8f8f] hover:text-[#ffffff] bg-[#1f1f1f] hover:bg-[#2A2A2A] cursor-pointer rounded-full p-[7px] pointer-events-auto z-20"
+                                    <button
+                                        className="absolute right-5 top-0 text-[#8f8f8f] dynamic-text-hover bg-[#1F1F1F] dynamic-bg-hover cursor-pointer rounded-full p-[7px] pointer-events-auto z-20"
+                                        style={{
+                                            '--textHoverColor': '#ffffff',
+                                            '--bgHoverColor': '#282828',
+                                        } as React.CSSProperties}
                                         onClick={() => scroll("right")}
                                     >
                                         <RightArrowIcon width="18" height="18" />

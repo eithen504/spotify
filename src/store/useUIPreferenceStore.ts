@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { LeftSidebarSortOption, LeftSidebarViewLabel } from "../Types";
 
 interface Preferences {
   leftPanelSize: number;
@@ -8,6 +9,8 @@ interface Preferences {
   isNowPlayingViewExpanded: boolean;
   isNowPlayingViewFullScreen: boolean;
   isMiniPlayerWindowOpen: boolean;
+  sort: LeftSidebarSortOption;
+  view: LeftSidebarViewLabel
 }
 
 interface UIPreferencesStore {
@@ -24,6 +27,8 @@ export const useUIPreferencesStore = create<UIPreferencesStore>((set) => ({
     isNowPlayingViewExpanded: false,
     isNowPlayingViewFullScreen: false,
     isMiniPlayerWindowOpen: false,
+    sort: "Recently Added",
+    view: "Default List"
   },
   setPreferences: (newPreferences) =>
     set((state) => ({
