@@ -6,6 +6,7 @@ import type { ResizePanel } from '../../../../Types';
 import { useUIPreferencesStore } from '../../../../store/useUIPreferenceStore';
 import useBreakPoint from '../../../../hooks/useBreakPoint';
 import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
+import useIsTouchScreen from '../../../../hooks/useIsTouchScreen';
 
 const MainContent = () => {
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
@@ -13,6 +14,7 @@ const MainContent = () => {
     const [breakpoint] = useBreakPoint();
     const containerRef = useRef<HTMLDivElement>(null);
     const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
+    const isTouchScreen = useIsTouchScreen();
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -116,7 +118,7 @@ const MainContent = () => {
                                         onTouchStart={() => startResizing('left')}
                                     >
                                         <div
-                                            className={`w-[1px] h-[97%] bg-transparent group-hover:bg-white ${activeResizePanel == "left" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                            className={`w-[1px] h-[97%] bg-transparent ${isTouchScreen ? "group-active:bg-white": "group-hover:bg-white"}  ${activeResizePanel == "left" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
                                         />
                                     </div>
 
@@ -135,7 +137,7 @@ const MainContent = () => {
                                                     onTouchStart={() => startResizing('right')}
                                                 >
                                                     <div
-                                                        className={`w-[1px] h-[97%] bg-transparent group-hover:bg-white ${activeResizePanel == "right" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                                        className={`w-[1px] h-[97%] bg-transparent ${isTouchScreen ? "group-active:bg-white": "group-hover:bg-white"} ${activeResizePanel == "right" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
                                                     />
                                                 </div>
 

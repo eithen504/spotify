@@ -71,7 +71,7 @@ const Header = () => {
                                 )
                             }
 
-                            <p className={`${isLeftSidebarExpanded || isTouchScreen ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
+                            <p className={`${(isLeftSidebarExpanded || isTouchScreen) ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
                                 Your Library
                             </p>
                         </div>
