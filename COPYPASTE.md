@@ -671,3 +671,35 @@ export default function MobileMainLayout() {
         </div>
       </DrawerContent>
     </Drawer>
+
+## Small Panel Library Item
+ <>
+            <div className="flex justify-center group">
+                    <div className="p-2 hover:bg-[#1F1F1F] rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer">
+                        <img
+                            src={"https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da849d25907759522a25b86a3033"}
+                            alt={"Liked Songs"}
+                            className="w-12 h-12 rounded-[4px] object-cover"
+                        />
+                    </div>
+            </div>
+
+            {
+                items.map((item, idx) => {
+                        return (
+                            <div
+                                key={idx}
+                                className="flex justify-center group"
+                            >
+                                <div className="p-2 hover:bg-[#1F1F1F] rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer">
+                                    <img
+                                        src={item.image}
+                                        alt={item.title}
+                                        className="w-12 h-12 rounded-[4px] object-cover"
+                                    />
+                                </div>
+                            </div>
+                        )
+                })
+            }
+        </>

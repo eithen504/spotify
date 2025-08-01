@@ -1,11 +1,40 @@
 import { Slider } from "../../../../components/ui/slider"
-import { FullScreenIcon, HighVolumeIcon, MiniPlayerIcon, NowPlayingIcon, QueueIcon } from "../../../../Svgs"
+import { useUIPreferencesStore } from "../../../../store/useUIPreferenceStore"
+import { ExitScreenIcon, FullScreenIcon, HighVolumeIcon, MiniPlayerIcon, NowPlayingIcon, QueueIcon } from "../../../../Svgs"
 
 const RightSideControls = () => {
+    const { preferences: { showNowPlayingView, isNowPlayingViewFullScreen }, setPreferences } = useUIPreferencesStore()
+
+    const handleToggleNowPlayingView = () => {
+        if (showNowPlayingView) {
+            setPreferences({ showNowPlayingView: false })
+            localStorage.setItem("showNowPlayingView", "false")
+        } else {
+            setPreferences({ showNowPlayingView: true })
+            localStorage.setItem("showNowPlayingView", "true")
+        }
+    }
+
+    const handleToggleFullscreen = () => {
+        const elem = document.documentElement; 
+
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch((err) => {
+                console.error(`Error enabling full-screen mode: ${err.message}`);
+            });
+            setPreferences({ isNowPlayingViewExpanded: true, isNowPlayingViewFullScreen: true })
+        } else {
+            document.exitFullscreen();
+            setPreferences({ isNowPlayingViewExpanded: false, isNowPlayingViewFullScreen: false })
+        }
+    };
+
     return (
         <div className="flex items-center space-x-4 text-[#8f8f8f] w-1/4 justify-end">
             {/* NowPlaying Icon */}
-            <button className={`hidden lg:block hover:text-[#ffffff] cursor-pointer`}>
+            <button className={`${showNowPlayingView ? "text-[#1CC558]" : "hover:text-[#ffffff]"} hidden lg:block cursor-pointer`}
+                onClick={handleToggleNowPlayingView}
+            >
                 <NowPlayingIcon width="16" height="16" />
             </button>
 
@@ -34,9 +63,16 @@ const RightSideControls = () => {
             </button>
 
             {/* Fullscreen Icon */}
-            <button className={` hover:text-[#ffffff] cursor-pointer`}
+            <button className={`hover:text-[#ffffff] cursor-pointer`}
+                onClick={handleToggleFullscreen}
             >
-                <FullScreenIcon width="16" height="16" />
+                {
+                    isNowPlayingViewFullScreen ? (
+                        <ExitScreenIcon width="16" height="16" />
+                    ) : (
+                        <FullScreenIcon width="16" height="16" />
+                    )
+                }
             </button>
         </div>
     )

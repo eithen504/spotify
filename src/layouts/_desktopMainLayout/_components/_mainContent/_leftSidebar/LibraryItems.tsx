@@ -1,3 +1,4 @@
+import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
 import { PinIcon } from '../../../../../Svgs'
 
 const items = [
@@ -25,10 +26,60 @@ const items = [
         title: "Some One Like You",
         image: "https://i.scdn.co/image/ab67616d00001e02164feb363334f93b6458d2a9",
         description: "Playlist • Spotify"
+    },
+        {
+        title: "Some One Like You",
+        image: "https://i.scdn.co/image/ab67616d00001e02164feb363334f93b6458d2a9",
+        description: "Playlist • Spotify"
+    }  ,  {
+        title: "Some One Like You",
+        image: "https://i.scdn.co/image/ab67616d00001e02164feb363334f93b6458d2a9",
+        description: "Playlist • Spotify"
+    }   , {
+        title: "Some One Like You",
+        image: "https://i.scdn.co/image/ab67616d00001e02164feb363334f93b6458d2a9",
+        description: "Playlist • Spotify"
     }
 ];
 
 const LibraryItems = () => {
+    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+
+    if (leftPanelSize <= 10) {
+        return (
+            <div className="mb-3">
+                <div className="flex justify-center group">
+                    <div className="p-2 hover:bg-[#1F1F1F] rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer">
+                        <img
+                            src={"https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da849d25907759522a25b86a3033"}
+                            alt={"Liked Songs"}
+                            className="w-12 h-12 rounded-[4px] object-cover"
+                        />
+                    </div>
+                </div>
+
+                {
+                    items.map((item, idx) => {
+                        return (
+                            <div
+                                key={idx}
+                                className="flex justify-center group"
+                            >
+                                <div className="p-2 hover:bg-[#1F1F1F] rounded-[4px] transition-colors relative flex-shrink-0 cursor-pointer">
+                                    <img
+                                        src={item.image}
+                                        alt={item.title}
+                                        className="w-12 h-12 rounded-[4px] object-cover"
+                                    />
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        )
+    }
+
     return (
         <div className="flex-1 px-3 mb-4">
             {/* Liked Tracks */}

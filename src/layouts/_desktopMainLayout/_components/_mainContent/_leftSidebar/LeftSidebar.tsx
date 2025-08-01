@@ -33,7 +33,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
 
     return (
         <aside
-            className="w-[320px] bg-[#121212] text-white rounded-md flex flex-col h-full overflow-y-auto hide-scrollbar group"
+            className="bg-[#121212] text-white rounded-md flex flex-col h-full overflow-y-auto hide-scrollbar group"
             style={{ width: `${leftPanelSize}%` }}
             ref={sidebarRef}
         >

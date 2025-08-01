@@ -136,7 +136,8 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 10px; /* Same width as hover state */
+  width: 10px;
+  /* Same width as hover state */
   background: transparent;
 }
 
@@ -157,5 +158,19 @@
 @media (min-height: 634px) {
   .track-art-size {
     max-width: 35rem;
+  }
+}
+
+@media (max-height: 500px) {
+  .custom-img {
+    width: 10rem;
+    height: 10rem;
+  }
+}
+
+@media (min-height: 501px) {
+  .custom-img {
+    width: 20rem;
+    height: 20rem;
   }
 }

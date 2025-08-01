@@ -3,13 +3,16 @@ import { Outlet } from 'react-router-dom'
 import NowPlayingView from './_nowPlayingView/NowPlayingView'
 import { useEffect, useRef, useState } from 'react';
 import type { ResizePanel } from '../../../../Types';
+import { useUIPreferencesStore } from '../../../../store/useUIPreferenceStore';
+import useBreakPoint from '../../../../hooks/useBreakPoint';
+import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
 
 const MainContent = () => {
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
     const [isResizing, setIsResizing] = useState<boolean>(false);
+    const [breakpoint] = useBreakPoint();
     const containerRef = useRef<HTMLDivElement>(null);
-    const [leftPanelSize, setLeftPanelSize] = useState(22);
-    const [rightPanelSize, setRightPanelSize] = useState(20);
+    const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -32,11 +35,26 @@ const MainContent = () => {
         const newSize = ((clientX - rect.left) / rect.width) * 100;
 
         if (activeResizePanel === 'left') {
-            if (newSize <= 7) {
-                setLeftPanelSize(7)
+            if (breakpoint == "lg") {
+                if (newSize <= 7) {
+                    setPreferences({ leftPanelSize: 7 })
+                    localStorage.setItem("leftPanelSize", "7")
+                }
+                if (newSize >= 22 && newSize <= 38) {
+                    setPreferences({ leftPanelSize: newSize })
+                    localStorage.setItem("leftPanelSize", `${newSize}`)
+                }
             }
-            if (newSize >= 22 && newSize <= 38) {
-                setLeftPanelSize(newSize)
+            if (breakpoint == "md") {
+                if (newSize <= 10) {
+                    setPreferences({ leftPanelSize: 10 });
+                    localStorage.setItem("leftPanelSize", "10");
+                }
+
+                if (newSize >= 32 && newSize <= 38) {
+                    setPreferences({ leftPanelSize: newSize });
+                    localStorage.setItem("leftPanelSize", `${newSize}`);
+                }
             }
 
         } else if (activeResizePanel === 'right') {
@@ -44,7 +62,8 @@ const MainContent = () => {
             const rightSize = 100 - newSize;
 
             if (rightSize >= 20 && rightSize <= 25) {
-                setRightPanelSize(rightSize)
+                setPreferences({ rightPanelSize: rightSize })
+                localStorage.setItem("rightPanelSize", `${rightSize}`);
             }
         }
     };
@@ -75,42 +94,63 @@ const MainContent = () => {
         };
     }, [isResizing, activeResizePanel]);
 
-    console.log("rigth", rightPanelSize);
-
     return (
         <main className="flex flex-1 bg-[#000000] text-white overflow-hidden px-2 gap-0"
             ref={containerRef}
         >
-            {/* Left Sidebar */}
-            <LeftSidebar leftPanelSize={leftPanelSize} />
+            {
+                isNowPlayingViewExpanded ? (
+                    <>
+                        <ExpandedNowPlayingView />
+                    </>
+                ) : (
+                    <>
+                        {/* Left Sidebar */}
+                        <LeftSidebar leftPanelSize={leftPanelSize} />
 
-            <div className="flex items-center justify-center h-full w-2 cursor-grab group"
-                onMouseDown={() => startResizing('left')}
-                onTouchStart={() => startResizing('left')}
-            >
-                <div
-                    className="w-[1px] h-[97%] bg-transparent group-hover:bg-white cursor-grab transition duration-300 ease-in-out touch-none"
-                />
-            </div>
+                        {
+                            !isLeftSidebarExpanded && (
+                                <>
+                                    <div className="flex items-center justify-center h-full w-2 cursor-grab group"
+                                        onMouseDown={() => startResizing('left')}
+                                        onTouchStart={() => startResizing('left')}
+                                    >
+                                        <div
+                                            className={`w-[1px] h-[97%] bg-transparent group-hover:bg-white ${activeResizePanel == "left" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                        />
+                                    </div>
 
-            {/* Children/Main Center Content */}
-            <section className="flex-1 bg-[#121212] p-6 flex justify-center items-start custom-scrollbar overflow-y-auto rounded-md">
-                <div className="w-full max-w-3xl">
-                    <Outlet />
-                </div>
-            </section>
+                                    {/* Children/Main Center Content */}
+                                    <section className="flex-1 bg-[#121212] p-6 flex justify-center items-start custom-scrollbar overflow-y-auto rounded-md">
+                                        <div className="w-full">
+                                            <Outlet />
+                                        </div>
+                                    </section>
 
-            <div className="hidden lg:flex items-center justify-center h-full w-2 cursor-grab group"
-                onMouseDown={() => startResizing('right')}
-                onTouchStart={() => startResizing('right')}
-            >
-                <div
-                    className="w-[1px] h-[97%] bg-transparent group-hover:bg-white cursor-grab transition duration-300 ease-in-out touch-none"
-                />
-            </div>
+                                    {
+                                        showNowPlayingView && (
+                                            <>
+                                                <div className="hidden lg:flex items-center justify-center h-full w-2 cursor-grab group"
+                                                    onMouseDown={() => startResizing('right')}
+                                                    onTouchStart={() => startResizing('right')}
+                                                >
+                                                    <div
+                                                        className={`w-[1px] h-[97%] bg-transparent group-hover:bg-white ${activeResizePanel == "right" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                                    />
+                                                </div>
 
-            {/* Right Sidebar */}
-            <NowPlayingView rightPanelSize={rightPanelSize} />
+                                                {/* Right Sidebar */}
+                                                <NowPlayingView rightPanelSize={rightPanelSize} />
+                                            </>
+                                        )
+                                    }
+                                </>
+                            )
+                        }
+                    </>
+                )
+            }
+
         </main>
     )
 }
