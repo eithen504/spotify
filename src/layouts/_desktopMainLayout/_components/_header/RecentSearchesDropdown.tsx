@@ -10,7 +10,8 @@ const RecentSearchesDropdown = () => {
             {Array.from({ length: 10 }).map((_, index) => (
                 <div
                     key={index}
-                    className="group cursor-pointer hover:bg-[#404040] text-white p-2 rounded-md flex items-center relative"
+                    className="group cursor-pointer dynamic-bg-hover text-white p-2 rounded-md flex items-center relative"
+                    style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
                 >
                     {/* Thumbnail */}
                     <img
