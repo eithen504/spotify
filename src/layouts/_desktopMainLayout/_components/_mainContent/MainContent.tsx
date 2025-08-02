@@ -118,7 +118,10 @@ const MainContent = () => {
                                         onTouchStart={() => startResizing('left')}
                                     >
                                         <div
-                                            className={`w-[1px] h-[97%] bg-transparent ${isTouchScreen ? "group-active:bg-white": "group-hover:bg-white"}  ${activeResizePanel == "left" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                            className={`w-[1px] h-[97%] bg-transparent dynamic-bg-hover ${activeResizePanel == "left" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                            style={{
+                                                '--bgHoverColor': '#ffffff',
+                                            } as React.CSSProperties}
                                         />
                                     </div>
 
@@ -137,7 +140,10 @@ const MainContent = () => {
                                                     onTouchStart={() => startResizing('right')}
                                                 >
                                                     <div
-                                                        className={`w-[1px] h-[97%] bg-transparent ${isTouchScreen ? "group-active:bg-white": "group-hover:bg-white"} ${activeResizePanel == "right" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                                        className={`w-[1px] h-[97%] bg-transparent dynamic-bg-hover ${activeResizePanel == "right" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
+                                                        style={{
+                                                            '--bgHoverColor': '#ffffff',
+                                                        } as React.CSSProperties}
                                                     />
                                                 </div>
 

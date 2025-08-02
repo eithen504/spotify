@@ -3,7 +3,14 @@ const CreditSection = () => {
         <div className="mt-6 bg-[#1e1e1e] p-4 rounded-md shadow-md">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-md font-semibold text-[#ffffff]">Credits</h3>
-                <button className="text-sm font-medium text-[#aaaaaa] hover:text-[#ffffff] hover:underline cursor-pointer">Show all</button>
+                <button
+                    className="text-sm font-medium text-[#aaaaaa] dynamic-text-hover hover:underline cursor-pointer"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                    } as React.CSSProperties}
+                >
+                    Show all
+                </button>
             </div>
 
             <div className="space-y-4">

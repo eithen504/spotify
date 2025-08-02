@@ -30,7 +30,10 @@ const CenterSection = () => {
             {/* Home Button */}
             <Link to={"/about"}>
                 <button
-                    className="p-3 text-[#ffffff] bg-[#1f1f1f] hover:bg-[#282828] rounded-full flex items-center justify-center cursor-pointer"
+                    className="p-3 text-[#ffffff] bg-[#1f1f1f] dynamic-bg-hover rounded-full flex items-center justify-center cursor-pointer"
+                    style={{
+                        '--bgHoverColor': '#282828',
+                    } as React.CSSProperties}
                     title="Home"
                 >
                     {

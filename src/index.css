@@ -192,18 +192,19 @@
   background-color: var(--bgGroupHoverColor, #ffffff);
 }
 
-/* group hover opacity 100 */
-.group-hover-opacity-100 {
+/* group hover opacity */
+.group-hover-opacity {
   opacity: 0;
 }
 
-.group:hover .group-hover-opacity-100 {
-  opacity: 1;
+.group:hover .group-hover-opacity {
+  opacity: var(--hoverOpacity, 1);
 }
 
 /* group hover translate x-0  */
-.group-hover-translate-x-0 { 
-  transform: translateX(-1rem); /* adjust initial offset as needed */
+.group-hover-translate-x-0 {
+  transform: translateX(-1rem);
+  /* adjust initial offset as needed */
   transition: transform 0.3s ease;
 }
 

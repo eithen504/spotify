@@ -30,13 +30,23 @@ const Header = () => {
 
             {/* Right Icons */}
             <div className="flex items-center gap-2 text-white/70 text-sm">
-                <button className="hover:text-[#ffffff] hover:bg-white/10 transition cursor-pointer p-[6px] rounded-full"
+                <button
+                    className="dynamic-text-hover dynamic-bg-hover transition cursor-pointer p-[6px] rounded-full"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                        '--bgHoverColor': '#ffffff1a',
+                    } as React.CSSProperties}
                     title="More Options For Xyz"
                 >
                     <MoreIcon />
                 </button>
 
-                <button className="hover:text-[#ffffff] hover:bg-white/10 transition cursor-pointer p-[10px] rounded-full"
+                <button
+                    className="dynamic-text-hover dynamic-bg-hover transition cursor-pointer p-[10px] rounded-full"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                        '--bgHoverColor': '#ffffff1a',
+                    } as React.CSSProperties}
                     title={isNowPlayingViewFullScreen ? "Exit Full Screen" : "Enter Full Screen"}
                     onClick={handleToggleFullscreen}
                 >
@@ -49,7 +59,12 @@ const Header = () => {
                     }
                 </button>
 
-                <button className="hover:text-[#ffffff] hover:bg-white/10 transition cursor-pointer p-[10px] rounded-full"
+                <button
+                    className="dynamic-text-hover dynamic-bg-hover transition cursor-pointer p-[10px] rounded-full"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                        '--bgHoverColor': '#ffffff1a',
+                    } as React.CSSProperties}
                     title="Minimize Now Playing View"
                     onClick={handleMinimizeNowPlayingView}
                 >

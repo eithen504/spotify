@@ -22,9 +22,10 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
             {/* Title and collapse button */}
             <div className="flex gap-2 items-center max-w-[150px] overflow-hidden">
                 <button
-                    className={`text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity-100 transition duration-400 ease-out`}
+                    className={`text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity transition duration-400 ease-out`}
                     style={{
                         '--textHoverColor': '#ffffff',
+                        '--hoverOpacity': 1
                     } as React.CSSProperties}
                     onClick={handleHidedNowPlayingView}
                 >
@@ -38,7 +39,12 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
 
 
             {/* Right side - Action buttons */}
-            <div className={`flex items-center space-x-2 group-hover-opacity-100 transition-all duration-400 ease-out`}>
+            <div
+                className={`flex items-center space-x-2 group-hover-opacity transition-all duration-400 ease-out`}
+                style={{
+                    '--hoverOpacity': 1,
+                } as React.CSSProperties}
+            >
                 <button
                     className="text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover p-[6px] cursor-pointer rounded-full transition-colors"
                     style={{

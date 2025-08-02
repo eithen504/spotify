@@ -3,7 +3,14 @@ const QueueSection = () => {
         <div className="bg-[#1e1e1e] mt-4 p-4 rounded-md shadow-md">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-md font-semibold text-[#ffffff]">Next in queue</h3>
-                <button className="text-sm font-medium text-[#aaaaaa] hover:text-[#ffffff] hover:underline cursor-pointer">Open queue</button>
+                <button
+                    className="text-sm font-medium text-[#aaaaaa] dynamic-text-hover hover:underline cursor-pointer"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                    } as React.CSSProperties}
+                >
+                    Open queue
+                </button>
             </div>
 
             <div className="flex items-center space-x-3">

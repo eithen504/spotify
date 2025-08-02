@@ -98,7 +98,7 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
         setIsDragging(true);
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-        
+
         setDragStart({
             x: clientX - position.x,
             y: clientY - position.y
@@ -110,10 +110,10 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
         if (isMaximized) return;
         setIsResizing(true);
         setResizeDirection(direction);
-        
+
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-        
+
         setResizeStart({
             x: clientX,
             y: clientY,
@@ -241,7 +241,7 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
             document.addEventListener('touchmove', handleMove, { passive: false });
             document.addEventListener('mouseup', handleMouseUp);
             document.addEventListener('touchend', handleMouseUp);
-            
+
             return () => {
                 document.removeEventListener('mousemove', handleMove);
                 document.removeEventListener('touchmove', handleMove);
@@ -294,13 +294,21 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
 
                 <div className="flex items-center space-x-1 z-10">
                     <button
-                        className="text-white/80 hover:text-white hover:bg-white/10 cursor-pointer p-2 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+                        className="text-white/80 dynamic-text-hover dynamic-bg-hover cursor-pointer p-2 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+                        style={{
+                            '--textHoverColor': '#ffffff',
+                            '--bgHoverColor': '#ffffff1a',
+                        } as React.CSSProperties}
                         onClick={handleMaximize}
                     >
                         {isMaximized ? <MinimizeIcon width="11" height="11" /> : <ExpandIcon width="11" height="11" />}
                     </button>
                     <button
-                        className="text-white/80 hover:text-white hover:bg-white/10 cursor-pointer p-2 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+                        className="text-white/80 dynamic-text-hover dynamic-bg-hover cursor-pointer p-2 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+                        style={{
+                            '--textHoverColor': '#ffffff',
+                            '--bgHoverColor': '#ffffff1a',
+                        } as React.CSSProperties}
                         onClick={() => {
                             onClose()
                         }}
@@ -317,7 +325,12 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                     style={{ background: '#3467eb' }}
                 >
                     {/* Dark overlay for the entire screen (red background) */}
-                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none"></div>
+                    <div
+                        className="absolute inset-0 bg-black group-hover-opacity transition-opacity duration-300 pointer-events-none"
+                        style={{
+                            '--hoverOpacity': 0.5,
+                        } as React.CSSProperties}
+                    />
 
                     {/* Main Content with centered image */}
                     <div className="h-full flex items-center justify-center p-4 relative">
@@ -325,11 +338,16 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                             <img
                                 src={'https://i.scdn.co/image/ab67616d00001e02ba5db46f4b838ef6027e6f96'}
                                 alt="Spotify Logo"
-                                className="w-full h-full object-cover group-hover:brightness-50 transition-all duration-300"
+                                className="w-full h-full object-cover transition-all duration-300"
                             />
 
                             {/* Controls that appear on hover */}
-                            <div className="absolute inset-0 flex items-center justify-center gap-1 hide-scrollbar opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div
+                                className="absolute inset-0 flex items-center justify-center gap-1 hide-scrollbar group-hover-opacity transition-opacity duration-300"
+                                style={{
+                                    '--hoverOpacity': 1,
+                                } as React.CSSProperties}
+                            >
                                 <button className="cursor-pointer rounded-full p-2 text-white">
                                     <HighVolumeIcon width="18" height="18" />
                                 </button>
@@ -362,7 +380,12 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                     </div>
 
                     {/* Progress Bar on hover */}
-                    <div className="absolute bottom-1 left-0 right-0 px-1 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div
+                        className="absolute bottom-1 left-0 right-0 px-1 py-1 group-hover-opacity transition-opacity duration-300"
+                        style={{
+                            '--hoverOpacity': 1,
+                        } as React.CSSProperties}
+                    >
                         <div className="flex justify-between text-white text-xs mb-1">
                             <span>{"0:00"}</span>
                             <span>{"4:55"}</span>
@@ -385,7 +408,12 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                         <span className="text-gray-400 text-sm">Ed Sheeran</span>
                     </div>
 
-                    <div className="text-gray-400 hover:text-white cursor-pointer flex items-center space-x-1 z-10">
+                    <div
+                        className="text-gray-400 dynamic-text-hover cursor-pointer flex items-center space-x-1 z-10"
+                        style={{
+                            '--textHoverColor': '#ffffff',
+                        } as React.CSSProperties}
+                    >
                         <AddIcon width="17" height="17" />
                     </div>
                 </div>
@@ -394,44 +422,44 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
             {/* Resize Handles */}
             {!isMinimized && !isMaximized && (
                 <>
-                    <div 
-                        className="absolute top-0 left-0 right-0 h-2 cursor-n-resize" 
+                    <div
+                        className="absolute top-0 left-0 right-0 h-2 cursor-n-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'top')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'top')}
                     />
-                    <div 
-                        className="absolute bottom-0 left-0 right-0 h-2 cursor-s-resize" 
+                    <div
+                        className="absolute bottom-0 left-0 right-0 h-2 cursor-s-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'bottom')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'bottom')}
                     />
-                    <div 
-                        className="absolute top-0 bottom-0 left-0 w-2 cursor-w-resize" 
+                    <div
+                        className="absolute top-0 bottom-0 left-0 w-2 cursor-w-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'left')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'left')}
                     />
-                    <div 
-                        className="absolute top-0 bottom-0 right-0 w-2 cursor-e-resize" 
+                    <div
+                        className="absolute top-0 bottom-0 right-0 w-2 cursor-e-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'right')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'right')}
                     />
 
-                    <div 
-                        className="absolute top-0 left-0 w-4 h-4 cursor-nw-resize" 
+                    <div
+                        className="absolute top-0 left-0 w-4 h-4 cursor-nw-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'top-left')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'top-left')}
                     />
-                    <div 
-                        className="absolute top-0 right-0 w-4 h-4 cursor-ne-resize" 
+                    <div
+                        className="absolute top-0 right-0 w-4 h-4 cursor-ne-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'top-right')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'top-right')}
                     />
-                    <div 
-                        className="absolute bottom-0 left-0 w-4 h-4 cursor-sw-resize" 
+                    <div
+                        className="absolute bottom-0 left-0 w-4 h-4 cursor-sw-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'bottom-left')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'bottom-left')}
                     />
-                    <div 
-                        className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize" 
+                    <div
+                        className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize"
                         onMouseDown={(e) => handleResizeMouseDown(e, 'bottom-right')}
                         onTouchStart={(e) => handleResizeMouseDown(e, 'bottom-right')}
                     />
