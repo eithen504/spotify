@@ -60,7 +60,7 @@ const Header = () => {
                             {
                                 !isLeftSidebarExpanded && (
                                     <button
-                                        className="text-[#8f8f8f] dynamic-text-hover cursor-pointer transform -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition duration-300 ease-out"
+                                        className="text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity-100 transition duration-400 ease-out"
                                         style={{
                                             '--textHoverColor': '#ffffff',
                                         } as React.CSSProperties}
@@ -72,7 +72,7 @@ const Header = () => {
                                 )
                             }
 
-                            <p className={`${isLeftSidebarExpanded ? "ml-0" : "-ml-6"} text-md font-bold text-[#ffffff] group-hover:ml-0 transition-all duration-300 truncate`}>
+                            <p className={`text-md font-bold text-[#ffffff] ${isLeftSidebarExpanded ? "ml-0": "-ml-[25px] group-hover-ml-0"} transition-all duration-400 truncate`}>
                                 Your Library
                             </p>
                         </div>

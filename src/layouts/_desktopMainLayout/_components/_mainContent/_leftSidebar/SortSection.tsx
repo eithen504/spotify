@@ -13,7 +13,7 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
     const { preferences: { sort, view }, setPreferences } = useUIPreferencesStore();
 
     return (
-        <>
+        <div className="relative"> {/* Add relative positioning container */}
             <div
                 onClick={toggleDropdown}
                 className="flex items-center text-[#8f8f8f] dynamic-text-hover space-x-2 cursor-pointer"
@@ -21,7 +21,7 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
             >
                 {
                     !isSearchActive && (
-                        <span className="text-sm font-semibold">{sort}</span>
+                        <span className="text-sm font-semibold min-w-0">{sort}</span>
                     )
                 }
                 <button className="transition-colors cursor-pointer">
@@ -32,7 +32,7 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
             </div>
 
             {isSortDropdownOpen && (
-                <div className="absolute right-0 top-10 w-52 bg-[#282828] rounded-[4px] shadow-[0_4px_5px_rgba(0,0,0,0.8)] z-50 text-sm text-white">
+                <div className="absolute top-full mt-[17px] right-0 w-52 bg-[#282828] rounded-[4px] shadow-[0_4px_5px_rgba(0,0,0,0.8)] z-[100] text-sm text-white">
                     <div className="space-y-0 p-1">
                         <p className="text-xs text-[#e5e7eb] p-2">Sort by</p>
                         {
@@ -64,6 +64,7 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
                             {
                                 LEFT_SIDEBAR_VIEW_OPTIONS.map((option) => (
                                     <button
+                                        key={option.label}
                                         className={`px-4 py-2 text-[#8f8f8f] dynamic-text-hover ${option.label == view ? "text-[#ffffff] bg-[#3e3e3e]": ""} rounded-sm cursor-pointer`}
                                         style={{
                                             '--textHoverColor': '#ffffff',
@@ -76,10 +77,9 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
                             }
                         </div>
                     </div>
-
                 </div>
             )}
-        </>
+        </div>
     )
 }
 

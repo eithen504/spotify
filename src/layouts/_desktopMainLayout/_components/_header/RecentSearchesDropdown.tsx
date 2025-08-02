@@ -29,14 +29,24 @@ const RecentSearchesDropdown = () => {
                     </div>
 
                     {/* Cross Icon */}
-                    <span className="mr-2 absolute right-2 hover:text-white text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <button
+                        className="mr-2 absolute right-2 text-[#8f8f8f] dynamic-text-hover group-hover-opacity-100 transition-opacity duration-200 cursor-pointer"
+                        style={{
+                            '--textHoverColor': '#ffffff',
+                        } as React.CSSProperties}
+                    >
                         <CrossIcon width="15" height="15" />
-                    </span>
+                    </button>
                 </div>
             ))}
 
             <div className="p-2">
-                <button className="py-1.5 px-6 text-sm border border-[#7c7c7c] hover:border-white font-medium rounded-full cursor-pointer">
+                <button
+                    className="py-1.5 px-6 text-sm border border-[#7c7c7c] dynamic-border-hover font-medium rounded-full cursor-pointer"
+                    style={{
+                        '--borderHoverColor': '#ffffff',
+                    } as React.CSSProperties}
+                >
                     Clear recent searches
                 </button>
             </div>

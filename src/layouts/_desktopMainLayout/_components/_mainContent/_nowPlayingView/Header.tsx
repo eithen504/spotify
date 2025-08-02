@@ -1,4 +1,3 @@
-import useIsTouchScreen from "../../../../../hooks/useIsTouchScreen";
 import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore";
 import { ExpandIcon, MoreIcon, UnCollapsedIcon } from "../../../../../Svgs"
 
@@ -8,7 +7,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
     const { setPreferences } = useUIPreferencesStore();
-    const isTouchScreen = useIsTouchScreen();
 
     const handleHidedNowPlayingView = () => {
         setPreferences({ showNowPlayingView: false })
@@ -23,25 +21,40 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
         <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} flex items-center justify-between flex-shrink-0 p-4 w-full sticky top-0 bg-[#121212] z-50`}>
             {/* Title and collapse button */}
             <div className="flex gap-2 items-center max-w-[150px] overflow-hidden">
-                <button className={`text-[#8f8f8f] hover:text-[#ffffff] cursor-pointer transform  ${isTouchScreen ? "opacity-100 translate-x-0": "opacity-0 -translate-x-4"} group-hover:translate-x-0 group-hover:opacity-100 transition duration-300 ease-out`}
+                <button
+                    className={`text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity-100 transition duration-400 ease-out`}
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                    } as React.CSSProperties}
                     onClick={handleHidedNowPlayingView}
                 >
                     <UnCollapsedIcon width="20" height="20" />
                 </button>
 
-                <p className={`text-md font-bold text-[#ffffff] ${isTouchScreen ? "ml-0": "-ml-7"} group-hover:ml-0 transition-all duration-300 truncate`}>
+                <p className={`text-md font-bold text-[#ffffff] -ml-7 group-hover-ml-0 transition-all duration-400 truncate`}>
                     Now Playing
                 </p>
             </div>
- 
+
 
             {/* Right side - Action buttons */}
-            <div className={`flex items-center space-x-2 ${isTouchScreen ? "opacity-100": "opacity-0"} group-hover:opacity-100 transition-all duration-400 ease-out`}>
-                <button className="text-[#8f8f8f] hover:text-[#ffffff] hover:bg-[#1E1E1E] p-[6px] cursor-pointer rounded-full transition-colors">
+            <div className={`flex items-center space-x-2 group-hover-opacity-100 transition-all duration-400 ease-out`}>
+                <button
+                    className="text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover p-[6px] cursor-pointer rounded-full transition-colors"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                        '--bgHoverColor': '#1E1E1E',
+                    } as React.CSSProperties}
+                >
                     <MoreIcon width="20" height="20" />
                 </button>
 
-                <button className="text-[#8f8f8f] hover:text-[#ffffff] hover:bg-[#1E1E1E] p-[8px] cursor-pointer rounded-full transition-colors"
+                <button
+                    className="text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover p-[8px] cursor-pointer rounded-full transition-colors"
+                    style={{
+                        '--textHoverColor': '#ffffff',
+                        '--bgHoverColor': '#1E1E1E',
+                    } as React.CSSProperties}
                     title={"Expand Now Playing View"}
                     onClick={handleExpandNowPlayingView}
                 >

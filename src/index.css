@@ -180,10 +180,38 @@
   color: var(--textHoverColor, #ffffff);
 }
 
+.dynamic-border-hover:hover {
+  border-color: var(--borderHoverColor, #ffffff);
+}
+
 .dynamic-bg-hover:hover {
   background-color: var(--bgHoverColor, #ffffff);
 }
 
 .group:hover .dynamic-bg-group-hover {
   background-color: var(--bgGroupHoverColor, #ffffff);
+}
+
+/* group hover opacity 100 */
+.group-hover-opacity-100 {
+  opacity: 0;
+}
+
+.group:hover .group-hover-opacity-100 {
+  opacity: 1;
+}
+
+/* group hover translate x-0  */
+.group-hover-translate-x-0 { 
+  transform: translateX(-1rem); /* adjust initial offset as needed */
+  transition: transform 0.3s ease;
+}
+
+.group:hover .group-hover-translate-x-0 {
+  transform: translateX(0);
+}
+
+/* group hover ml-0 */
+.group:hover .group-hover-ml-0 {
+  margin-left: 0;
 }
