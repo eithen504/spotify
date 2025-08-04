@@ -296,7 +296,6 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                     <button
                         className="text-white/80 dynamic-text-hover dynamic-bg-hover cursor-pointer p-2 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
                         style={{
-                            '--textHoverColor': '#ffffff',
                             '--bgHoverColor': '#ffffff1a',
                         } as React.CSSProperties}
                         onClick={handleMaximize}
@@ -306,7 +305,6 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                     <button
                         className="text-white/80 dynamic-text-hover dynamic-bg-hover cursor-pointer p-2 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
                         style={{
-                            '--textHoverColor': '#ffffff',
                             '--bgHoverColor': '#ffffff1a',
                         } as React.CSSProperties}
                         onClick={() => {
@@ -410,9 +408,6 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
 
                     <div
                         className="text-gray-400 dynamic-text-hover cursor-pointer flex items-center space-x-1 z-10"
-                        style={{
-                            '--textHoverColor': '#ffffff',
-                        } as React.CSSProperties}
                     >
                         <AddIcon width="17" height="17" />
                     </div>

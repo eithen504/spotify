@@ -57,7 +57,6 @@ const TabsSection = () => {
                                     <button
                                         className="absolute left-5 top-0 text-[#8f8f8f] dynamic-text-hover bg-[#1F1F1F] dynamic-bg-hover cursor-pointer rounded-full p-[7px] pointer-events-auto z-20"
                                         style={{
-                                            '--textHoverColor': '#ffffff',
                                             '--bgHoverColor': '#282828',
                                         } as React.CSSProperties}
                                         onClick={() => scroll("left")}
@@ -93,7 +92,6 @@ const TabsSection = () => {
                                     <button
                                         className="absolute right-5 top-0 text-[#8f8f8f] dynamic-text-hover bg-[#1F1F1F] dynamic-bg-hover cursor-pointer rounded-full p-[7px] pointer-events-auto z-20"
                                         style={{
-                                            '--textHoverColor': '#ffffff',
                                             '--bgHoverColor': '#282828',
                                         } as React.CSSProperties}
                                         onClick={() => scroll("right")}

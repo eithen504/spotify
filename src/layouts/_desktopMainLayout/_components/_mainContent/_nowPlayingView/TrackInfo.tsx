@@ -19,18 +19,11 @@ const TrackInfo = () => {
                 <div className="flex items-center space-x-4 text-xl text-[#8f8f8f]">
                     <button
                         className="dynamic-text-hover cursor-pointer group-hover-opacity transition-all duration-400 ease-out"
-                        style={{
-                            '--textHoverColor': '#ffffff',
-                            '--hoverOpacity': 1
-                        } as React.CSSProperties}
                     >
                         <ShareIcon width="16" height="16" />
                     </button>
                     <button
                         className="dynamic-text-hover cursor-pointer"
-                        style={{
-                            '--textHoverColor': '#ffffff',
-                        } as React.CSSProperties}
                     >
                         <AddIcon width="16" height="16" />
                     </button>

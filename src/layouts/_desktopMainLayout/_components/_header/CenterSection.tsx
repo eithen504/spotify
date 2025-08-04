@@ -28,7 +28,7 @@ const CenterSection = () => {
     return (
         <div className="flex items-center flex-1 gap-3 justify-center">
             {/* Home Button */}
-            <Link to={"/about"}>
+            <Link to={"/"}>
                 <button
                     className="p-3 text-[#ffffff] bg-[#1f1f1f] dynamic-bg-hover rounded-full flex items-center justify-center cursor-pointer"
                     style={{
@@ -54,7 +54,6 @@ const CenterSection = () => {
                 >
                     <button
                         className={`mr-3 text-[#adadad] ${searchQuery ? "dynamic-text-hover cursor-pointer" : ""}`}
-                        style={{ '--textHoverColor': '#ffffff' } as React.CSSProperties}
                     >
                         <SearchIcon />
                     </button>
@@ -73,7 +72,6 @@ const CenterSection = () => {
                         searchQuery && (
                             <button
                                 className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
-                                style={{ '--textHoverColor': '#ffffff' } as React.CSSProperties}
                                 onClick={handleClearSearchQuery}
                             >
                                 <CrossIcon />
@@ -85,7 +83,6 @@ const CenterSection = () => {
 
                     <button
                         className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
-                        style={{ '--textHoverColor': '#ffffff' } as React.CSSProperties}
                     >
                         <BrowseIcon />
                     </button>

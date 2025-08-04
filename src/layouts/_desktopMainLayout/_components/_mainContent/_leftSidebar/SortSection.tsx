@@ -17,7 +17,6 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
             <div
                 onClick={toggleDropdown}
                 className="flex items-center text-[#8f8f8f] dynamic-text-hover space-x-2 cursor-pointer"
-                style={{ '--textHoverColor': '#ffffff' } as React.CSSProperties}
             >
                 {
                     !isSearchActive && (
@@ -66,9 +65,6 @@ const SortSection: React.FC<SortSectionProps> = ({ isSearchActive, isSortDropdow
                                     <button
                                         key={option.label}
                                         className={`px-4 py-2 text-[#8f8f8f] dynamic-text-hover ${option.label == view ? "text-[#ffffff] bg-[#3e3e3e]": ""} rounded-sm cursor-pointer`}
-                                        style={{
-                                            '--textHoverColor': '#ffffff',
-                                        } as React.CSSProperties}
                                         onClick={() => setPreferences({view: option.label})}
                                     >
                                         {option.icon}

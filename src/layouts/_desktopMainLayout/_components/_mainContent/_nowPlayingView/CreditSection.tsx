@@ -5,9 +5,6 @@ const CreditSection = () => {
                 <h3 className="text-md font-semibold text-[#ffffff]">Credits</h3>
                 <button
                     className="text-sm font-medium text-[#aaaaaa] dynamic-text-hover hover:underline cursor-pointer"
-                    style={{
-                        '--textHoverColor': '#ffffff',
-                    } as React.CSSProperties}
                 >
                     Show all
                 </button>

@@ -33,7 +33,6 @@ const Header = () => {
                 <button
                     className="dynamic-text-hover dynamic-bg-hover transition cursor-pointer p-[6px] rounded-full"
                     style={{
-                        '--textHoverColor': '#ffffff',
                         '--bgHoverColor': '#ffffff1a',
                     } as React.CSSProperties}
                     title="More Options For Xyz"
@@ -44,7 +43,6 @@ const Header = () => {
                 <button
                     className="dynamic-text-hover dynamic-bg-hover transition cursor-pointer p-[10px] rounded-full"
                     style={{
-                        '--textHoverColor': '#ffffff',
                         '--bgHoverColor': '#ffffff1a',
                     } as React.CSSProperties}
                     title={isNowPlayingViewFullScreen ? "Exit Full Screen" : "Enter Full Screen"}
@@ -62,7 +60,6 @@ const Header = () => {
                 <button
                     className="dynamic-text-hover dynamic-bg-hover transition cursor-pointer p-[10px] rounded-full"
                     style={{
-                        '--textHoverColor': '#ffffff',
                         '--bgHoverColor': '#ffffff1a',
                     } as React.CSSProperties}
                     title="Minimize Now Playing View"

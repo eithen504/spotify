@@ -22,7 +22,6 @@ const SearchSection: React.FC<SearchSeactionProps> = ({
                 onClick={handleSearchIconClick}
                 className={`text-[#8f8f8f] ${isSearchActive ? "bg-[#2A2A2A] text-[#ffffff] rounded-l-[4px]" : "rounded-full"} dynamic-text-hover dynamic-bg-hover transition-colors cursor-pointer p-[6.5px]`}
                 style={{
-                    '--textHoverColor': '#ffffff',
                     '--bgHoverColor': '#2A2A2A',
                 } as React.CSSProperties}
             >
@@ -43,9 +42,6 @@ const SearchSection: React.FC<SearchSeactionProps> = ({
                             searchQuery && (
                                 <button
                                     className="mr-2 text-[#8f8f8f] dynamic-text-hover cursor-pointer"
-                                    style={{
-                                        '--textHoverColor': '#ffffff',
-                                    } as React.CSSProperties}
                                     onClick={handleClearSearchQuery}
                                 >
                                     <CrossIcon width="15" height="15" />

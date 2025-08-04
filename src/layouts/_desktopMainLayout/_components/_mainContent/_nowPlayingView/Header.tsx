@@ -24,7 +24,6 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
                 <button
                     className={`text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity transition duration-400 ease-out`}
                     style={{
-                        '--textHoverColor': '#ffffff',
                         '--hoverOpacity': 1
                     } as React.CSSProperties}
                     onClick={handleHidedNowPlayingView}
@@ -41,14 +40,10 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
             {/* Right side - Action buttons */}
             <div
                 className={`flex items-center space-x-2 group-hover-opacity transition-all duration-400 ease-out`}
-                style={{
-                    '--hoverOpacity': 1,
-                } as React.CSSProperties}
             >
                 <button
                     className="text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover p-[6px] cursor-pointer rounded-full transition-colors"
                     style={{
-                        '--textHoverColor': '#ffffff',
                         '--bgHoverColor': '#1E1E1E',
                     } as React.CSSProperties}
                 >
@@ -58,7 +53,6 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
                 <button
                     className="text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover p-[8px] cursor-pointer rounded-full transition-colors"
                     style={{
-                        '--textHoverColor': '#ffffff',
                         '--bgHoverColor': '#1E1E1E',
                     } as React.CSSProperties}
                     title={"Expand Now Playing View"}

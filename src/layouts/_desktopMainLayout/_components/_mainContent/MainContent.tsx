@@ -113,17 +113,17 @@ const MainContent = () => {
                         {
                             !isLeftSidebarExpanded && (
                                 <>
-                                    <div className="flex items-center justify-center h-full w-2 cursor-grab group"
+                                    <div
                                         onMouseDown={() => startResizing('left')}
                                         onTouchStart={() => startResizing('left')}
+                                        className="w-2 bg-black cursor-grab transition-colors touch-none group relative"
                                     >
+                                        {/* Center white bar on hover */}
                                         <div
-                                            className={`w-[1px] h-[97%] bg-transparent dynamic-bg-hover ${activeResizePanel == "left" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
-                                            style={{
-                                                '--bgHoverColor': '#ffffff',
-                                            } as React.CSSProperties}
+                                            className={`w-[0.5px] h-[96%] dynamic-bg-group-hover ${activeResizePanel == "left" ? "bg-[#ffffff]" : ""} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition duration-300 ease-in-out touch-none`}
                                         />
                                     </div>
+
 
                                     {/* Children/Main Center Content */}
                                     <section className="flex-1 bg-[#121212] p-6 flex justify-center items-start custom-scrollbar overflow-y-auto rounded-md">
@@ -135,15 +135,14 @@ const MainContent = () => {
                                     {
                                         showNowPlayingView && (
                                             <>
-                                                <div className="hidden lg:flex items-center justify-center h-full w-2 cursor-grab group"
+                                                <div
                                                     onMouseDown={() => startResizing('right')}
                                                     onTouchStart={() => startResizing('right')}
+                                                    className="w-2 bg-black cursor-grab transition-colors touch-none group relative"
                                                 >
+                                                    {/* Center white bar on hover */}
                                                     <div
-                                                        className={`w-[1px] h-[97%] bg-transparent dynamic-bg-hover ${activeResizePanel == "right" ? "bg-white" : ""} cursor-grab transition duration-300 ease-in-out touch-none`}
-                                                        style={{
-                                                            '--bgHoverColor': '#ffffff',
-                                                        } as React.CSSProperties}
+                                                        className={`w-[0.5px] h-[96%] dynamic-bg-group-hover ${activeResizePanel == "right" ? "bg-[#ffffff]" : ""} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition duration-300 ease-in-out touch-none`}
                                                     />
                                                 </div>
 

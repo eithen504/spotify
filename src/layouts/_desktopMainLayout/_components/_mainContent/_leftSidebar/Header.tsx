@@ -61,11 +61,6 @@ const Header = () => {
                                 !isLeftSidebarExpanded && (
                                     <button
                                         className="text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity transition duration-400 ease-out"
-                                        style={{
-                                            '--textHoverColor': '#ffffff',
-                                            '--hoverOpacity': 1
-                                        } as React.CSSProperties}
-                                        
                                         title="Collapse Your library"
                                         onClick={handleCollapsedLibrary}
                                     >
@@ -83,7 +78,6 @@ const Header = () => {
                             <button
                                 className="p-[10px] rounded-full text-[#8f8f8f] dynamic-text-hover bg-[#1f1f1f] dynamic-bg-hover flex items-center justify-center transition cursor-pointer"
                                 style={{
-                                    '--textHoverColor': '#ffffff',
                                     '--bgHoverColor': '#282828'
                                 } as React.CSSProperties}
                             >
@@ -92,7 +86,6 @@ const Header = () => {
                             <button
                                 className="p-[9.5px] rounded-full text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover flex items-center justify-center transition cursor-pointer"
                                 style={{
-                                    '--textHoverColor': '#ffffff',
                                     '--bgHoverColor': '#1f1f1f'
                                 } as React.CSSProperties}
                                 title={isLeftSidebarExpanded ? "Minimize Your Library" : "Expand Your Library"}
@@ -113,9 +106,6 @@ const Header = () => {
                         <div className="flex flex-col items-center justify-center gap-4 w-full h-full">
                             <button
                                 className="text-[#8f8f8f] dynamic-text-hover transition mt-[6px] cursor-pointer group/button"
-                                style={{
-                                    '--textHoverColor': '#ffffff',
-                                } as React.CSSProperties}
                                 title="Open Your library"
                                 onClick={handleOpenLibrary}
                             >
@@ -130,7 +120,6 @@ const Header = () => {
                             <button
                                 className="text-[#8f8f8f] dynamic-text-hover bg-[#1f1f1f] dynamic-bg-hover transition p-[10px] rounded-full cursor-pointer"
                                 style={{
-                                    '--textHoverColor': '#ffffff',
                                     '--bgHoverColor': '#282828'
                                 } as React.CSSProperties}
                             >

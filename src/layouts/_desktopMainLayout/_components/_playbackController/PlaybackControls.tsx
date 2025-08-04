@@ -4,13 +4,13 @@ import { NextIcon, PlayIcon, PrevIcon, RepeatIcon, ShuffleIcon } from "../../../
 const PlaybackControls = () => {
     return (
         <div className="flex flex-col items-center w-1/2">
-            <div className="flex items-center space-x-6 mb-2 text-[#8f8f8f]">
-                <button className="hover:text-[#ffffff] cursor-pointer"
+            <div className="flex items-center space-x-6 mb-2 text-[#b3b3b3]">
+                <button className="dynamic-text-hover cursor-pointer"
                     title="Enable Shuffle"
                 >
                     <ShuffleIcon width="16" height="16" />
                 </button>
-                <button className="hover:text-[#ffffff] cursor-pointer"
+                <button className="dynamic-text-hover cursor-pointer"
                     title="Previous"
                 >
                     <PrevIcon width="16" height="16" />
@@ -20,12 +20,12 @@ const PlaybackControls = () => {
                 >
                     <PlayIcon width="16" height="16" />
                 </button>
-                <button className="hover:text-[#ffffff] cursor-pointer"
+                <button className="dynamic-text-hover cursor-pointer"
                     title="Next"
                 >
                     <NextIcon width="16" height="16" />
                 </button>
-                <button className="hover:text-[#ffffff] cursor-pointer"
+                <button className="dynamic-text-hover cursor-pointer"
                     title="Enable Repeat"
                 >
                     <RepeatIcon width="16" height="16" />

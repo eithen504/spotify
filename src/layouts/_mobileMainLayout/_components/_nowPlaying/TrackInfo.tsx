@@ -11,7 +11,7 @@ const TrackInfo = () => {
                     The Weekdn
                 </p>
             </div>
-            <button className="text-white/70 hover:text-white cursor-pointer flex-shrink-0 ml-4">
+            <button className="text-white/70 dynamic-text-hover cursor-pointer flex-shrink-0 ml-4">
                 <AddIcon />
             </button>
         </div>

@@ -32,22 +32,24 @@ const RightSideControls = () => {
 
     return (
         <>
-            <div className="flex items-center space-x-4 text-[#8f8f8f] w-1/4 justify-end">
+            <div className="flex items-center space-x-4 text-[#b3b3b3] w-1/4 justify-end">
                 {/* NowPlaying Icon */}
-                <button className={`${showNowPlayingView ? "text-[#1CC558]" : "hover:text-[#ffffff]"} hidden lg:block cursor-pointer`}
+                <button className={`${showNowPlayingView ? "text-[#1CC558]" : "dynamic-text-hover"} hidden lg:block cursor-pointer`}
                     onClick={handleToggleNowPlayingView}
                 >
                     <NowPlayingIcon width="16" height="16" />
                 </button>
 
                 {/* Queue Icon */}
-                <button className={`hidden lg:block hover:text-[#ffffff] cursor-pointer`}
+                <button className={`hidden lg:block dynamic-text-hover cursor-pointer`}
                 >
                     <QueueIcon width="16" height="16" />
                 </button>
 
                 {/* Volume Icon and Slider */}
-                <HighVolumeIcon width="16" height="16" />
+                <button className="dynamic-text-hover cursor-pointer">
+                    <HighVolumeIcon width="16" height="16" />
+                </button>
 
                 <div className="w-20 h-1 rounded-full">
                     <Slider
@@ -59,14 +61,14 @@ const RightSideControls = () => {
                 </div>
 
                 {/* miniPlyer Icon */}
-                <button className={`${isMiniPlayerWindowOpen ? "text-[#1CC558]": "hover:text-[#ffffff]"} cursor-pointer`}
+                <button className={`${isMiniPlayerWindowOpen ? "text-[#1CC558]" : "dynamic-text-hover"} cursor-pointer`}
                     onClick={() => setPreferences({ isMiniPlayerWindowOpen: true })}
                 >
                     <MiniPlayerIcon width="16" height="16" />
                 </button>
 
                 {/* Fullscreen Icon */}
-                <button className={`hover:text-[#ffffff] cursor-pointer`}
+                <button className={`dynamic-text-hover cursor-pointer`}
                     onClick={handleToggleFullscreen}
                 >
                     {

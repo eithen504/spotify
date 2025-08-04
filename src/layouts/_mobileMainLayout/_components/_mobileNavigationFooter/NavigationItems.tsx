@@ -13,7 +13,7 @@ const NavigationItems = () => {
                         key={item.name}
                         to={item.path}
                     >
-                        <div className={`flex flex-col items-center ${isActive ? "text-white" : "text-white/70"} active:scale-95  hover:text-white text-xs cursor-pointer`}>
+                        <div className={`flex flex-col items-center ${isActive ? "text-white" : "text-white/70"} active:scale-95 dynamic-text-hover text-xs cursor-pointer`}>
                             {isActive ? (
                                 item.ActiveIcon
                             ) : (
@@ -25,7 +25,7 @@ const NavigationItems = () => {
                 ) : (
                     <div
                         key={item.name}
-                        className="flex flex-col items-center text-white/70 hover:text-white text-xs cursor-pointer"
+                        className="flex flex-col items-center text-white/70 dynamic-text-hover text-xs cursor-pointer"
                     >
                         {item.Icon}
                         <span className="mt-1 text-[11px] font-extralight">{item.name}</span>

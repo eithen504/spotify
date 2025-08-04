@@ -28,7 +28,7 @@ const MobileMiniPlayer: React.FC<MobileMiniPlayerProps> = ({ onOpen }) => {
 
                 {/* Right Controls */}
                 <div className="flex items-center space-x-6 text-white">
-                    <button aria-label="Favorite" className="text-white/70 hover:text-white cursor-pointer">
+                    <button aria-label="Favorite" className="text-white/70 dynamic-text-hover cursor-pointer">
                         <AddIcon />
                     </button>
                     <button aria-label="Play" className="cursor-pointer text-white">
