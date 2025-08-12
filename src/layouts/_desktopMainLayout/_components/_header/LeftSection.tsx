@@ -1,12 +1,16 @@
+import { Link } from "react-router-dom"
 import { LogoIcon } from "../../../../Svgs"
 
 const LeftSection = () => {
     return (
         <div className="flex items-center">
             {/* Spotify Logo */}
-            <button className="rounded-full flex items-center justify-center">
+            <Link
+                to={"/"}
+                className="rounded-full text-[#ffffff] flex items-center justify-center"
+            >
                 <LogoIcon width="35" height="35" />
-            </button>
+            </Link>
         </div>
     )
 }

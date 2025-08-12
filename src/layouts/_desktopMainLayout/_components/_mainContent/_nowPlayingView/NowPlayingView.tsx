@@ -34,7 +34,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
     return (
 
         <aside
-            className="hidden lg:flex bg-[#121212] text-white group relative h-full flex-col overflow-y-auto hide-scrollbar"
+            className="hidden lg:flex bg-[#121212] text-[#ffffff] group relative h-full flex-col overflow-y-auto hide-scrollbar"
             style={{ width: `${rightPanelSize}%` }}
             ref={sidebarRef}
         >

@@ -16,7 +16,7 @@ const PlaybackControls = () => {
                     <PrevIcon width="16" height="16" />
                 </button>
                 <button
-                    className={`p-2 bg-white text-black rounded-full flex items-center justify-center transition-transform cursor-pointer`}
+                    className={`p-2 bg-[#ffffff] text-black rounded-full flex items-center justify-center transition-transform cursor-pointer`}
                 >
                     <PlayIcon width="16" height="16" />
                 </button>

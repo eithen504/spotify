@@ -9,7 +9,7 @@ export default function MobileMainLayout() {
     const [isNowPlayingDrawerOpen, setIsNowPlayingDrawerOpen] = useState(false);
 
     return (
-        <div className="min-h-screen text-white relative bg-[#121212]">
+        <div className="min-h-screen text-[#ffffff] relative bg-[#121212]">
             {/* Main Content */}
             <MainContent />
 

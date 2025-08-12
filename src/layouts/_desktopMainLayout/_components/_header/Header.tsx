@@ -4,7 +4,7 @@ import RightSection from "./RightSection"
 
 const Header = () => {
     return (
-        <header className="bg-[#000000] text-[#ffffff] px-6 py-[8px] flex items-center justify-between">
+        <header className="bg-[#000000] px-6 py-[8px] flex items-center justify-between">
             {/* Left Section - Logo */}
             <LeftSection />
 

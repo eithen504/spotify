@@ -60,7 +60,7 @@ const Header = () => {
                             {
                                 !isLeftSidebarExpanded && (
                                     <button
-                                        className="text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-hover-translate-x-0 group-hover-opacity transition duration-400 ease-out"
+                                        className="text-[#8f8f8f] dynamic-text-hover cursor-pointer transform group-header-hover-translate group-header-hover transition duration-400 ease-out"
                                         title="Collapse Your library"
                                         onClick={handleCollapsedLibrary}
                                     >
@@ -69,7 +69,7 @@ const Header = () => {
                                 )
                             }
 
-                            <p className={`text-md font-bold text-[#ffffff] ${isLeftSidebarExpanded ? "ml-0": "-ml-[25px] group-hover-ml-0"} transition-all duration-400 truncate`}>
+                            <p className={`text-md font-bold text-[#ffffff] ${isLeftSidebarExpanded ? "ml-0": "-ml-[25px] group-header-hover-ml"} transition-all duration-400 truncate`}>
                                 Your Library
                             </p>
                         </div>

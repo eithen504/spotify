@@ -6,7 +6,6 @@ import type { ResizePanel } from '../../../../Types';
 import { useUIPreferencesStore } from '../../../../store/useUIPreferenceStore';
 import useBreakPoint from '../../../../hooks/useBreakPoint';
 import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
-import useIsTouchScreen from '../../../../hooks/useIsTouchScreen';
 
 const MainContent = () => {
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
@@ -14,7 +13,6 @@ const MainContent = () => {
     const [breakpoint] = useBreakPoint();
     const containerRef = useRef<HTMLDivElement>(null);
     const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
-    const isTouchScreen = useIsTouchScreen();
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -97,7 +95,7 @@ const MainContent = () => {
     }, [isResizing, activeResizePanel]);
 
     return (
-        <main className="flex flex-1 bg-[#000000] text-white overflow-hidden px-2 gap-0"
+        <main className="flex flex-1 bg-[#000000] text-[#ffffff] overflow-hidden px-2 gap-0"
             ref={containerRef}
         >
             {
@@ -138,7 +136,7 @@ const MainContent = () => {
                                                 <div
                                                     onMouseDown={() => startResizing('right')}
                                                     onTouchStart={() => startResizing('right')}
-                                                    className="w-2 bg-black cursor-grab transition-colors touch-none group relative"
+                                                    className="hidden lg:flex w-2 bg-black cursor-grab transition-colors touch-none group relative"
                                                 >
                                                     {/* Center white bar on hover */}
                                                     <div

@@ -26,7 +26,7 @@ const Header = () => {
     return (
         <div className="w-full h-14 px-6 flex items-center justify-between shadow-sm">
             {/* Left Title */}
-            <h2 className="text-white text-md font-extrabold">Now Playing</h2>
+            <h2 className="text-[#ffffff] text-md font-extrabold">Now Playing</h2>
 
             {/* Right Icons */}
             <div className="flex items-center gap-2 text-white/70 text-sm">

@@ -1,5 +1,5 @@
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
-import { PinIcon } from '../../../../../Svgs'
+import { PinIcon, PlayIcon } from '../../../../../Svgs'
 
 const items = [
     {
@@ -43,7 +43,7 @@ const items = [
 ];
 
 const LibraryItems = () => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    const { preferences: { leftPanelSize, isLeftSidebarExpanded, view } } = useUIPreferencesStore();
 
     if (leftPanelSize <= 10) {
         return (
@@ -91,36 +91,50 @@ const LibraryItems = () => {
     }
 
     return (
-        <div className="flex-1 px-3 mb-4">
-            {/* Liked Tracks */}
-            <div
-                className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
-                style={{
-                    '--bgHoverColor': '#1F1F1F',
-                } as React.CSSProperties}
-            >
-                <div className="w-12 h-12 rounded overflow-hidden">
-                    <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
-                        alt="New Music Friday India"
-                        className="w-full h-full object-cover"
-                    />
-                </div>
-                <div className="flex-1 min-w-0">
-                    <div className="font-medium text-md text-[#ffffff] truncate">Liked Tracks</div>
-                    <div className="flex items-center gap-1 text-[#aaaaaa] truncate">
-                        <div className="rotate-45 text-[#1CC558]">
-                            <PinIcon width="14" height="14" />
+        view == "Compact List" ? (
+            <div className="flex-1 px-3 mb-4">
+                {/* Liked Tracks */}
+                <div
+                    className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                    style={{
+                        '--bgHoverColor': '#1F1F1F',
+                    } as React.CSSProperties}
+                >
+                    <div className="flex-1 min-w-0">
+                        <div className="font-medium text-md text-[#ffffff] truncate">Liked Tracks</div>
+                        <div className="flex items-center gap-1 text-[#aaaaaa] truncate">
+                            <div className="rotate-45 text-[#1CC558]">
+                                <PinIcon width="14" height="14" />
+                            </div>
+                            <span className="truncate text-sm">Playlist</span>
                         </div>
-                        <span className="truncate text-sm">Playlist</span>
                     </div>
                 </div>
-            </div>
 
-            {
-                items.map((item, idx) => (
+                {
+                    items.map((item, idx) => (
+                        <div
+                            key={idx}
+                            className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                            style={{
+                                '--bgHoverColor': '#1F1F1F',
+                            } as React.CSSProperties}
+                        >
+                            <div className="flex-1 min-w-0">
+                                <div className="font-medium text-[#ffffff] truncate">{item.title}</div>
+                                <div className="text-[#aaaaaa] truncate">
+                                    <span className="truncate text-sm">{item.description}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        ) : (
+            view == "Default List" ? (
+                <div className="flex-1 px-3 mb-4">
+                    {/* Liked Tracks */}
                     <div
-                        key={idx}
                         className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
                         style={{
                             '--bgHoverColor': '#1F1F1F',
@@ -128,21 +142,169 @@ const LibraryItems = () => {
                     >
                         <div className="w-12 h-12 rounded overflow-hidden">
                             <img
-                                src={item.image}
-                                alt="Top Tracks 2024 India"
+                                src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
+                                alt="New Music Friday India"
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <div className="font-medium text-white truncate">{item.title}</div>
-                            <div className="text-[#aaaaaa] truncate">
-                                <span className="truncate text-sm">{item.description}</span>
+                            <div className="font-medium text-md text-[#ffffff] truncate">Liked Tracks</div>
+                            <div className="flex items-center gap-1 text-[#aaaaaa] truncate">
+                                <div className="rotate-45 text-[#1CC558]">
+                                    <PinIcon width="14" height="14" />
+                                </div>
+                                <span className="truncate text-sm">Playlist</span>
                             </div>
                         </div>
                     </div>
-                ))
-            }
-        </div>
+
+                    {
+                        items.map((item, idx) => (
+                            <div
+                                key={idx}
+                                className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                                style={{
+                                    '--bgHoverColor': '#1F1F1F',
+                                } as React.CSSProperties}
+                            >
+                                <div className="w-12 h-12 rounded overflow-hidden">
+                                    <img
+                                        src={item.image}
+                                        alt="Top Tracks 2024 India"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="font-medium text-[#ffffff] truncate">{item.title}</div>
+                                    <div className="text-[#aaaaaa] truncate">
+                                        <span className="truncate text-sm">{item.description}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            ) : (
+                view == "Compact Grid" ? (
+                    <div
+                        className={`${isLeftSidebarExpanded
+                            ? "expand-grid-layout"
+                            : leftPanelSize <= 28
+                                ? "grid-layout"
+                                : "custom-grid-layout"
+                            } px-3`}
+                    >
+
+                        <div
+                            className="group p-3 dynamic-bg-hover cursor-pointer rounded-[4px] flex flex-col overflow-hidden"
+                            style={{
+                                '--bgHoverColor': '#1F1F1F',
+                            } as React.CSSProperties}
+                        >
+                            {/* Square Image */}
+                            <div className="relative w-full aspect-square rounded-[4px] overflow-hidden">
+                                <img
+                                    src="https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da849d25907759522a25b86a3033"
+                                    alt="Liked Songs"
+                                    className="absolute top-0 left-0 w-full h-full object-cover"
+                                />
+
+                                {/* Play Button with Slide-Up on Hover */}
+                                <div className="absolute bottom-2 right-2 transform opacity-0 group-hover-translate-y-0 group-hover-opacity transition-all duration-300 ease-in-out">
+                                    <button className="bg-[#1ed760] hover:bg-[#3BE477] text-black rounded-full p-4 cursor-pointer transition-transform shadow-lg">
+                                        <PlayIcon width="17" height="17" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {
+                            items.map((item, index) => {
+                                return (
+                                    <div
+                                        key={index}
+                                        className="group p-3 dynamic-bg-hover cursor-pointer rounded-[4px] flex flex-col overflow-hidden"
+                                        style={{
+                                            '--bgHoverColor': '#1F1F1F',
+                                        } as React.CSSProperties}
+                                    >
+                                        {/* Square Image */}
+                                        <div className="relative w-full aspect-square rounded-[4px] overflow-hidden">
+                                            <img
+                                                src={item.image}
+                                                alt="Liked Songs"
+                                                className="absolute top-0 left-0 w-full h-full object-cover"
+                                            />
+
+                                            {/* Play Button with Slide-Up on Hover */}
+                                            <div className="absolute bottom-2 right-2 transform opacity-0 group-hover-translate-y-0 group-hover-opacity transition-all duration-300 ease-in-out">
+                                                <button className="bg-[#1ed760] hover:bg-[#3BE477] text-black rounded-full p-4 cursor-pointer transition-transform shadow-lg">
+                                                    <PlayIcon width="17" height="17" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+
+                    </div>
+                ) : (
+                    <div className="flex-1 px-3 mb-4">
+                        {/* Liked Tracks */}
+                        <div
+                            className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                            style={{
+                                '--bgHoverColor': '#1F1F1F',
+                            } as React.CSSProperties}
+                        >
+                            <div className="w-12 h-12 rounded overflow-hidden">
+                                <img
+                                    src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
+                                    alt="New Music Friday India"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="font-medium text-md text-[#ffffff] truncate">Liked Tracks</div>
+                                <div className="flex items-center gap-1 text-[#aaaaaa] truncate">
+                                    <div className="rotate-45 text-[#1CC558]">
+                                        <PinIcon width="14" height="14" />
+                                    </div>
+                                    <span className="truncate text-sm">Playlist</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {
+                            items.map((item, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
+                                    style={{
+                                        '--bgHoverColor': '#1F1F1F',
+                                    } as React.CSSProperties}
+                                >
+                                    <div className="w-12 h-12 rounded overflow-hidden">
+                                        <img
+                                            src={item.image}
+                                            alt="Top Tracks 2024 India"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="font-medium text-[#ffffff] truncate">{item.title}</div>
+                                        <div className="text-[#aaaaaa] truncate">
+                                            <span className="truncate text-sm">{item.description}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                )
+            )
+        )
     )
 }
 

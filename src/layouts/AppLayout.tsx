@@ -3,6 +3,7 @@ import useBreakPoint from "../hooks/useBreakPoint"
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import DesktopMainLayout from "./_desktopMainLayout/DesktopMainLayout";
 import MobileMainLayout from "./_mobileMainLayout/MobileMainLayout";
+import type { LeftSidebarViewLabel } from "../Types";
 
 export default function AppLayout() {
     const [breakpoint] = useBreakPoint();
@@ -13,13 +14,14 @@ export default function AppLayout() {
         let rightPanelSize = Number(localStorage.getItem("rightPanelSize")) || 20
         const isLeftSidebarExpanded = localStorage.getItem("isLeftSidebarExpanded") == "true"
         const showNowPlayingView = localStorage.getItem("showNowPlayingView") == "true"
+        const view = localStorage.getItem("view") || "Compact List"
 
         rightPanelSize = (rightPanelSize >= 20 && rightPanelSize <= 25) ? rightPanelSize : 20
 
         localStorage.setItem("rightPanelSize", `${rightPanelSize}`)
 
         if (breakpoint == "lg") {
-            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView })
+            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, view: view as LeftSidebarViewLabel })
         }
 
         if (breakpoint == "md") {
@@ -35,7 +37,7 @@ export default function AppLayout() {
                 leftPanelSize = 100;
             }
 
-            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView })
+            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, view: view as LeftSidebarViewLabel })
             localStorage.setItem("leftPanelSize", `${leftPanelSize}`)
         }
     }, [breakpoint])

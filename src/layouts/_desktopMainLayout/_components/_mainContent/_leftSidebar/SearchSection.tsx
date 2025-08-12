@@ -36,7 +36,7 @@ const SearchSection: React.FC<SearchSeactionProps> = ({
                             value={searchQuery}
                             onChange={handleInputChange}
                             placeholder="Search in Your Library"
-                            className="bg-[#2A2A2A] text-white text-sm outline-none flex-1 w-full placeholder-[#8f8f8f] placeholder:font-semibold p-[5px] rounded-r-[4px]"
+                            className="bg-[#2A2A2A] text-[#ffffff] placeholder-[#8f8f8f] text-sm outline-none flex-1 w-full placeholder:font-semibold p-[5px] rounded-r-[4px]"
                         />
                         {
                             searchQuery && (

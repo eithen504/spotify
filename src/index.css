@@ -192,27 +192,280 @@
   background-color: var(--bgGroupHoverColor, #ffffff);
 }
 
+
 /* group hover opacity */
 .group-hover-opacity {
   opacity: 0;
 }
-
 .group:hover .group-hover-opacity {
   opacity: var(--hoverOpacity, 1);
 }
 
+
 /* group hover translate x-0  */
 .group-hover-translate-x-0 {
   transform: translateX(-1rem);
-  /* adjust initial offset as needed */
-  transition: transform 0.3s ease;
 }
-
 .group:hover .group-hover-translate-x-0 {
   transform: translateX(0);
 }
 
+
+/* group hover translate y-0  */
+.group-hover-translate-y-0 {
+  transform: translateY(1rem);
+}
+.group:hover .group-hover-translate-y-0 {
+  transform: translateY(0);
+}
+
+
 /* group hover ml-0 */
 .group:hover .group-hover-ml-0 {
   margin-left: 0;
+}
+
+
+/* group header hover */
+.group-header-hover {
+  opacity: 0;
+}
+.group\/header:hover .group-header-hover {
+  opacity: 1;
+}
+
+/* group header hover translate */
+.group-header-hover-translate {
+  transform: translateX(-1rem);
+}
+.group\/header:hover .group-header-hover-translate {
+  transform: translateX(0);
+}
+
+/* group header hover ml */
+.group\/header:hover .group-header-hover-ml {
+  margin-left: 0;
+}
+
+
+
+/* Grid Layout Normal Screen */
+/* customGrid.css */
+.grid-layout {
+  display: grid;
+  gap: 0rem;
+}
+
+/* Default (mobile-first) */
+.grid-layout {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* >= 1024px (lg) */
+@media (min-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* >= 1280px (xl) */
+@media (min-width: 1280px) {
+  .grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* >= 1536px (2xl) */
+@media (min-width: 1536px) {
+  .grid-layout {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ✅ Custom Breakpoints via Pure CSS */
+
+/* >= 1800px (3xl) */
+@media (min-width: 1800px) {
+  .grid-layout {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* >= 2100px (4xl) */
+@media (min-width: 2100px) {
+  .grid-layout {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 2400px) {
+  .grid-layout {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 2800px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 3400px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 3800px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+}
+
+
+/* Grid Layout Bigger Screen */
+/* customGrid.css */
+.custom-grid-layout {
+  display: grid;
+  gap: 0rem;
+}
+
+/* Default (mobile-first) */
+.custom-grid-layout {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* >= 1024px (lg) */
+@media (min-width: 1024px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* >= 1280px (xl) */
+@media (min-width: 1280px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* >= 1536px (2xl) */
+@media (min-width: 1536px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ✅ Custom Breakpoints via Pure CSS */
+
+/* >= 1800px (3xl) */
+@media (min-width: 1800px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* >= 2100px (4xl) */
+@media (min-width: 2100px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 2400px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 2800px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 3400px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 3800px) {
+  .custom-grid-layout {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+}
+
+
+/* Expand LeftSidebar Grid Layout */
+/* customGrid.css */
+.expand-grid-layout {
+  display: grid;
+  gap: 0rem;
+}
+
+/* Default (mobile-first) */
+.expand-grid-layout {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* >= 1024px (lg) */
+@media (min-width: 1024px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+/* >= 1280px (xl) */
+@media (min-width: 1280px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+/* >= 1536px (2xl) */
+@media (min-width: 1536px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+}
+
+/* ✅ Custom Breakpoints via Pure CSS */
+
+/* >= 1800px (3xl) */
+@media (min-width: 1800px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+}
+
+/* >= 2100px (4xl) */
+@media (min-width: 2100px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 2400px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 2800px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 3400px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 3800px) {
+  .expand-grid-layout {
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+  }
 }

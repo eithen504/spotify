@@ -28,32 +28,24 @@ const CenterSection = () => {
     return (
         <div className="flex items-center flex-1 gap-3 justify-center">
             {/* Home Button */}
-            <Link to={"/"}>
-                <button
-                    className="p-3 text-[#ffffff] bg-[#1f1f1f] dynamic-bg-hover rounded-full flex items-center justify-center cursor-pointer"
-                    style={{
-                        '--bgHoverColor': '#282828',
-                    } as React.CSSProperties}
-                    title="Home"
-                >
-                    {
-                        isHomePage ? (
-                            <HomeFilledIcon />
-                        ) : (
-                            <HomeIcon />
-                        )
-                    }
-                </button>
+            <Link to={"/"}
+                className="p-3 text-[#ffffff] bg-[#1f1f1f] dynamic-bg-hover rounded-full flex items-center justify-center cursor-pointer"
+                style={{
+                    '--bgHoverColor': '#282828',
+                } as React.CSSProperties}
+                title="Home"
+            >
+                {isHomePage ? <HomeFilledIcon /> : <HomeIcon />}
             </Link>
 
             {/* Search Bar */}
             <div className="max-w-[470px] w-full relative" ref={searchBarRef}>
                 <div
-                    className={`flex items-center bg-[#1f1f1f] rounded-full px-4 py-[11px] cursor-text ${isFocused ? "border border-white" : "border border-transparent"}`}
+                    className={`flex items-center bg-[#1f1f1f] rounded-full px-4 py-[11px] cursor-text ${isFocused ? "border border-[#ffffff]" : "border border-transparent"}`}
                     onClick={() => inputRef.current?.focus()}
                 >
                     <button
-                        className={`mr-3 text-[#adadad] ${searchQuery ? "dynamic-text-hover cursor-pointer" : ""}`}
+                        className={`mr-3 text-[#adadad] ${searchQuery.trim() ? "dynamic-text-hover cursor-pointer" : ""}`}
                     >
                         <SearchIcon />
                     </button>
@@ -65,11 +57,11 @@ const CenterSection = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onFocus={() => setIsFocused(true)}
                         placeholder="What do you want to play?"
-                        className="bg-transparent focus:outline-none flex-grow text-md placeholder:text-[#adadad]"
+                        className="bg-transparent focus:outline-none flex-grow text-md placeholder:text-[#adadad] text-[#ffffff]"
                     />
 
                     {
-                        searchQuery && (
+                        searchQuery.trim() && (
                             <button
                                 className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
                                 onClick={handleClearSearchQuery}
@@ -88,7 +80,7 @@ const CenterSection = () => {
                     </button>
                 </div>
 
-                {isFocused && (
+                {isFocused && !searchQuery.trim() && (
                     <RecentSearchesDropdown />
                 )}
             </div>
