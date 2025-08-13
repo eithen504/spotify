@@ -5,10 +5,12 @@ import DesktopMainLayout from "./_desktopMainLayout/DesktopMainLayout";
 import MobileMainLayout from "./_mobileMainLayout/MobileMainLayout";
 import type { LeftSidebarViewLabel } from "../Types";
 import { VIEW_COMPONENTS } from "../Constants";
+import { useScrollStore } from "../store/useScrollStore";
 
 export default function AppLayout() {
     const [breakpoint] = useBreakPoint();
     const { setPreferences } = useUIPreferencesStore();
+    const {setIsScrolled} = useScrollStore();
 
     useEffect(() => {
         let leftPanelSize = Number(localStorage.getItem("leftPanelSize")) || 22
@@ -43,6 +45,10 @@ export default function AppLayout() {
             setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, view: view as LeftSidebarViewLabel })
             localStorage.setItem("leftPanelSize", `${leftPanelSize}`)
         }
+    }, [breakpoint])
+
+    useEffect(() => {
+        setIsScrolled(false)
     }, [breakpoint])
 
     return (
