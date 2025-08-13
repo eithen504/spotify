@@ -136,10 +136,17 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  /* Same width as hover state */
+  background: transparent;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar {
   width: 10px;
   /* Same width as hover state */
   background: transparent;
 }
+
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: transparent;

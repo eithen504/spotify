@@ -143,7 +143,7 @@ const MainContent = () => {
                                     </div>
 
                                     {/* Children/Main Center Content */}
-                                    <section className="flex-1 bg-[#121212] rounded-md overflow-y-auto custom-scrollbar"
+                                    <section className="flex-1 bg-[#121212] rounded-md overflow-y-auto hide-scrollbar"
                                         ref={scrollSectionRef}
                                     >
                                         <Outlet />
