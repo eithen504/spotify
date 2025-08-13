@@ -88,7 +88,7 @@ const HomePage = () => {
             />
 
             {/* Tabs */}
-            <div className={`${isScrolled ? "bg-[#2D2453]" : ""} sticky top-0 left-0 w-full z-50 px-4 md:px-10 py-4 max-w-[90rem] mx-auto`}>
+            <div className={`${isScrolled ? "bg-[#2D2453]" : ""} fixed md:sticky top-0 left-0 w-full z-50 px-4 md:px-10 py-4 max-w-[90rem] mx-auto`}>
                 <div className="relative flex space-x-3">
                     {HOMEPAGE_TABS.map((tab) => (
                         <button
@@ -105,7 +105,7 @@ const HomePage = () => {
             </div>
 
             {/* Grid */}
-            <div className="pb-10 mt-2 px-4 md:px-10 max-w-[90rem] mx-auto">
+            <div className="pb-10 pt-18 md:pt-2 px-4 md:px-10 max-w-[90rem] mx-auto">
                 <div className={`grid grid-cols-2 ${leftPanelSize <= 28 ? "md:grid-cols-4" : "md:grid-cols-2"} gap-2`}>
                     {items?.map((item, index) => {
                         return (
