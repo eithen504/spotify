@@ -6,13 +6,17 @@ import type { ResizePanel } from '../../../../Types';
 import { useUIPreferencesStore } from '../../../../store/useUIPreferenceStore';
 import useBreakPoint from '../../../../hooks/useBreakPoint';
 import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
+import { useScrollStore } from '../../../../store/useScrollStore';
+
 
 const MainContent = () => {
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
     const [isResizing, setIsResizing] = useState<boolean>(false);
     const [breakpoint] = useBreakPoint();
     const containerRef = useRef<HTMLDivElement>(null);
+    const scrollSectionRef = useRef<HTMLDivElement>(null);
     const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
+    const { setIsScrolled } = useScrollStore()
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -94,6 +98,22 @@ const MainContent = () => {
         };
     }, [isResizing, activeResizePanel]);
 
+    useEffect(() => {
+        const element = scrollSectionRef.current;
+        if (!element) return;
+
+        const onScroll = () => {
+            if (element.scrollTop > 0) {
+                setIsScrolled(true)
+            } else {
+                setIsScrolled(false)
+            }
+        };
+
+        element.addEventListener("scroll", onScroll);
+        return () => element.removeEventListener("scroll", onScroll);
+    }, []);
+
     return (
         <main className="flex flex-1 bg-[#000000] text-[#ffffff] overflow-hidden px-2 gap-0"
             ref={containerRef}
@@ -122,12 +142,11 @@ const MainContent = () => {
                                         />
                                     </div>
 
-
                                     {/* Children/Main Center Content */}
-                                    <section className="flex-1 bg-[#121212] p-6 flex justify-center items-start custom-scrollbar overflow-y-auto rounded-md">
-                                        <div className="w-full">
-                                            <Outlet />
-                                        </div>
+                                    <section className="flex-1 bg-[#121212] rounded-md overflow-y-auto custom-scrollbar"
+                                        ref={scrollSectionRef}
+                                    >
+                                        <Outlet />
                                     </section>
 
                                     {

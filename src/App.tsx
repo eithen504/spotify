@@ -1,12 +1,13 @@
 // App.tsx
 import { Routes, Route } from 'react-router-dom';
 import AppLayout from './layouts/AppLayout';
+import HomePage from './Routes/_homePage/HomePage';
 
 function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
       </Route>
     </Routes>

@@ -4,6 +4,7 @@ import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import DesktopMainLayout from "./_desktopMainLayout/DesktopMainLayout";
 import MobileMainLayout from "./_mobileMainLayout/MobileMainLayout";
 import type { LeftSidebarViewLabel } from "../Types";
+import { VIEW_COMPONENTS } from "../Constants";
 
 export default function AppLayout() {
     const [breakpoint] = useBreakPoint();
@@ -14,11 +15,13 @@ export default function AppLayout() {
         let rightPanelSize = Number(localStorage.getItem("rightPanelSize")) || 20
         const isLeftSidebarExpanded = localStorage.getItem("isLeftSidebarExpanded") == "true"
         const showNowPlayingView = localStorage.getItem("showNowPlayingView") == "true"
-        const view = localStorage.getItem("view") || "Compact List"
+        const localView = localStorage.getItem("view") || "Default List"
+        const view = VIEW_COMPONENTS[localView as LeftSidebarViewLabel] ? localView : "Default List"
 
         rightPanelSize = (rightPanelSize >= 20 && rightPanelSize <= 25) ? rightPanelSize : 20
 
         localStorage.setItem("rightPanelSize", `${rightPanelSize}`)
+        localStorage.setItem("view", `${view}`)
 
         if (breakpoint == "lg") {
             setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, view: view as LeftSidebarViewLabel })

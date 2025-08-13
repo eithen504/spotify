@@ -21,3 +21,7 @@ export type LeftSidebarViewOption = {
 }
 
 export type LeftSidebarViewIcon = Record<LeftSidebarViewLabel, JSX.Element>
+
+export type ViewComponent = Record<LeftSidebarViewLabel, JSX.Element>
+
+export type HomePageTab = "All" | "Music" | "Podcasts";

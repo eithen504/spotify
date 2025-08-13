@@ -1,5 +1,9 @@
+import CompactGridItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/CompactGridItems";
+import CompactListItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/CompactListItems";
+import DefaultGridItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/DefaultGridItems";
+import DefaultListItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { LeftSidebarSortOption, LeftSidebarTab, LeftSidebarViewIcon, LeftSidebarViewOption, NavigationItem } from "./Types"
+import type { HomePageTab, LeftSidebarSortOption, LeftSidebarTab, LeftSidebarViewIcon, LeftSidebarViewOption, NavigationItem, ViewComponent } from "./Types"
 
 const LEFT_SIDEBAR_TABS: LeftSidebarTab[] = ["Playlists", "Save Playlists", "Save Albums", "Podcasts"]
 
@@ -58,10 +62,21 @@ const LEFT_SIDEBAR_VIEW_ICONS: LeftSidebarViewIcon = {
     "Default Grid": <DefaultGridIcon width="16" height="16" />,
 };
 
+const VIEW_COMPONENTS: ViewComponent = {
+    "Compact List": <CompactListItems />,
+    "Default List": <DefaultListItems />,
+    "Compact Grid": <CompactGridItems />,
+    "Default Grid": <DefaultGridItems />,
+};
+
+const HOMEPAGE_TABS: HomePageTab[] = ["All", "Music", "Podcasts"]
+
 export {
     LEFT_SIDEBAR_TABS,
     NAVIGATION_ITEMS,
     LEFT_SIDEBAR_SORT_OPTIONS,
     LEFT_SIDEBAR_VIEW_OPTIONS,
-    LEFT_SIDEBAR_VIEW_ICONS
+    LEFT_SIDEBAR_VIEW_ICONS,
+    VIEW_COMPONENTS,
+    HOMEPAGE_TABS
 }
