@@ -45,7 +45,7 @@ function Slider({
             "bg-[#ffffff] dynamic-bg-group-hover absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
           )}
           style={{
-            '--bgGroupHoverColor': '#1ED45F',
+            '--bgGroupHoverColor': '#3BE477',
           } as React.CSSProperties}
         />
       </SliderPrimitive.Track>

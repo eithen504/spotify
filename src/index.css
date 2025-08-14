@@ -187,22 +187,27 @@
   color: var(--textHoverColor, #ffffff);
 }
 
-.dynamic-bg-hover:hover {
-  background-color: var(--bgHoverColor, #ffffff);
+.group:hover .dynamic-text-group-hover {
+  color: var(--textGroupHoverColor, #ffffff);
 }
 
-.dynamic-border-hover:hover {
-  border-color: var(--borderHoverColor, #ffffff);
+.dynamic-bg-hover:hover {
+  background-color: var(--bgHoverColor, #ffffff);
 }
 
 .group:hover .dynamic-bg-group-hover {
   background-color: var(--bgGroupHoverColor, #ffffff);
 }
 
+.dynamic-border-hover:hover {
+  border-color: var(--borderHoverColor, #ffffff);
+}
+
+
 
 /* group hover opacity */
 .group-hover-opacity {
-  opacity: 0;
+  opacity: var(--initialOpacity, 0);
 }
 .group:hover .group-hover-opacity {
   opacity: var(--hoverOpacity, 1);
@@ -213,6 +218,7 @@
 .group-hover-translate-x-0 {
   transform: translateX(-1rem);
 }
+
 .group:hover .group-hover-translate-x-0 {
   transform: translateX(0);
 }
@@ -222,6 +228,7 @@
 .group-hover-translate-y-0 {
   transform: translateY(1rem);
 }
+
 .group:hover .group-hover-translate-y-0 {
   transform: translateY(0);
 }
@@ -237,6 +244,7 @@
 .group-header-hover {
   opacity: 0;
 }
+
 .group\/header:hover .group-header-hover {
   opacity: 1;
 }
@@ -245,6 +253,7 @@
 .group-header-hover-translate {
   transform: translateX(-1rem);
 }
+
 .group\/header:hover .group-header-hover-translate {
   transform: translateX(0);
 }

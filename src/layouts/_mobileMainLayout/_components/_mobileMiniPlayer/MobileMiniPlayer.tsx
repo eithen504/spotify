@@ -12,7 +12,7 @@ const MobileMiniPlayer: React.FC<MobileMiniPlayerProps> = ({ onOpen }) => {
             onClick={onOpen}
         >
             <footer className={`rounded-sm w-full h-[57px] flex items-center justify-between px-4 shadow-md`}
-                style={{ background: '#3C3C3C' }}
+                style={{ background: '#460B1D' }}
             >
                 {/* Track Info */}
                 <TrackInfo />

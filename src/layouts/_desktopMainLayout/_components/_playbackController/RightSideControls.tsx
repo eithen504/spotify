@@ -34,7 +34,7 @@ const RightSideControls = () => {
         <>
             <div className="flex items-center space-x-4 text-[#b3b3b3] w-1/4 justify-end">
                 {/* NowPlaying Icon */}
-                <button className={`${showNowPlayingView ? "text-[#1CC558]" : "dynamic-text-hover"} hidden lg:block cursor-pointer`}
+                <button className={`${showNowPlayingView ? "text-[#3BE477]" : "dynamic-text-hover"} hidden lg:block cursor-pointer`}
                     onClick={handleToggleNowPlayingView}
                 >
                     <NowPlayingIcon width="16" height="16" />
@@ -61,8 +61,8 @@ const RightSideControls = () => {
                 </div>
 
                 {/* miniPlyer Icon */}
-                <button className={`${isMiniPlayerWindowOpen ? "text-[#1CC558]" : "dynamic-text-hover"} cursor-pointer`}
-                    onClick={() => setPreferences({ isMiniPlayerWindowOpen: true })}
+                <button className={`${isMiniPlayerWindowOpen ? "text-[#3BE477]" : "dynamic-text-hover"} cursor-pointer`}
+                    onClick={() => setPreferences({ isMiniPlayerWindowOpen: !isMiniPlayerWindowOpen })}
                 >
                     <MiniPlayerIcon width="16" height="16" />
                 </button>

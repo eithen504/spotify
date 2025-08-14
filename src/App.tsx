@@ -2,13 +2,14 @@
 import { Routes, Route } from 'react-router-dom';
 import AppLayout from './layouts/AppLayout';
 import HomePage from './Routes/_homePage/HomePage';
+import PlaylistPage from './Routes/_playlistPage/PlaylistPage';
 
 function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/playlist/:id" element={<PlaylistPage />} />
       </Route>
     </Routes>
   );
@@ -16,109 +17,4 @@ function App() {
 
 export default App;
 
-// pages/Home.tsx
-function Home() {
-  return (
-    <>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-      <h1>home</h1>
-
-    </>
-  )
-}
-
-// pages/About.tsx
-function About() {
-  return (
-    <>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-      <h1>about</h1>
-
-    </>
-  )
-}
 

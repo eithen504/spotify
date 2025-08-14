@@ -16,7 +16,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isOpen, onClose }) => {
     return (
         <Drawer open={isOpen} onClose={onClose}>
             <DrawerContent className="z-500"
-                style={{ background: '#3C3C3C' }}
+                style={{ background: '#460B1D' }}
             >
                 <div className="h-screen w-full flex flex-col relative overflow-hidden">
                     {/* Header */}
