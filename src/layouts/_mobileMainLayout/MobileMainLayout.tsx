@@ -7,13 +7,15 @@ import { useScrollStore } from "../../store/useScrollStore";
 
 export default function MobileMainLayout() {
     const [isNowPlayingDrawerOpen, setIsNowPlayingDrawerOpen] = useState(false);
-    const { setIsScrolled } = useScrollStore();
+    const { setIsScrolled, setIsScrollExceeded } = useScrollStore();
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 0);
         };
 
+        setIsScrollExceeded(window.screenY > 200)
+        
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);

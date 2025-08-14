@@ -16,7 +16,7 @@ const MainContent = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const scrollSectionRef = useRef<HTMLDivElement>(null);
     const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
-    const { setIsScrolled } = useScrollStore()
+    const { setIsScrolled, setIsScrollExceeded } = useScrollStore()
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -107,6 +107,12 @@ const MainContent = () => {
                 setIsScrolled(true)
             } else {
                 setIsScrolled(false)
+            }
+
+            if(element.scrollTop > 200){
+                setIsScrollExceeded(true)
+            } else {
+                setIsScrollExceeded(false)
             }
         };
 

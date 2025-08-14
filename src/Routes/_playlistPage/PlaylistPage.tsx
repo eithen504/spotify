@@ -1,9 +1,11 @@
 import Footer from "../../components/ui/footer";
+import { useScrollStore } from "../../store/useScrollStore";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { AddIcon, ClockIcon, DefaultListIcon, DropdownIcon, MoreIcon, PlayIcon, ShareIcon } from "../../Svgs";
 
 const PlaylistPage = () => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    const {isScrollExceeded} = useScrollStore();
 
     const items = [
         {
@@ -53,6 +55,24 @@ const PlaylistPage = () => {
             />
 
             {/* Playlist Header */}
+            <header className={`${isScrollExceeded ? "flex": "hidden"} max-w-[90rem] mx-auto gap-3 shadow-[0_4px_5px_rgba(0,0,0,0.1)] fixed md:sticky top-0 left-0 w-full z-50 px-4 md:px-6 py-[8.2px] items-center mb-[0px] md:-mb-[64px]`}
+                style={{ background: '#2D2453' }}
+            >
+                <button className={`transition-opacity duration-400 ease-in-out mt-0.5 cursor-pointer p-3.5 rounded-full text-black bg-[#1ed760] dynamic-bg-hover`}
+                    style={{
+                        '--bgHoverColor': '#3BE477',
+                    } as React.CSSProperties}
+                >
+                    <PlayIcon width="18" height="18" />
+
+                </button>
+                <h2 className={`transition-opacity duration-400 ease-in-out text-2xl font-bold truncate overflow-hidden whitespace-nowrap`}>
+                    {'title'}
+                </h2>
+
+            </header>
+
+            {/* Playlist Info Section */}
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto">
                 {/* Playlist Cover */}
                 <img
@@ -146,12 +166,11 @@ const PlaylistPage = () => {
                     <PlayIcon width="18" height="18" />
                 </button>
 
-
             </div>
 
             <div className="relative max-w-[90rem] mx-auto">
                 {/* Playlist Table Header */}
-                <div className={`sticky group top-0 left-0 w-full z-10 text-sm text-white/70 bg-[#121212] pb-2 px-10 pt-2 hidden md:flex`}>
+                <div className={`sticky group top-16 left-0 w-full z-10 text-sm text-white/70 bg-[#121212] pb-2 px-10 pt-2 hidden md:flex`}>
                     <div className="w-6">#</div>
                     <div className="flex-1 truncate">Title</div>
                     {
@@ -180,7 +199,7 @@ const PlaylistPage = () => {
                 </div>
 
                 {/* Seperator Line */}
-                <div className={`px-6 hidden md:block sticky top-9 left-0 w-full z-10 mb-3`}>
+                <div className={`px-6 hidden md:block sticky top-25 left-0 w-full z-10 mb-3`}>
                     <div className="w-full h-[1px] bg-white/10 " />
                 </div>
 
