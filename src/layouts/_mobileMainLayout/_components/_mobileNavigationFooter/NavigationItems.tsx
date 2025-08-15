@@ -1,12 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NAVIGATION_ITEMS } from '../../../../Constants';
 
 const NavigationItems = () => {
+    const { pathname } = useLocation();
+
     return (
         <>
             {NAVIGATION_ITEMS.map((item) => {
                 const isAccount = item.name === "Account";
-                const isActive = location.pathname === item.path;
+                const isActive = pathname === item.path;
 
                 return !isAccount ? (
                     <Link

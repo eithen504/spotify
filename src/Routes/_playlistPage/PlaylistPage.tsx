@@ -13,10 +13,9 @@ const PlaylistPage = () => {
         <div className="relative text-white min-h-screen">
             {/* Background gradient */}
             <div
-                className="w-full absolute inset-0 z-0 h-[700px]"
+                className="w-full absolute inset-0 z-0 h-[700px] mt-64 opacity-70"
                 style={{
                     height: '250px',
-                    opacity: 1,
                     backgroundImage: `linear-gradient(to bottom, #2D2453, #121212)`
                 }}
             />
