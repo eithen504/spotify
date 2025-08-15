@@ -7,18 +7,22 @@ import { useScrollStore } from "../../store/useScrollStore";
 
 export default function MobileMainLayout() {
     const [isNowPlayingDrawerOpen, setIsNowPlayingDrawerOpen] = useState(false);
-    const { setIsScrolled, setIsScrollExceeded } = useScrollStore();
+    const { setIsScrolled, setScrollFromTop, scrollFromTop } = useScrollStore();
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 0);
+            const scrollTop = window.scrollY; // Correct property
+            setIsScrolled(scrollTop > 0);
+            console.log("el", scrollTop);
+            setScrollFromTop(scrollTop); // Now updates correctly
         };
 
-        setIsScrollExceeded(window.screenY > 200)
-        
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+
+    console.log("scrollfrom top", scrollFromTop);
 
     return (
         <div className="min-h-screen text-[#ffffff] relative bg-[#121212]">

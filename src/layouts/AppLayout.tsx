@@ -10,7 +10,7 @@ import { useScrollStore } from "../store/useScrollStore";
 export default function AppLayout() {
     const [breakpoint] = useBreakPoint();
     const { setPreferences } = useUIPreferencesStore();
-    const { setIsScrolled, setIsScrollExceeded } = useScrollStore();
+    const { setIsScrolled, setScrollFromTop } = useScrollStore();
 
     useEffect(() => {
         let leftPanelSize = Number(localStorage.getItem("leftPanelSize")) || 22
@@ -49,7 +49,7 @@ export default function AppLayout() {
 
     useEffect(() => {
         setIsScrolled(false)
-        setIsScrollExceeded(false)
+        setScrollFromTop(0)
     }, [breakpoint])
 
     return (

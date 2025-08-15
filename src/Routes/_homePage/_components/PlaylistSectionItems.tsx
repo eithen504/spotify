@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { LeftArrowIcon, PlayIcon, RightArrowIcon } from '../../../Svgs';
+import { useNavigate } from 'react-router-dom';
 
 const PlaylistSectionItems = () => {
     const items = [
@@ -37,6 +38,7 @@ const PlaylistSectionItems = () => {
         }
     ];
 
+    const navigate = useNavigate();
     const scrollRef = useRef(null);
     const [canScroll, setCanScroll] = useState({ left: false, right: true });
 
@@ -117,6 +119,7 @@ const PlaylistSectionItems = () => {
                             style={{
                                 '--bgHoverColor': '#1C1C1C',
                             } as React.CSSProperties}
+                            onClick={() => navigate("/playlist/123")}
                         >
                             <div className="relative overflow-hidden rounded-sm transition-shadow duration-300">
                                 <img

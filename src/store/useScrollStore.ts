@@ -2,14 +2,14 @@ import { create } from "zustand";
 
 interface ScrollStore {
   isScrolled: boolean;
-  isScrollExceeded: boolean;
+  scrollFromTop: number;
   setIsScrolled: (scrolled: boolean) => void;
-  setIsScrollExceeded: (exceeded: boolean) => void;
+  setScrollFromTop: (value: number) => void;
 }
 
 export const useScrollStore = create<ScrollStore>((set) => ({
   isScrolled: false,
-  isScrollExceeded: false,
+  scrollFromTop: 0,
   setIsScrolled: (scrolled) => set({ isScrolled: scrolled }),
-  setIsScrollExceeded: (exceeded) => set({ isScrollExceeded: exceeded }),
+  setScrollFromTop: (value) => set({ scrollFromTop: value }),
 }));
