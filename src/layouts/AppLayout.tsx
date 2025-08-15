@@ -5,14 +5,10 @@ import DesktopMainLayout from "./_desktopMainLayout/DesktopMainLayout";
 import MobileMainLayout from "./_mobileMainLayout/MobileMainLayout";
 import type { LeftSidebarViewLabel } from "../Types";
 import { VIEW_COMPONENTS } from "../Constants";
-import { useScrollStore } from "../store/useScrollStore";
-import { useLocation } from "react-router-dom";
 
 export default function AppLayout() {
-    const {pathname} = useLocation();
     const [breakpoint] = useBreakPoint();
     const { setPreferences } = useUIPreferencesStore();
-    const { setIsScrolled, setScrollFromTop } = useScrollStore();
 
     useEffect(() => {
         let leftPanelSize = Number(localStorage.getItem("leftPanelSize")) || 22
@@ -49,11 +45,6 @@ export default function AppLayout() {
         }
     }, [breakpoint])
 
-    useEffect(() => {
-        setIsScrolled(false)
-        setScrollFromTop(0)
-        window.scrollTo(0, 0);
-    }, [breakpoint, pathname])
 
     return (
         <div className="overflow-hidden bg-[#121212]">

@@ -1,5 +1,5 @@
 import LeftSidebar from './_leftSidebar/LeftSidebar'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import NowPlayingView from './_nowPlayingView/NowPlayingView'
 import { useEffect, useRef, useState } from 'react';
 import type { ResizePanel } from '../../../../Types';
@@ -8,8 +8,8 @@ import useBreakPoint from '../../../../hooks/useBreakPoint';
 import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
 import { useScrollStore } from '../../../../store/useScrollStore';
 
-
 const MainContent = () => {
+    const { pathname } = useLocation();
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
     const [isResizing, setIsResizing] = useState<boolean>(false);
     const [breakpoint] = useBreakPoint();
@@ -115,6 +115,15 @@ const MainContent = () => {
         element.addEventListener("scroll", onScroll);
         return () => element.removeEventListener("scroll", onScroll);
     }, []);
+
+    useEffect(() => {
+        const element = scrollSectionRef.current;
+        if (!element) return;
+
+        element.scrollTop = 0;
+        setIsScrolled(false)
+        setScrollFromTop(0)
+    }, [pathname]);
 
     return (
         <main className="flex flex-1 bg-[#000000] text-[#ffffff] overflow-hidden px-2 gap-0"
