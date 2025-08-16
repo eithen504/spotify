@@ -114,7 +114,7 @@ const MainContent = () => {
 
         element.addEventListener("scroll", onScroll);
         return () => element.removeEventListener("scroll", onScroll);
-    }, []);
+    }, [scrollSectionRef.current]);
 
     useEffect(() => {
         const element = scrollSectionRef.current;
@@ -123,7 +123,7 @@ const MainContent = () => {
         element.scrollTop = 0;
         setIsScrolled(false)
         setScrollFromTop(0)
-    }, [pathname]);
+    }, [pathname, isNowPlayingViewExpanded, isLeftSidebarExpanded]);
 
     return (
         <main className="flex flex-1 bg-[#000000] text-[#ffffff] overflow-hidden px-2 gap-0"

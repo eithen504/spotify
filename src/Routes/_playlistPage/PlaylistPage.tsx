@@ -1,5 +1,7 @@
 import Footer from "../../components/ui/footer";
 import { useScrollStore } from "../../store/useScrollStore";
+import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
+import { getScrollThreshold } from "../../utils";
 import PlaylistControls from "./_components/PlaylistControls";
 import PlaylistHeader from "./_components/PlaylistHeader";
 import PlaylistInfoSection from "./_components/PlaylistInfoSection";
@@ -8,12 +10,16 @@ import PlaylistTracks from "./_components/PlaylistTracks";
 
 const PlaylistPage = () => {
     const { scrollFromTop } = useScrollStore();
+    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+
+
+    const shouldShowFullBorder = scrollFromTop >= getScrollThreshold(leftPanelSize);
 
     return (
         <div className="relative text-white min-h-screen">
             {/* Background gradient */}
             <div
-                className="w-full absolute inset-0 z-0 h-[700px] mt-64 opacity-70"
+                className={`w-full absolute inset-0 z-0 ${leftPanelSize >= 7 && leftPanelSize <= 10 ? "mt-64" : leftPanelSize >= 32 && leftPanelSize <= 38 ? "mt-47" : "mt-52"} h-[700px] opacity-70`}
                 style={{
                     height: '250px',
                     backgroundImage: `linear-gradient(to bottom, #2D2453, #121212)`
@@ -34,7 +40,7 @@ const PlaylistPage = () => {
                 <PlaylistTableHeader />
 
                 {/* Seperator Line */}
-                <div className={`${scrollFromTop >= 296 ? "px-0" : "px-6"} hidden md:block sticky top-25 left-0 w-full z-10 mb-3`}>
+                <div className={`${shouldShowFullBorder ? "px-0" : "px-6"} hidden md:block sticky top-25 left-0 w-full mb-3`}>
                     <div className="w-full h-[1px] bg-white/10 " />
                 </div>
 
