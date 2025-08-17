@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Footer from "../../components/ui/footer";
 import { useScrollStore } from "../../store/useScrollStore";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
@@ -7,19 +8,45 @@ import PlaylistHeader from "./_components/PlaylistHeader";
 import PlaylistInfoSection from "./_components/PlaylistInfoSection";
 import PlaylistTableHeader from "./_components/PlaylistTableHeader";
 import PlaylistTracks from "./_components/PlaylistTracks";
+import type { Column } from "../../Types";
 
 const PlaylistPage = () => {
     const { scrollFromTop } = useScrollStore();
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-
+    const [view, setView] = useState<"Compact List" | "Default List">("Default List")
 
     const shouldShowFullBorder = scrollFromTop >= getScrollThreshold(leftPanelSize);
+
+    const [columns, setColumns] = useState<Record<Column, boolean>>({
+        "Artist": true,
+        "Album": true,
+        "Duration": true,
+        "Date added": false,
+    });
+
+    useEffect(() => {
+        if (view == "Default List") {
+            setColumns({
+                "Artist": false,
+                "Album": true,
+                "Duration": true,
+                "Date added": true,
+            })
+        } else {
+            setColumns({
+                "Artist": true,
+                "Album": true,
+                "Duration": true,
+                "Date added": false,
+            })
+        }
+    }, [view])
 
     return (
         <div className="relative text-white min-h-screen">
             {/* Background gradient */}
             <div
-                className={`w-full absolute inset-0 z-0 ${leftPanelSize >= 7 && leftPanelSize <= 10 ? "mt-64" : leftPanelSize >= 32 && leftPanelSize <= 38 ? "mt-47" : "mt-52"} h-[700px] opacity-70`}
+                className={`w-full absolute inset-0 z-0 mt-90 ${leftPanelSize >= 7 && leftPanelSize <= 10 ? "md:mt-64" : leftPanelSize >= 32 && leftPanelSize <= 38 ? "md:mt-47" : "md:mt-52"} h-[700px] opacity-70`}
                 style={{
                     height: '250px',
                     backgroundImage: `linear-gradient(to bottom, #2D2453, #121212)`
@@ -33,11 +60,11 @@ const PlaylistPage = () => {
             <PlaylistInfoSection />
 
             {/* Playlist Controls */}
-            <PlaylistControls />
+            <PlaylistControls view={view} setView={setView} />
 
             <div className="relative max-w-[90rem] mx-auto">
                 {/* Playlist Table Header */}
-                <PlaylistTableHeader />
+                <PlaylistTableHeader view={view} columns={columns} setColumns={setColumns} />
 
                 {/* Seperator Line */}
                 <div className={`${shouldShowFullBorder ? "px-0" : "px-6"} hidden md:block sticky top-25 left-0 w-full mb-3`}>
@@ -45,7 +72,7 @@ const PlaylistPage = () => {
                 </div>
 
                 {/* Playlist Tracks */}
-                <PlaylistTracks />
+                <PlaylistTracks view={view} columns={columns} />
             </div>
 
             <Footer />

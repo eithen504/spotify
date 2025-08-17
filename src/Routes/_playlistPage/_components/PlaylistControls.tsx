@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useUIPreferencesStore } from '../../../store/useUIPreferenceStore';
-import { AddIcon, AddToQueueIcon, DefaultListIcon, LogoIcon, MoreIcon, PlayIcon, PlusIcon, ReportIcon, ShareIcon } from '../../../Svgs';
+import { AddIcon, AddToQueueIcon, CompactListIcon, DefaultListIcon, LogoIcon, MoreIcon, PlayIcon, ReportIcon, ShareIcon, TickIcon } from '../../../Svgs';
 import useBreakPoint from '../../../hooks/useBreakPoint';
 import { Drawer, DrawerContent } from '../../../components/ui/drawer';
+import { useScrollStore } from '../../../store/useScrollStore';
 
 const moreMenuOptions = [
     {
@@ -37,23 +38,43 @@ const moreMenuOptions = [
 
 ]
 
-const PlaylistControls = () => {
+interface PlaylistControlsProps {
+    view: "Compact List" | "Default List";
+    setView: React.Dispatch<React.SetStateAction<"Default List" | "Compact List">>;
+}
+
+const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-    const [isMoreDropdowmOpen, setIsMoreDropdowmOpen] = useState(false);
+    const { shouldHideScroll, setShouldHideScroll } = useScrollStore();
+    const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
+    const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
     const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
     const [breakPoint] = useBreakPoint();
     const moreDropdownRef = useRef<HTMLDivElement>(null);
+    const viewDropdownRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
-            if (moreDropdownRef.current && !moreDropdownRef.current.contains(e.target as Node)) {
-                setIsMoreDropdowmOpen(false);
+            if (moreDropdownRef.current && !moreDropdownRef.current.contains(e.target as Node) && !isViewDropdownOpen) {
+                setIsMoreDropdownOpen(false);
+                setShouldHideScroll(false)
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [isViewDropdownOpen]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (viewDropdownRef.current && !viewDropdownRef.current.contains(e.target as Node) && !isMoreDropdownOpen) {
+                setIsViewDropdownOpen(false);
+                setShouldHideScroll(false)
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isMoreDropdownOpen]);
 
     return (
         <div
@@ -104,7 +125,8 @@ const PlaylistControls = () => {
                         if (breakPoint == "sm") {
                             setIsMoreDrawerOpen((prev) => !prev)
                         } else {
-                            setIsMoreDropdowmOpen((prev) => !prev)
+                            setIsMoreDropdownOpen((prev) => !prev)
+                            setShouldHideScroll(!shouldHideScroll);
                         }
                     }
                     }
@@ -113,8 +135,8 @@ const PlaylistControls = () => {
                     <MoreIcon width="30" height="30" />
                 </button>
 
-                {isMoreDropdowmOpen && (
-                    <div className={`w-65 fixed z-500 top-31 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}>
+                {isMoreDropdownOpen && (
+                    <div className={`w-65 fixed z-600 -mt-67 md:-ml-10 lg:ml-0 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}>
                         {
                             moreMenuOptions?.map(({ icon, label, hasTopBorder }) => {
 
@@ -173,10 +195,64 @@ const PlaylistControls = () => {
                 )}
             </div>
 
-            <button className="hidden md:flex text-white/70 dynamic-text-hover cursor-pointer ml-auto items-center gap-1.5">
-                {leftPanelSize <= 23 && <span>{"selectedView"}</span>}
-                <DefaultListIcon width="15" height="15" />
-            </button>
+            <div className="relative ml-auto" ref={viewDropdownRef}>
+                <button
+                    className="hidden md:flex text-white/70 dynamic-text-hover cursor-pointer text-sm items-center gap-1.5"
+                    onClick={() => {
+                        setIsViewDropdownOpen((prev) => !prev)
+                        setShouldHideScroll(!shouldHideScroll)
+                    }}
+                >
+                    {leftPanelSize <= 23 && <span className="font-medium">{view}</span>}
+                    {
+                        view == "Compact List" ? <CompactListIcon width="15" height="15" /> : <DefaultListIcon width="15" height="15" />
+                    }
+                </button>
+
+                {isViewDropdownOpen && (
+                    <div className="w-45 absolute z-600 bottom-9 right-0 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm">
+                        <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
+                            <span className="flex items-center gap-3 text-xs">
+                                View as
+                            </span>
+                        </div>
+
+                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                            onClick={() => setView("Compact List")}
+                        >
+                            <span className={`${view == "Compact List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                <CompactListIcon width="15" height="15" />
+                                Compact List
+                            </span>
+
+                            {
+                                view == "Compact List" && (
+                                    <p className="text-[#3BE477]">
+                                        <TickIcon width="15" height="15" />
+                                    </p>
+                                )
+                            }
+                        </button>
+
+                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                            onClick={() => setView("Default List")}
+                        >
+                            <span className={`${view == "Default List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                <DefaultListIcon width="15" height="15" />
+                                Default List
+                            </span>
+
+                            {
+                                view == "Default List" && (
+                                    <p className="text-[#3BE477]">
+                                        <TickIcon width="15" height="15" />
+                                    </p>
+                                )
+                            }
+                        </button>
+                    </div>
+                )}
+            </div>
 
             <button
                 className="block md:hidden text-black bg-[#1ed760] dynamic-bg-hover rounded-full p-[19px] ml-auto cursor-pointer"
