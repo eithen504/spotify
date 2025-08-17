@@ -5,6 +5,7 @@ import { ClockIcon, DropdownIcon, TickIcon } from "../../../Svgs";
 import { getScrollThreshold } from "../../../utils";
 import { useEffect, useRef, useState } from "react";
 import type { Column } from "../../../Types";
+import useBreakPoint from "../../../hooks/useBreakPoint";
 
 interface PlaylistTableHeaderProps {
     view: "Compact List" | "Default List";
@@ -16,6 +17,7 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const { scrollFromTop, setShouldHideScroll } = useScrollStore();
     const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
+    const [breakPoint] = useBreakPoint();
     const columnDropdownRef = useRef<HTMLDivElement>(null);
 
     // Calculate the background class based on conditions
@@ -33,7 +35,7 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
     }, []);
 
     return (
-        <div className={`sticky group top-16 left-0 w-full z-500 text-sm text-white/70 ${backgroundClass} pb-2 px-10 pt-2 hidden md:flex`}>
+        <div className={`sticky group top-16 left-0 w-full z-10 text-sm text-white/70 ${backgroundClass} pb-2 px-10 pt-2 hidden md:flex`}>
             <div className="w-6">#</div>
             <div className="flex-1 truncate">Title</div>
             {
@@ -62,7 +64,7 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
                 {columns["Duration"] && <ClockIcon width="18" height="18" />}
             </div>
 
-            <div className="relative" ref={columnDropdownRef}>
+            <div className="relative flex items-center" ref={columnDropdownRef}>
                 <button className="cursor-pointer group-hover-opacity dynamic-text-hover"
                     onClick={() => {
                         setIsColumnDropdownOpen((prev) => !prev);
@@ -73,7 +75,16 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
                 </button>
 
                 {isColumnDropdownOpen && (
-                    <div className="w-45 absolute z-500 bottom-9 right-0 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm">
+                    <div
+                        className="w-45 fixed z-500 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
+                        style={{
+                            top: `${(columnDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
+                            ...(breakPoint === "md" && {
+                                right: `47px`,
+                            }),
+                        }}
+
+                    >
                         <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
                             <span className="flex items-center gap-3 text-xs">
                                 Column

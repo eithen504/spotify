@@ -136,7 +136,12 @@ const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) =>
                 </button>
 
                 {isMoreDropdownOpen && (
-                    <div className={`w-65 fixed z-600 -mt-67 md:-ml-10 lg:ml-0 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}>
+                    <div
+                        className={`w-65 fixed z-600 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}
+                        style={{
+                            top: `${(moreDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
+                        }}
+                    >
                         {
                             moreMenuOptions?.map(({ icon, label, hasTopBorder }) => {
 
@@ -210,7 +215,15 @@ const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) =>
                 </button>
 
                 {isViewDropdownOpen && (
-                    <div className="w-45 absolute z-600 bottom-9 right-0 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm">
+                    <div
+                        className="w-45 fixed z-600 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
+                        style={{
+                            top: `${(viewDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
+                            ...(breakPoint === "md" && {
+                                right: `30px`,
+                            }),
+                        }}
+                    >
                         <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
                             <span className="flex items-center gap-3 text-xs">
                                 View as
