@@ -3,7 +3,7 @@ import CompactListItems from "./layouts/_desktopMainLayout/_components/_mainCont
 import DefaultGridItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/DefaultGridItems";
 import DefaultListItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { HomePageTab, LeftSidebarSortOption, LeftSidebarTab, LeftSidebarViewIcon, LeftSidebarViewOption, NavigationItem, ViewComponent } from "./Types"
+import type { Genre, HomePageTab, LeftSidebarSortOption, LeftSidebarTab, LeftSidebarViewIcon, LeftSidebarViewOption, NavigationItem, ViewComponent } from "./Types"
 
 const LEFT_SIDEBAR_TABS: LeftSidebarTab[] = ["Playlists", "Save Playlists", "Save Albums", "Podcasts"]
 
@@ -71,6 +71,123 @@ const VIEW_COMPONENTS: ViewComponent = {
 
 const HOMEPAGE_TABS: HomePageTab[] = ["All", "Music", "Podcasts"]
 
+const GENRES: Genre[] = [
+    {
+        id: "0JQ5DAqbMKFz6FAsUtgAab",
+        title: "Hindi",
+        bgColor: "bg-[#DC148C]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84dc9d42bc37d95f153c33fa5b"
+    },
+    {
+        id: "1KLPoBkeHXzq3NaGMyvCYx",
+        title: "Party",
+        bgColor: "bg-[#8D67AB]",
+        image: "https://i.scdn.co/image/ab67706f00000002d2c23cff8e4056e5c891216d"
+    },
+    {
+        id: "2QW8TMxFVuGe7LidpUoRlf",
+        title: "Chill",
+        bgColor: "bg-[#B06239]",
+        image: "https://i.scdn.co/image/ab67706f0000000243cc4425ca68418fcab705fd"
+    },
+    {
+        id: "3ZJr7yHSWEdqUfnIPpASXo",
+        title: "Summer",
+        bgColor: "bg-[#27856A]",
+        image: "https://i.scdn.co/image/ab67706f000000025e5ae44995b14abdb1e6695e"
+    },
+    {
+        id: "4VPedCbnHr3zAgLNvFcTks",
+        title: "Love",
+        bgColor: "bg-[#DC148C]",
+        image: "https://i.scdn.co/image/ab67706f00000002dcb7b32f8bf2e6a7851245e3"
+    },
+    {
+        id: "5ETghADu9pQvbiKpPcknOj",
+        title: "Emotional & HeartBreaking",
+        bgColor: "bg-[#1E3264]",
+        image: "https://i.scdn.co/image/ab67706f000000026a529b45bf70807cc16b1a88"
+    },
+    {
+        id: "6RSjhZNCLaUcYiKXoxSgDt",
+        title: "Road Trip",
+        bgColor: "bg-[#8D67AB]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84ab7f27e3e1e376b29cf2f22d"
+    },
+    {
+        id: "7LKbgJMTxx1EWHWslrBnMc",
+        title: "Sleep",
+        bgColor: "bg-[#1E3264]",
+        image: "https://i.scdn.co/image/ab67706f00000002cd17d41419faa97069e06c16"
+    },
+    {
+        id: "8DLoXEHwnZpVuJkNHgwUex",
+        title: "Strees Relief",
+        bgColor: "bg-[#5179A1]",
+        image: "https://i.scdn.co/image/ab67706f000000025db1394baf8862336f19ac83"
+    },
+    {
+        id: "9NKebCaYi6TH1VRGyxVtBP",
+        title: "Instrumental",
+        bgColor: "bg-[#1F5F4D]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84de3927234c577925c274e45e"
+    },
+    {
+        id: "10JXpYKDwxUR6LsZyGbUVo",
+        title: "Happy",
+        bgColor: "bg-[#0D73EC]",
+        image: "https://i.scdn.co/image/ab67616d0000b27317f480c5a24fd7b5c7929521"
+    },
+    {
+        id: "11FYRxapWUkowNzXFtVLyB",
+        title: "workout",
+        bgColor: "bg-[#777777]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84124bd0cf5122f4e1aa2a65b7"
+    },
+    {
+        id: "12HBETGksRQzyXtDjVqvMe",
+        title: "Focus",
+        bgColor: "bg-[#A56752]",
+        image: "https://i.scdn.co/image/ab67706f000000026020f2f6476db518ef747da4"
+    },
+    {
+        id: "13MYkJpzyXTvCAWDtzJKVE",
+        title: "Dance",
+        bgColor: "bg-[#477D95]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8443c71a3a90d88df3ba8acd78"
+    },
+    {
+        id: "14QJFnkPLTqEVdSgXLHkZe",
+        title: "Cooking",
+        bgColor: "bg-[#7D4B32]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84eec4b5eaa5f9893e6df4e25b"
+    },
+    {
+        id: "15UJEnpbLMWsEfQgOpBmKH",
+        title: "Travel",
+        bgColor: "bg-[#0D72ED]",
+        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8404fd89ab8064c32896fd0cdc"
+    },
+    {
+        id: "16LHRwGizVQymAfBkwCKoT",
+        title: "Rain & Monsoon",
+        bgColor: "bg-[#006450]",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyupWpvf4JJhOavy8wvuwwL5sqLjmMvWu4Wg&s"
+    },
+    {
+        id: "17EVnyjKwUdCQaHnpLmBeX",
+        title: "Lofi",
+        bgColor: "bg-[#BA5D07]",
+        image: "https://i.scdn.co/image/ab67616d00001e02c9cdb8a6f71db82df0a37459"
+    },
+    {
+        id: "18PUKrniLDuoxAcSmBZjJG",
+        title: "Nature & Noise",
+        bgColor: "bg-[#05241E]",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTteCZYrLEdaHGuBcEaapjjDMYsoI77V3eJIg&s"
+    }
+];
+
 export {
     LEFT_SIDEBAR_TABS,
     NAVIGATION_ITEMS,
@@ -78,5 +195,6 @@ export {
     LEFT_SIDEBAR_VIEW_OPTIONS,
     LEFT_SIDEBAR_VIEW_ICONS,
     VIEW_COMPONENTS,
-    HOMEPAGE_TABS
+    HOMEPAGE_TABS,
+    GENRES
 }

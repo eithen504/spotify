@@ -27,4 +27,31 @@ export type ViewComponent = Record<LeftSidebarViewLabel, JSX.Element>
 export type HomePageTab = "All" | "Music" | "Podcasts";
 
 export type Column = "Artist" | "Album" | "Duration" | "Date added";
- 
+
+export type GenreTitle =
+    | "Hindi"
+    | "Party"
+    | "Chill"
+    | "Summer"
+    | "Love"
+    | "Emotional & HeartBreaking"
+    | "Road Trip"
+    | "Sleep"
+    | "Strees Relief"
+    | "Instrumental"
+    | "Happy"
+    | "workout"
+    | "Focus"
+    | "Dance"
+    | "Cooking"
+    | "Travel"
+    | "Rain & Monsoon"
+    | "Lofi"
+    | "Nature & Noise";
+
+export type Genre = {
+    id: string;
+    title: GenreTitle;
+    bgColor: string;
+    image: string;
+}

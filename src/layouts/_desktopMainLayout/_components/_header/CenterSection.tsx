@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
-import { BrowseIcon, CrossIcon, HomeFilledIcon, HomeIcon, SearchIcon } from "../../../../Svgs"
+import { BrowseIcon, BrowserFilledIcon, CrossIcon, HomeFilledIcon, HomeIcon, SearchIcon } from "../../../../Svgs"
 import { useEffect, useRef, useState } from "react";
 import RecentSearchesDropdown from "./RecentSearchesDropdown";
 
@@ -13,6 +13,8 @@ const CenterSection = () => {
     const searchBarRef = useRef<HTMLDivElement | null>(null);
 
     const handleClearSearchQuery = () => setSearchQuery("");
+
+    const isSearchPage = pathname == "/search";
 
     // Close dropdown when clicked outside
     useEffect(() => {
@@ -73,11 +75,15 @@ const CenterSection = () => {
 
                     <div className="w-px h-6 bg-[#7C7C7C] mx-4"></div>
 
-                    <button
-                        className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
+                    <Link
+                        to={"/search"}
+                        className={`flex flex-col ${isSearchPage ? "text-[#ffffff]" : "text-[#adadad]"} dynamic-text-hover gap-1 cursor-pointer`}
+                        title="Browse"
                     >
-                        <BrowseIcon />
-                    </button>
+                        {
+                            isSearchPage ? <BrowserFilledIcon /> : <BrowseIcon />
+                        }
+                    </Link>
                 </div>
 
                 {isFocused && !searchQuery.trim() && (

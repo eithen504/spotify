@@ -1,8 +1,12 @@
+import { useLocation } from "react-router-dom"
 import { FacebookIcon, InstagramIcon, TwitterIcon } from "../../Svgs"
 
 const Footer = () => {
+    const { pathname } = useLocation();
+    const isHomePage = pathname == "/";
+
     return (
-        <footer className={`p-4 md:p-10 mt-7 text-white max-w-[90rem] mx-auto`}>
+        <footer className={`p-4 ${isHomePage ? "md:px-10 md:py-10" : "md:px-6 md:py-10"} mt-7 text-white max-w-[90rem] mx-auto`}>
             <div className="flex flex-col  justify-between gap-8">
                 {/* Company */}
                 <div className="space-y-2">
