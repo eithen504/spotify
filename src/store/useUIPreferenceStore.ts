@@ -6,6 +6,7 @@ interface Preferences {
   rightPanelSize: number;
   isLeftSidebarExpanded: boolean;
   showNowPlayingView: boolean;
+  showQueueView: boolean;
   isNowPlayingViewExpanded: boolean;
   isNowPlayingViewFullScreen: boolean;
   isMiniPlayerWindowOpen: boolean;
@@ -24,6 +25,7 @@ export const useUIPreferencesStore = create<UIPreferencesStore>((set) => ({
     rightPanelSize: 20,
     isLeftSidebarExpanded: false,
     showNowPlayingView: false,
+    showQueueView: false,
     isNowPlayingViewExpanded: false,
     isNowPlayingViewFullScreen: false,
     isMiniPlayerWindowOpen: false,

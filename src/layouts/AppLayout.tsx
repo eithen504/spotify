@@ -15,6 +15,7 @@ export default function AppLayout() {
         let rightPanelSize = Number(localStorage.getItem("rightPanelSize")) || 20
         const isLeftSidebarExpanded = localStorage.getItem("isLeftSidebarExpanded") == "true"
         const showNowPlayingView = localStorage.getItem("showNowPlayingView") == "true"
+        const showQueueView = localStorage.getItem("showQueueView") == "true"
         const localView = localStorage.getItem("view") || "Default List"
         const view = VIEW_COMPONENTS[localView as LeftSidebarViewLabel] ? localView : "Default List"
 
@@ -24,7 +25,7 @@ export default function AppLayout() {
         localStorage.setItem("view", `${view}`)
 
         if (breakpoint == "lg") {
-            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, view: view as LeftSidebarViewLabel })
+            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, showQueueView, view: view as LeftSidebarViewLabel })
         }
 
         if (breakpoint == "md") {
@@ -40,11 +41,10 @@ export default function AppLayout() {
                 leftPanelSize = 100;
             }
 
-            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, view: view as LeftSidebarViewLabel })
+            setPreferences({ leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, showQueueView, view: view as LeftSidebarViewLabel })
             localStorage.setItem("leftPanelSize", `${leftPanelSize}`)
         }
     }, [breakpoint])
-
 
     return (
         <div className="overflow-hidden bg-[#121212]">

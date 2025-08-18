@@ -4,15 +4,27 @@ import { ExitScreenIcon, FullScreenIcon, HighVolumeIcon, MiniPlayerIcon, NowPlay
 import MiniPlayerWindow from "./MiniPlayerWindow"
 
 const RightSideControls = () => {
-    const { preferences: { showNowPlayingView, isNowPlayingViewFullScreen, isMiniPlayerWindowOpen }, setPreferences } = useUIPreferencesStore()
+    const { preferences: { showNowPlayingView, showQueueView, isNowPlayingViewFullScreen, isMiniPlayerWindowOpen }, setPreferences } = useUIPreferencesStore()
 
     const handleToggleNowPlayingView = () => {
         if (showNowPlayingView) {
             setPreferences({ showNowPlayingView: false })
             localStorage.setItem("showNowPlayingView", "false")
         } else {
-            setPreferences({ showNowPlayingView: true })
+            setPreferences({ showNowPlayingView: true, showQueueView: false })
             localStorage.setItem("showNowPlayingView", "true")
+            localStorage.setItem("showQueueView", "false")
+        }
+    }
+
+    const handleToggleQueueView = () => {
+        if (showQueueView) {
+            setPreferences({ showQueueView: false })
+            localStorage.setItem("showQueueView", "false")
+        } else {
+            setPreferences({ showQueueView: true, showNowPlayingView: false })
+            localStorage.setItem("showQueueView", "true")
+            localStorage.setItem("showNowPlayingView", "false")
         }
     }
 
@@ -41,7 +53,8 @@ const RightSideControls = () => {
                 </button>
 
                 {/* Queue Icon */}
-                <button className={`hidden lg:block dynamic-text-hover cursor-pointer`}
+                <button className={`${showQueueView ? "text-[#3BE477]" : "dynamic-text-hover"} hidden lg:block cursor-pointer`}
+                    onClick={handleToggleQueueView}
                 >
                     <QueueIcon width="16" height="16" />
                 </button>

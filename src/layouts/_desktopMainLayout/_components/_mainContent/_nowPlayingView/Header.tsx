@@ -36,7 +36,6 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
                 </p>
             </div>
 
-
             {/* Right side - Action buttons */}
             <div
                 className={`flex items-center space-x-2 group-hover-opacity transition-all duration-400 ease-out`}

@@ -1,12 +1,13 @@
 import LeftSidebar from './_leftSidebar/LeftSidebar'
 import { Outlet, useLocation } from 'react-router-dom'
 import NowPlayingView from './_nowPlayingView/NowPlayingView'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ResizePanel } from '../../../../Types';
 import { useUIPreferencesStore } from '../../../../store/useUIPreferenceStore';
 import useBreakPoint from '../../../../hooks/useBreakPoint';
 import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
 import { useScrollStore } from '../../../../store/useScrollStore';
+import QueueView from './_queueView/QueueView';
 
 const MainContent = () => {
     const { pathname } = useLocation();
@@ -15,7 +16,7 @@ const MainContent = () => {
     const [breakpoint] = useBreakPoint();
     const containerRef = useRef<HTMLDivElement>(null);
     const scrollSectionRef = useRef<HTMLDivElement>(null);
-    const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
+    const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, showQueueView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
     const { setIsScrolled, setScrollFromTop } = useScrollStore()
 
     const startResizing = (panel: 'left' | 'right') => {
@@ -116,7 +117,7 @@ const MainContent = () => {
         return () => element.removeEventListener("scroll", onScroll);
     }, [scrollSectionRef.current]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const element = scrollSectionRef.current;
         if (!element) return;
 
@@ -161,7 +162,7 @@ const MainContent = () => {
                                     </section>
 
                                     {
-                                        showNowPlayingView && (
+                                        (showNowPlayingView || showQueueView) && (
                                             <>
                                                 <div
                                                     onMouseDown={() => startResizing('right')}
@@ -175,7 +176,9 @@ const MainContent = () => {
                                                 </div>
 
                                                 {/* Right Sidebar */}
-                                                <NowPlayingView rightPanelSize={rightPanelSize} />
+                                                {
+                                                    showNowPlayingView ? <NowPlayingView rightPanelSize={rightPanelSize} /> : <QueueView rightPanelSize={rightPanelSize} />
+                                                }
                                             </>
                                         )
                                     }

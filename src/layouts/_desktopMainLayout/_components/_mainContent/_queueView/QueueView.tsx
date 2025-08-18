@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react"
-import CreditSection from "./CreditSection"
-import Header from "./Header"
-import QueueSection from "./QueueSection"
-import TrackInfo from "./TrackInfo"
+import React, { useEffect, useRef, useState } from 'react'
+import Header from './Header';
+import NowPlayingSection from './NowPlayingSection';
+import NextInQueueSection from './NextInQueueSection';
 
-interface NowPlayingViewProps {
+interface QueueViewProps {
     rightPanelSize: number;
 }
 
-const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
+const QueueView: React.FC<QueueViewProps> = ({ rightPanelSize }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const sidebarRef = useRef<HTMLDivElement | null>(null)
 
@@ -32,28 +31,23 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
     }, [])
 
     return (
-
         <aside
             className="hidden lg:flex bg-[#121212] text-[#ffffff] group relative h-full flex-col overflow-y-auto hide-scrollbar"
             style={{ width: `${rightPanelSize}%` }}
             ref={sidebarRef}
         >
-            {/* Header */} 
+            {/* Fixed header section */}
             <Header isScrolled={isScrolled} />
 
-            {/* Scrollable Content */}
-            <div className="flex-1 px-4 pb-4">
-                {/* Track Info */}
-                <TrackInfo />
+            <div className="flex-1">
+                {/* Now Playing Section */}
+                <NowPlayingSection />
 
-                {/* Credit Section */}
-                <CreditSection />
-
-                {/* Queue Section */}
-                <QueueSection />
+                {/* Next In Queue Section */}
+                <NextInQueueSection />
             </div>
         </aside>
     )
 }
 
-export default NowPlayingView
+export default QueueView
