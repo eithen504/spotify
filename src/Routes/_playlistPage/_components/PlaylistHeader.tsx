@@ -4,7 +4,7 @@ import { PlayIcon } from '../../../Svgs';
 
 const PlaylistHeader = () => {
     const {scrollFromTop} = useScrollStore();
-
+ 
     return (
         <header className={`max-w-[90rem] mx-auto flex gap-3 shadow-[0_4px_5px_rgba(0,0,0,0.1)] fixed md:sticky top-0 left-0 w-full z-50 px-4 md:px-6 py-[8.2px] items-center mb-[0px] md:-mb-[64px]`}
             style={{

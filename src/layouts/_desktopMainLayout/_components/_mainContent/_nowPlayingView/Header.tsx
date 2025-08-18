@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
     }
 
     return (
-        <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} flex items-center justify-between flex-shrink-0 p-4 w-full sticky top-0 bg-[#121212] z-50`}>
+        <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} flex items-center justify-between flex-shrink-0 p-4 w-full sticky top-0 bg-[#121212] z-5`}>
             {/* Title and collapse button */}
             <div className="flex gap-2 items-center max-w-[150px] overflow-hidden">
                 <button

@@ -3,7 +3,7 @@ import { useScrollStore } from "../../../store/useScrollStore";
 import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
 import { ClockIcon, DropdownIcon, TickIcon } from "../../../Svgs";
 import { getScrollThreshold } from "../../../utils";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { Column } from "../../../Types";
 import useBreakPoint from "../../../hooks/useBreakPoint";
 
@@ -14,8 +14,8 @@ interface PlaylistTableHeaderProps {
 }
 
 const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns, setColumns }) => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-    const { scrollFromTop, setShouldHideScroll } = useScrollStore();
+    const { preferences: { leftPanelSize, showNowPlayingView } } = useUIPreferencesStore();
+    const { scrollFromTop } = useScrollStore();
     const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
     const [breakPoint] = useBreakPoint();
     const columnDropdownRef = useRef<HTMLDivElement>(null);
@@ -23,16 +23,6 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
     // Calculate the background class based on conditions
     const shouldShowBackground = scrollFromTop >= getScrollThreshold(leftPanelSize);
     const backgroundClass = shouldShowBackground ? "bg-[#1F1F1F]" : "";
-
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (columnDropdownRef.current && !columnDropdownRef.current.contains(e.target as Node)) {
-                setIsColumnDropdownOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
 
     return (
         <div className={`sticky group top-16 left-0 w-full z-10 text-sm text-white/70 ${backgroundClass} pb-2 px-10 pt-2 hidden md:flex`}>
@@ -68,166 +58,172 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
                 <button className="cursor-pointer group-hover-opacity dynamic-text-hover"
                     onClick={() => {
                         setIsColumnDropdownOpen((prev) => !prev);
-                        setShouldHideScroll(true)
                     }}
                 >
                     <DropdownIcon width="15" height="15" />
                 </button>
 
                 {isColumnDropdownOpen && (
-                    <div
-                        className="w-45 fixed z-500 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
-                        style={{
-                            top: `${(columnDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
-                            ...(breakPoint === "md" && {
-                                right: `47px`,
-                            }),
-                        }}
+                    <>
+                        {/* Full-screen overlay to prevent scrolling */}
+                        <div
+                            className="fixed inset-0 z-800"
+                            onClick={() => setIsColumnDropdownOpen(false)}
+                        />
 
-                    >
-                        <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
-                            <span className="flex items-center gap-3 text-xs">
-                                Column
-                            </span>
+                        <div
+                            className="w-45 fixed z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
+                            style={{
+                                top: `${(columnDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
+                                ...((breakPoint === "md" || !showNowPlayingView) && {
+                                    right: `47px`,
+                                }),
+                            }}
+
+                        >
+                            <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
+                                <span className="flex items-center gap-3 text-xs">
+                                    Column
+                                </span>
+                            </div>
+
+                            {
+                                view == "Compact List" ? (
+                                    <>
+                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                            onClick={() => setColumns({
+                                                "Artist": !columns["Artist"],
+                                                "Album": columns["Album"],
+                                                "Duration": columns["Duration"],
+                                                "Date added": false,
+                                            })}
+                                        >
+                                            <span className={`${columns["Artist"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                Artist
+                                            </span>
+
+                                            {
+                                                columns["Artist"] && (
+                                                    <p className="text-[#3BE477]">
+                                                        <TickIcon width="15" height="15" />
+                                                    </p>
+                                                )
+                                            }
+                                        </button>
+
+                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                            onClick={() => setColumns({
+                                                "Artist": columns["Artist"],
+                                                "Album": !columns["Album"],
+                                                "Duration": columns["Duration"],
+                                                "Date added": false,
+                                            })}
+                                        >
+                                            <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                Album
+                                            </span>
+
+                                            {
+                                                columns["Album"] && (
+                                                    <p className="text-[#3BE477]">
+                                                        <TickIcon width="15" height="15" />
+                                                    </p>
+                                                )
+                                            }
+                                        </button>
+
+                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                            onClick={() => setColumns({
+                                                "Artist": columns["Artist"],
+                                                "Album": columns["Album"],
+                                                "Duration": !columns["Duration"],
+                                                "Date added": false,
+                                            })}
+                                        >
+                                            <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                Duration
+                                            </span>
+
+                                            {
+                                                columns["Duration"] && (
+                                                    <p className="text-[#3BE477]">
+                                                        <TickIcon width="15" height="15" />
+                                                    </p>
+                                                )
+                                            }
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                            onClick={() => setColumns({
+                                                "Artist": false,
+                                                "Album": !columns["Album"],
+                                                "Duration": columns["Duration"],
+                                                "Date added": columns["Date added"],
+                                            })}
+                                        >
+                                            <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                Album
+                                            </span>
+
+                                            {
+                                                columns["Album"] && (
+                                                    <p className="text-[#3BE477]">
+                                                        <TickIcon width="15" height="15" />
+                                                    </p>
+                                                )
+                                            }
+                                        </button>
+
+                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                            onClick={() => setColumns({
+                                                "Artist": false,
+                                                "Album": columns["Album"],
+                                                "Duration": columns["Duration"],
+                                                "Date added": !columns["Date added"],
+                                            })}
+                                        >
+                                            <span className={`${columns["Date added"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                Date added
+                                            </span>
+
+                                            {
+                                                columns["Date added"] && (
+                                                    <p className="text-[#3BE477]">
+                                                        <TickIcon width="15" height="15" />
+                                                    </p>
+                                                )
+                                            }
+                                        </button>
+
+                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                            onClick={() => setColumns({
+                                                "Artist": false,
+                                                "Album": columns["Album"],
+                                                "Duration": !columns["Duration"],
+                                                "Date added": columns["Date added"],
+                                            })}
+                                        >
+                                            <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                Duration
+                                            </span>
+
+                                            {
+                                                columns["Duration"] && (
+                                                    <p className="text-[#3BE477]">
+                                                        <TickIcon width="15" height="15" />
+                                                    </p>
+                                                )
+                                            }
+                                        </button>
+                                    </>
+                                )
+                            }
                         </div>
-
-                        {
-                            view == "Compact List" ? (
-                                <>
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setColumns({
-                                            "Artist": !columns["Artist"],
-                                            "Album": columns["Album"],
-                                            "Duration": columns["Duration"],
-                                            "Date added": false,
-                                        })}
-                                    >
-                                        <span className={`${columns["Artist"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                            Artist
-                                        </span>
-
-                                        {
-                                            columns["Artist"] && (
-                                                <p className="text-[#3BE477]">
-                                                    <TickIcon width="15" height="15" />
-                                                </p>
-                                            )
-                                        }
-                                    </button>
-
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setColumns({
-                                            "Artist": columns["Artist"],
-                                            "Album": !columns["Album"],
-                                            "Duration": columns["Duration"],
-                                            "Date added": false,
-                                        })}
-                                    >
-                                        <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                            Album
-                                        </span>
-
-                                        {
-                                            columns["Album"] && (
-                                                <p className="text-[#3BE477]">
-                                                    <TickIcon width="15" height="15" />
-                                                </p>
-                                            )
-                                        }
-                                    </button>
-
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setColumns({
-                                            "Artist": columns["Artist"],
-                                            "Album": columns["Album"],
-                                            "Duration": !columns["Duration"],
-                                            "Date added": false,
-                                        })}
-                                    >
-                                        <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                            Duration
-                                        </span>
-
-                                        {
-                                            columns["Duration"] && (
-                                                <p className="text-[#3BE477]">
-                                                    <TickIcon width="15" height="15" />
-                                                </p>
-                                            )
-                                        }
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setColumns({
-                                            "Artist": false,
-                                            "Album": !columns["Album"],
-                                            "Duration": columns["Duration"],
-                                            "Date added": columns["Date added"],
-                                        })}
-                                    >
-                                        <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                            Album
-                                        </span>
-
-                                        {
-                                            columns["Album"] && (
-                                                <p className="text-[#3BE477]">
-                                                    <TickIcon width="15" height="15" />
-                                                </p>
-                                            )
-                                        }
-                                    </button>
-
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setColumns({
-                                            "Artist": false,
-                                            "Album": columns["Album"],
-                                            "Duration": columns["Duration"],
-                                            "Date added": !columns["Date added"],
-                                        })}
-                                    >
-                                        <span className={`${columns["Date added"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                            Date added
-                                        </span>
-
-                                        {
-                                            columns["Date added"] && (
-                                                <p className="text-[#3BE477]">
-                                                    <TickIcon width="15" height="15" />
-                                                </p>
-                                            )
-                                        }
-                                    </button>
-
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setColumns({
-                                            "Artist": false,
-                                            "Album": columns["Album"],
-                                            "Duration": !columns["Duration"],
-                                            "Date added": columns["Date added"],
-                                        })}
-                                    >
-                                        <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                            Duration
-                                        </span>
-
-                                        {
-                                            columns["Duration"] && (
-                                                <p className="text-[#3BE477]">
-                                                    <TickIcon width="15" height="15" />
-                                                </p>
-                                            )
-                                        }
-                                    </button>
-                                </>
-                            )
-                        }
-                    </div>
+                    </>
                 )}
             </div>
-
         </div>
     )
 }

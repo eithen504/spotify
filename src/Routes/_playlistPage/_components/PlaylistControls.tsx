@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useUIPreferencesStore } from '../../../store/useUIPreferenceStore';
 import { AddIcon, AddToQueueIcon, CompactListIcon, DefaultListIcon, LogoIcon, MoreIcon, PlayIcon, ReportIcon, ShareIcon, TickIcon } from '../../../Svgs';
 import useBreakPoint from '../../../hooks/useBreakPoint';
 import { Drawer, DrawerContent } from '../../../components/ui/drawer';
-import { useScrollStore } from '../../../store/useScrollStore';
 
 const moreMenuOptions = [
     {
@@ -44,37 +43,13 @@ interface PlaylistControlsProps {
 }
 
 const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-    const { shouldHideScroll, setShouldHideScroll } = useScrollStore();
+    const { preferences: { leftPanelSize, showNowPlayingView } } = useUIPreferencesStore();
     const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
     const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
     const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
     const [breakPoint] = useBreakPoint();
     const moreDropdownRef = useRef<HTMLDivElement>(null);
     const viewDropdownRef = useRef<HTMLDivElement>(null);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (moreDropdownRef.current && !moreDropdownRef.current.contains(e.target as Node) && !isViewDropdownOpen) {
-                setIsMoreDropdownOpen(false);
-                setShouldHideScroll(false)
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isViewDropdownOpen]);
-
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (viewDropdownRef.current && !viewDropdownRef.current.contains(e.target as Node) && !isMoreDropdownOpen) {
-                setIsViewDropdownOpen(false);
-                setShouldHideScroll(false)
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isMoreDropdownOpen]);
 
     return (
         <div
@@ -119,45 +94,51 @@ const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) =>
             </button>
 
             {/* More Button + Dropdown */}
-            <div className="relative" ref={moreDropdownRef}>
+            <div className="relative flex items-center" ref={moreDropdownRef}>
                 <button
                     onClick={() => {
-                        if (breakPoint == "sm") {
+                        if (breakPoint == "sm") { 
                             setIsMoreDrawerOpen((prev) => !prev)
                         } else {
                             setIsMoreDropdownOpen((prev) => !prev)
-                            setShouldHideScroll(!shouldHideScroll);
                         }
                     }
                     }
-                    className="text-white/70 dynamic-text-hover cursor-pointer mt-[8px]"
+                    className="text-white/70 dynamic-text-hover cursor-pointer"
                 >
                     <MoreIcon width="30" height="30" />
                 </button>
 
                 {isMoreDropdownOpen && (
-                    <div
-                        className={`w-65 fixed z-600 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}
-                        style={{
-                            top: `${(moreDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
-                        }}
-                    >
-                        {
-                            moreMenuOptions?.map(({ icon, label, hasTopBorder }) => {
+                    <>
+                        <div
+                            className="fixed inset-0 z-800"
+                            onClick={() => setIsMoreDropdownOpen(false)}
+                        />
 
-                                return (
-                                    <button className={`${hasTopBorder ? "border-t border-[#3E3E3E]" : ""}  text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5 `}
-                                        key={label}
-                                    >
-                                        <span className="flex items-center gap-3">
-                                            {icon}
-                                            {label}
-                                        </span>
-                                    </button>
-                                )
-                            })
-                        }
-                    </div>
+                        <div
+                            className={`w-65 fixed z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}
+                            style={{
+                                top: `${(moreDropdownRef.current?.getBoundingClientRect().bottom ?? 0) - 265}px`,
+                            }}
+                        >
+                            {
+                                moreMenuOptions?.map(({ icon, label, hasTopBorder }) => {
+
+                                    return (
+                                        <button className={`${hasTopBorder ? "border-t border-[#3E3E3E]" : ""}  text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5 `}
+                                            key={label}
+                                        >
+                                            <span className="flex items-center gap-3">
+                                                {icon}
+                                                {label}
+                                            </span>
+                                        </button>
+                                    )
+                                })
+                            }
+                        </div>
+                    </>
                 )}
 
                 {isMoreDrawerOpen && (
@@ -200,12 +181,11 @@ const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) =>
                 )}
             </div>
 
-            <div className="relative ml-auto" ref={viewDropdownRef}>
+            <div className="relative ml-auto flex items-center" ref={viewDropdownRef}>
                 <button
                     className="hidden md:flex text-white/70 dynamic-text-hover cursor-pointer text-sm items-center gap-1.5"
                     onClick={() => {
                         setIsViewDropdownOpen((prev) => !prev)
-                        setShouldHideScroll(!shouldHideScroll)
                     }}
                 >
                     {leftPanelSize <= 23 && <span className="font-medium">{view}</span>}
@@ -215,11 +195,17 @@ const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) =>
                 </button>
 
                 {isViewDropdownOpen && (
+                    <>
                     <div
-                        className="w-45 fixed z-600 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
+                            className="fixed inset-0 z-800"
+                            onClick={() => setIsViewDropdownOpen(false)}
+                        />
+
+                    <div
+                        className="w-45 fixed z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
                         style={{
                             top: `${(viewDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
-                            ...(breakPoint === "md" && {
+                            ...((breakPoint === "md" || !showNowPlayingView) && {
                                 right: `30px`,
                             }),
                         }}
@@ -264,6 +250,7 @@ const PlaylistControls: React.FC<PlaylistControlsProps> = ({ view, setView }) =>
                             }
                         </button>
                     </div>
+                    </>
                 )}
             </div>
 

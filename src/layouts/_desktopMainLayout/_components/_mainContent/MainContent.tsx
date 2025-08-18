@@ -16,7 +16,7 @@ const MainContent = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const scrollSectionRef = useRef<HTMLDivElement>(null);
     const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
-    const { shouldHideScroll, setIsScrolled, setScrollFromTop } = useScrollStore()
+    const { setIsScrolled, setScrollFromTop } = useScrollStore()
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -154,7 +154,7 @@ const MainContent = () => {
                                     </div>
 
                                     {/* Children/Main Center Content */}
-                                    <section className={`flex-1 bg-[#121212] rounded-md ${shouldHideScroll ? "overflow-y-hidden" : "overflow-y-auto"} hide-scrollbar`}
+                                    <section className={`flex-1 bg-[#121212] rounded-md overflow-y-auto hide-scrollbar`}
                                         ref={scrollSectionRef}
                                     >
                                         <Outlet />

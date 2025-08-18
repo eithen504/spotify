@@ -37,7 +37,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
             style={{ width: `${leftPanelSize}%` }}
             ref={sidebarRef}
         >
-            <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} sticky top-0 bg-[#121212] z-50`}>
+            <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} sticky top-0 bg-[#121212] z-10`}>
                 {/* Header */}
                 <Header />
 
