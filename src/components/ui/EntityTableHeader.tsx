@@ -1,19 +1,19 @@
-import type React from "react";
-import { useScrollStore } from "../../../store/useScrollStore";
-import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
-import { ClockIcon, DropdownIcon, TickIcon } from "../../../Svgs";
-import { getScrollThreshold } from "../../../utils";
 import { useRef, useState } from "react";
-import type { Column } from "../../../Types";
-import useBreakPoint from "../../../hooks/useBreakPoint";
+import { useScrollStore } from "../../store/useScrollStore";
+import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
+import type { Column } from "../../Types";
+import useBreakPoint from "../../hooks/useBreakPoint";
+import { getScrollThreshold } from "../../utils";
+import { ClockIcon, DropdownIcon, TickIcon } from "../../Svgs";
 
-interface PlaylistTableHeaderProps {
+
+interface EntityTableHeaderProps {
     view: "Compact List" | "Default List";
     columns: Record<Column, boolean>;
     setColumns: React.Dispatch<React.SetStateAction<Record<Column, boolean>>>
 }
 
-const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns, setColumns }) => {
+const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, setColumns }) => {
     const { preferences: { leftPanelSize, showNowPlayingView } } = useUIPreferencesStore();
     const { scrollFromTop } = useScrollStore();
     const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
@@ -21,11 +21,10 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
     const columnDropdownRef = useRef<HTMLDivElement>(null);
 
     // Calculate the background class based on conditions
-    const shouldShowBackground = scrollFromTop >= getScrollThreshold(leftPanelSize);
-    const backgroundClass = shouldShowBackground ? "bg-[#1F1F1F]" : "";
+    const showBackground = scrollFromTop >= getScrollThreshold(leftPanelSize);
 
     return (
-        <div className={`sticky group top-16 left-0 w-full z-10 text-sm text-white/70 ${backgroundClass} pb-2 px-10 pt-2 hidden md:flex`}>
+        <div className={`sticky group top-16 left-0 w-full z-10 text-sm text-white/70 ${showBackground ? "bg-[#1F1F1F]" : ""} pb-2 px-10 pt-2 hidden md:flex`}>
             <div className="w-6">#</div>
             <div className="flex-1 truncate">Title</div>
             {
@@ -228,4 +227,4 @@ const PlaylistTableHeader: React.FC<PlaylistTableHeaderProps> = ({ view, columns
     )
 }
 
-export default PlaylistTableHeader
+export default EntityTableHeader

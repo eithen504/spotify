@@ -11,14 +11,14 @@ import EntityControls from "../../components/ui/EntityControls";
 import EntityTableHeader from "../../components/ui/EntityTableHeader";
 import EntityTracks from "../../components/ui/EntityTracks";
 
-const PlaylistPage = () => {
+const CollectionTracksPage = () => {
     const { scrollFromTop } = useScrollStore();
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const [view, setView] = useState<"Compact List" | "Default List">("Default List")
 
     const showFullBorder = scrollFromTop >= getScrollThreshold(leftPanelSize);
 
-    const imgUrl = "https://i.scdn.co/image/ab67616d00001e029246f630349fd58c5924400f"
+    const imgUrl = "https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
     const { dominantColor } = useDominantColor(imgUrl);
 
     const [columns, setColumns] = useState<Record<Column, boolean>>({
@@ -30,10 +30,10 @@ const PlaylistPage = () => {
 
     const controls: Controls = {
         Play: true,
-        Preview: true,
-        Save: true,
-        Share: true,
-        More: true,
+        Preview: false,
+        Save: false,
+        Share: false,
+        More: false,
         View: true,
     };
 
@@ -67,16 +67,16 @@ const PlaylistPage = () => {
             />
 
             {/* Playlist Header */}
-            <EntityHeader title="Worth The Wait" dominateColor={dominantColor || ""} />
+            <EntityHeader title="Liked Tracks" dominateColor={dominantColor || ""} />
 
             {/* Playlist Info Section */}
             <EntityInfoSection
                 entity={
                     {
                         imgUrl,
-                        displayType: "Public Playlist",
-                        title: "I Just Need A Nap",
-                        description: "Spotify . 15 Tracks . 2 hr 15 min"
+                        displayType: "Private Playlist",
+                        title: "Liked Tracks",
+                        description: "userxyz . 15 Tracks . 2 hr 15 min"
                     }
                 }
                 dominateColor={dominantColor || ""}
@@ -111,4 +111,4 @@ const PlaylistPage = () => {
     );
 };
 
-export default PlaylistPage;
+export default CollectionTracksPage;

@@ -1,15 +1,20 @@
 import React from 'react'
-import { useScrollStore } from '../../../store/useScrollStore'
-import { PlayIcon } from '../../../Svgs';
+import { useScrollStore } from '../../store/useScrollStore';
+import { PlayIcon } from '../../Svgs';
 
-const PlaylistHeader = () => {
-    const {scrollFromTop} = useScrollStore();
- 
+interface EntityHeaderProps {
+    title: string;
+    dominateColor: string;
+}
+
+const EntityHeader: React.FC<EntityHeaderProps> = ({ title, dominateColor }) => {
+    const { scrollFromTop } = useScrollStore();
+
     return (
         <header className={`max-w-[90rem] mx-auto flex gap-3 shadow-[0_4px_5px_rgba(0,0,0,0.1)] fixed md:sticky top-0 left-0 w-full z-50 px-4 md:px-6 py-[8.2px] items-center mb-[0px] md:-mb-[64px]`}
             style={{
                 opacity: scrollFromTop / 250,
-                background: '#2D2453'
+                background: dominateColor
             }}
         >
             <button
@@ -25,11 +30,11 @@ const PlaylistHeader = () => {
             </button>
 
             <h2 className={`${scrollFromTop >= 250 ? "opacity-100" : "opacity-0"} transition-opacity duration-500 ease-in-out text-2xl font-bold truncate overflow-hidden whitespace-nowrap`}>
-                {'title'}
+                {title}
             </h2>
 
         </header>
     )
 }
 
-export default PlaylistHeader
+export default EntityHeader

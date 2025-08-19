@@ -11,14 +11,14 @@ import EntityControls from "../../components/ui/EntityControls";
 import EntityTableHeader from "../../components/ui/EntityTableHeader";
 import EntityTracks from "../../components/ui/EntityTracks";
 
-const PlaylistPage = () => {
+const AlbumPage = () => { 
     const { scrollFromTop } = useScrollStore();
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const [view, setView] = useState<"Compact List" | "Default List">("Default List")
 
     const showFullBorder = scrollFromTop >= getScrollThreshold(leftPanelSize);
 
-    const imgUrl = "https://i.scdn.co/image/ab67616d00001e029246f630349fd58c5924400f"
+    const imgUrl = "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96"
     const { dominantColor } = useDominantColor(imgUrl);
 
     const [columns, setColumns] = useState<Record<Column, boolean>>({
@@ -67,15 +67,15 @@ const PlaylistPage = () => {
             />
 
             {/* Playlist Header */}
-            <EntityHeader title="Worth The Wait" dominateColor={dominantColor || ""} />
+            <EntityHeader title="Divide" dominateColor={dominantColor || ""} />
 
             {/* Playlist Info Section */}
             <EntityInfoSection
                 entity={
                     {
                         imgUrl,
-                        displayType: "Public Playlist",
-                        title: "I Just Need A Nap",
+                        displayType: "Album",
+                        title: "Divide",
                         description: "Spotify . 15 Tracks . 2 hr 15 min"
                     }
                 }
@@ -111,4 +111,4 @@ const PlaylistPage = () => {
     );
 };
 
-export default PlaylistPage;
+export default AlbumPage;

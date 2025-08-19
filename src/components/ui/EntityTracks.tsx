@@ -1,7 +1,7 @@
 import React from 'react'
-import { AddIcon, MoreIcon, PlayIcon } from '../../../Svgs';
-import { useUIPreferencesStore } from '../../../store/useUIPreferenceStore';
-import type { Column } from '../../../Types';
+import type { Column } from '../../Types';
+import { useUIPreferencesStore } from '../../store/useUIPreferenceStore';
+import { AddIcon, MoreIcon, PlayIcon } from '../../Svgs';
 
 const items = [
     {
@@ -76,12 +76,12 @@ const items = [
     }
 ];
 
-interface PlaylistTracksProps {
+interface EntityTracksProps {
     view: "Compact List" | "Default List";
     columns: Record<Column, boolean>;
 }
 
-const PlaylistTracks: React.FC<PlaylistTracksProps> = ({ view, columns }) => {
+const EntityTracks: React.FC<EntityTracksProps> = ({ view, columns }) => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
 
     return (
@@ -193,4 +193,4 @@ const PlaylistTracks: React.FC<PlaylistTracksProps> = ({ view, columns }) => {
     )
 }
 
-export default PlaylistTracks
+export default EntityTracks

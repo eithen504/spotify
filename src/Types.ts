@@ -55,3 +55,7 @@ export type Genre = {
     bgColor: string;
     image: string;
 }
+
+export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "More" | "View";
+
+export type Controls = Record<ControlKeys, boolean>;
