@@ -1,10 +1,11 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { BrowseIcon, BrowserFilledIcon, CrossIcon, HomeFilledIcon, HomeIcon, SearchIcon } from "../../../../Svgs"
 import { useEffect, useRef, useState } from "react";
 import RecentSearchesDropdown from "./RecentSearchesDropdown";
 
 const CenterSection = () => {
     const { pathname } = useLocation();
+    const navigate = useNavigate();
     const isHomePage = pathname == "/";
     const inputRef = useRef<HTMLInputElement>(null);
     const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +26,21 @@ const CenterSection = () => {
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.ctrlKey && event.key.toLowerCase() === "k") {
+                event.preventDefault(); // prevent browser’s default find action
+                console.log("Ctrl + K pressed!");
+                // 👉 Example: focus search input
+                inputRef.current?.focus();
+                navigate("/search")
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
     return (

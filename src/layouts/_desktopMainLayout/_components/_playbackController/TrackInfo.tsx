@@ -17,8 +17,9 @@ const TrackInfo = () => {
                 setPreferences({ showNowPlayingView: false })
                 localStorage.setItem("showNowPlayingView", "false")
             } else {
-                setPreferences({ showNowPlayingView: true })
+                setPreferences({ showNowPlayingView: true, showQueueView: false })
                 localStorage.setItem("showNowPlayingView", "true")
+                localStorage.setItem("showQueueView", "false")
             }
         }
 
