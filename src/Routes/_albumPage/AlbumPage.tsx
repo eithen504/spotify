@@ -33,8 +33,9 @@ const AlbumPage = () => {
         Preview: true,
         Save: true,
         Share: true,
+        Follow: false,
         More: true,
-        View: true,
+        View: true
     };
 
     useEffect(() => {

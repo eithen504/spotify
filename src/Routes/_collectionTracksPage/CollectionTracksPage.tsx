@@ -33,8 +33,9 @@ const CollectionTracksPage = () => {
         Preview: false,
         Save: false,
         Share: false,
+        Follow: false,
         More: false,
-        View: true,
+        View: true
     };
 
     useEffect(() => {

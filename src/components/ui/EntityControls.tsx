@@ -114,6 +114,15 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                 )
             }
 
+            {/* Follow */}
+            {
+                controls["Follow"] && (
+                    <button className="cursor-pointer py-1 px-6 border border-white/50 dynamic-border-hover rounded-full text-sm font-bold">
+                        Follow
+                    </button>
+                )
+            }
+
             {/* More */}
             {
                 controls["More"] && (
@@ -149,8 +158,12 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                                         moreMenuOptions?.map(({ icon, label, hasTopBorder }) => {
 
                                             return (
-                                                <button className={`${hasTopBorder ? "border-t border-[#3E3E3E]" : ""}  text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5 `}
+                                                <button
                                                     key={label}
+                                                    className={`${hasTopBorder ? "border-t border-[#3E3E3E]" : ""} text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5 `}
+                                                    style={{
+                                                        '--bgHoverColor': '#3E3E3E',
+                                                    } as React.CSSProperties}
                                                 >
                                                     <span className="flex items-center gap-3">
                                                         {icon}
@@ -187,7 +200,10 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                                     {moreMenuOptions?.map(({ icon, label, action }) => {
                                         return (
                                             <button
-                                                className="text-white hover:text-white/70 cursor-pointer w-full py-3 px-4 flex items-center justify-between font-normal text-md transition-transform duration-200 hover:scale-[0.99]"
+                                                className="text-[#ffffff] dynamic-text-hover cursor-pointer w-full py-3 px-4 flex items-center justify-between font-normal text-md transition-transform duration-200 dynamic-scale-hover"
+                                                style={{
+                                                    '--textHoverColor': 'rgba(255, 255, 255, 0.7)',
+                                                } as React.CSSProperties}
                                                 key={label}
                                                 onClick={action}
                                             >
@@ -243,8 +259,12 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                                         </span>
                                     </div>
 
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                        onClick={() => setView?.("Default List")}
+                                    <button
+                                        className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                        style={{
+                                            '--bgHoverColor': '#3E3E3E',
+                                        } as React.CSSProperties}
+                                        onClick={() => setView?.("Compact List")}
                                     >
                                         <span className={`${view == "Compact List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                             <CompactListIcon width="15" height="15" />
@@ -260,7 +280,11 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                                         }
                                     </button>
 
-                                    <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
+                                    <button
+                                        className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                        style={{
+                                            '--bgHoverColor': '#3E3E3E',
+                                        } as React.CSSProperties}
                                         onClick={() => setView?.("Default List")}
                                     >
                                         <span className={`${view == "Default List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>

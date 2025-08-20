@@ -6,18 +6,18 @@ import EntityInfoSection from "../../components/ui/EntityInfoSection";
 import useDominantColor from "../../hooks/useDominateColor";
 import EntityControls from "../../components/ui/EntityControls";
 
-const EpisodePage = () => {
+const PodcastPage = () => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
 
     const imgUrl = "https://i.scdn.co/image/ab6765630000ba8adb02dd7e735e527d2937647c"
     const { dominantColor } = useDominantColor(imgUrl);
 
     const controls: Controls = {
-        Play: true,
+        Play: false,
         Preview: false,
-        Save: true,
-        Share: true,
-        Follow: false,
+        Save: false,
+        Share: false,
+        Follow: true,
         More: true,
         View: false
     };
@@ -34,15 +34,15 @@ const EpisodePage = () => {
             />
 
             {/* Playlist Header */}
-            <EntityHeader title="ChatGPT Brain Root Debate" dominateColor={dominantColor || ""} />
+            <EntityHeader title="The Diary Of A CEO" dominateColor={dominantColor || ""} />
 
             {/* Playlist Info Section */}
             <EntityInfoSection
                 entity={
                     {
                         imgUrl,
-                        displayType: "Podcast Episode",
-                        title: "ChatGPT Brain Root Debate",
+                        displayType: "Podcast",
+                        title: "The Diary Of A CEO",
                         description: "userxyz . 5 min"
                     }
                 }
@@ -70,4 +70,4 @@ const EpisodePage = () => {
     );
 };
 
-export default EpisodePage;
+export default PodcastPage;

@@ -56,6 +56,6 @@ export type Genre = {
     image: string;
 }
 
-export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "More" | "View";
+export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "Follow" | "More" | "View";
 
 export type Controls = Record<ControlKeys, boolean>;

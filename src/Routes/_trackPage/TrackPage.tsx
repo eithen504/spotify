@@ -25,8 +25,9 @@ const TrackPage = () => {
         Preview: false,
         Save: true,
         Share: true,
+        Follow: false,
         More: true,
-        View: false,
+        View: false
     };
 
     return (

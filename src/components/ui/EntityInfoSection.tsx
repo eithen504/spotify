@@ -1,6 +1,5 @@
 import type React from "react";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
-import { useLocation } from "react-router-dom";
 
 interface EntityInfo {
     imgUrl: string;
@@ -27,7 +26,7 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
 
     return (
         <div style={{ background: dominateColor }}>
-            <div className={`relative z-10 flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
+            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
                 {/* Entity Cover */}
                 <img
                     src={imgUrl}

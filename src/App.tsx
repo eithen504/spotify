@@ -8,6 +8,7 @@ import AlbumPage from './Routes/_albumPage/AlbumPage';
 import CollectionTracksPage from './Routes/_collectionTracksPage/CollectionTracksPage';
 import TrackPage from './Routes/_trackPage/TrackPage';
 import EpisodePage from './Routes/_episodePage/EpisodePage';
+import PodcastPage from './Routes/_podcastPage/PodcastPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/playlist/:id" element={<PlaylistPage />} />
         <Route path="/album/:id" element={<AlbumPage />} />
         <Route path="/track/:id" element={<TrackPage />} />
+        <Route path="/show/:id" element={<PodcastPage />} />
         <Route path="/episode/:id" element={<EpisodePage />} />
         <Route path="/collection/tracks" element={<CollectionTracksPage />} />
       </Route>

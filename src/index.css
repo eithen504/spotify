@@ -203,12 +203,17 @@
   border-color: var(--borderHoverColor, #ffffff);
 }
 
+.dynamic-scale-hover:hover {
+  transform: scale(var(--scale, 0.99));
+}
+
 
 
 /* group hover opacity */
 .group-hover-opacity {
   opacity: var(--initialOpacity, 0);
 }
+
 .group:hover .group-hover-opacity {
   opacity: var(--hoverOpacity, 1);
 }

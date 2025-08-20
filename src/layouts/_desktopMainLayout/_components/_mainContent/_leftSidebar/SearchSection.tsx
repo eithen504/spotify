@@ -39,7 +39,7 @@ const SearchSection: React.FC<SearchSeactionProps> = ({
                             className="bg-[#2A2A2A] text-[#ffffff] placeholder-[#8f8f8f] text-sm outline-none flex-1 w-full placeholder:font-semibold p-[5px] rounded-r-[4px]"
                         />
                         {
-                            searchQuery && (
+                            searchQuery && ( 
                                 <button
                                     className="mr-2 text-[#8f8f8f] dynamic-text-hover cursor-pointer"
                                     onClick={handleClearSearchQuery}
