@@ -5,6 +5,7 @@ import EntityHeader from "../../components/ui/EntityHeader";
 import EntityInfoSection from "../../components/ui/EntityInfoSection";
 import useDominantColor from "../../hooks/useDominateColor";
 import EntityControls from "../../components/ui/EntityControls";
+import DescriptionSection from "./_componenets/DescriptionSection";
 
 const EpisodePage = () => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
@@ -54,14 +55,7 @@ const EpisodePage = () => {
 
             <div className="relative max-w-[90rem] mx-auto">
                 {/* Description Section */}
-                <div className="mb-4 px-4 md:px-6 mt-4">
-                    <h2 className="text-xl font-bold mb-4">Description</h2>
-                    <p className="text-gray-300 leading-relaxed line-clamp-3">
-                        MIT just announced that AI is rotting your brain?! Two world-leading
-                        experts break this study down and reveal how AI and ChatGPT could
-                        silently shrink your brain, kill creativity, and wreck your memory.
-                    </p>
-                </div>
+                <DescriptionSection/>
             </div>
 
 
