@@ -59,7 +59,7 @@ const PlaylistSectionItems = () => {
     const scroll = (direction: 'left' | 'right'): void => {
         if (scrollRef.current) {
             const container = scrollRef.current as HTMLDivElement;
-            const scrollAmount = direction === 'left' ? -500 : 500;
+            const scrollAmount = direction === 'left' ? -250 : 250;
             container.scrollBy({
                 left: scrollAmount,
                 behavior: 'smooth',
