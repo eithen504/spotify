@@ -111,7 +111,7 @@ const RightSection = () => {
             {
                 isUnauthenticated ? (
                     <>
-                        <button className="hidden lg:block cursor-pointer text-gray-400 hover:text-white text-sm font-semibold py-1.5 px-4 rounded-full"
+                        <button className="hidden lg:block cursor-pointer text-gray-400 dynamic-text-hover text-sm font-semibold py-1.5 px-4 rounded-full"
                             onClick={() => navigate("/auth")}
                         >
                             Sign up
@@ -135,7 +135,11 @@ const RightSection = () => {
 
                         {/* Profile Button */}
                         <div className="relative flex items-center" ref={profileDropdownRef}>
-                            <div className="bg-[#121212] hover:bg-[#1F1F1F] p-2 rounded-full cursor-pointer"
+                            <div
+                                className="bg-[#121212] dynamic-bg-hover p-2 rounded-full cursor-pointer"
+                                style={{
+                                    '--bgHoverColor': '#1F1F1F',
+                                } as React.CSSProperties}
                                 onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
                             >
                                 <button className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm cursor-pointer">
@@ -143,7 +147,7 @@ const RightSection = () => {
                                 </button>
                             </div>
 
-                            {/* Dropdown */}
+                            {/* Profile Dropdown */}
                             {isProfileDropdownOpen && (
                                 <ProfileDropdown profileMenuOptions={profileMenuOptions} />
                             )}
@@ -151,8 +155,6 @@ const RightSection = () => {
                     </>
                 )
             }
-
-
         </div>
     );
 };
