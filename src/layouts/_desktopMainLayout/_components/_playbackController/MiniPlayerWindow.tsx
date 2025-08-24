@@ -289,7 +289,7 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose }) => {
                 onDoubleClick={handleMaximize}
             >
                 <div className="flex items-center space-x-3 z-10">
-                    <span className="text-white text-xs font-medium drop-shadow-sm">open.spotiy.com</span>
+                    <span className="text-[#ffffff] text-xs font-medium drop-shadow-sm">open.spotiy.com</span>
                 </div>
 
                 <div className="flex items-center space-x-1 z-10">

@@ -22,9 +22,10 @@ export type LeftSidebarViewOption = {
 
 export type LeftSidebarViewIcon = Record<LeftSidebarViewLabel, JSX.Element>
 
-export type ViewComponent = Record<LeftSidebarViewLabel, JSX.Element>
+export type LeftSidebarViewComponent = Record<LeftSidebarViewLabel, JSX.Element>
 
 export type HomePageTab = "All" | "Music" | "Podcasts";
+export type HomePageTabs = HomePageTab[];
 
 export type Column = "Artist" | "Album" | "Duration" | "Date added";
 
@@ -57,5 +58,22 @@ export type Genre = {
 }
 
 export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "Follow" | "More" | "View";
-
 export type Controls = Record<ControlKeys, boolean>;
+
+export type MenuOption = {
+    icon?: JSX.Element;
+    label: string;
+    action: () => void;
+    hasTopBorder?: boolean;
+    shouldHide?: boolean
+}
+
+export type User = {
+  _id: string;
+  email: string;
+  displayName: string;
+  avatarUrl: string;
+  bio: string;
+  createdAt: Date;
+  updatedAt: Date;
+};

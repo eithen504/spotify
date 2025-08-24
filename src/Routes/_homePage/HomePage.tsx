@@ -9,7 +9,7 @@ const HomePage = () => {
     const { isScrolled } = useScrollStore();
 
     return (
-        <div className="relative text-white min-h-screen">
+        <div className="relative text-[#ffffff] min-h-screen">
             <div
                 className="w-full absolute inset-0 z-0 h-[700px]"
                 style={{
@@ -26,8 +26,11 @@ const HomePage = () => {
             <RecentItems />
 
             {
-                [1, 2, 3].map((_) => (
-                    <div className="pt-7 md:pt-10 relative max-w-[90rem] mx-auto">
+                [1, 2, 3].map((_, idx) => (
+                    <div
+                        key={idx}
+                        className="pt-7 md:pt-10 relative max-w-[90rem] mx-auto"
+                    >
                         {/* PlaylistSection Header */}
                         <PlaylistSectionHeader title="Good Morning" />
 
@@ -37,7 +40,7 @@ const HomePage = () => {
                 ))
             }
 
-            <Footer/>
+            <Footer />
         </div>
     )
 }

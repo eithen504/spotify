@@ -74,7 +74,7 @@ const items = [
 const NextInQueueSection = () => {
     return (
         <div className="px-2 pt-4 pb-4">
-            <h2 className="text-white text-md font-bold p-2">Next In Queue</h2>
+            <h2 className="text-[#ffffff] text-md font-bold p-2">Next In Queue</h2>
 
             <div className="space-y-0">
                 {items.map((item, idx) => (

@@ -4,7 +4,7 @@ import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import DesktopMainLayout from "./_desktopMainLayout/DesktopMainLayout";
 import MobileMainLayout from "./_mobileMainLayout/MobileMainLayout";
 import type { LeftSidebarViewLabel } from "../Types";
-import { VIEW_COMPONENTS } from "../Constants";
+import { LEFT_SIDEBAR_VIEW_COMPONENTS } from "../Constants";
 
 export default function AppLayout() {
     const [breakpoint] = useBreakPoint();
@@ -17,7 +17,7 @@ export default function AppLayout() {
         const showNowPlayingView = localStorage.getItem("showNowPlayingView") == "true"
         const showQueueView = localStorage.getItem("showQueueView") == "true"
         const localView = localStorage.getItem("view") || "Default List"
-        const view = VIEW_COMPONENTS[localView as LeftSidebarViewLabel] ? localView : "Default List"
+        const view = LEFT_SIDEBAR_VIEW_COMPONENTS[localView as LeftSidebarViewLabel] ? localView : "Default List"
 
         rightPanelSize = (rightPanelSize >= 20 && rightPanelSize <= 25) ? rightPanelSize : 20
 

@@ -1,9 +1,5 @@
-import { VIEW_COMPONENTS } from '../../../../../Constants';
+import { LEFT_SIDEBAR_VIEW_COMPONENTS } from '../../../../../Constants';
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
-import CompactGridItems from './CompactGridItems';
-import CompactListItems from './CompactListItems';
-import DefaultGridItems from './DefaultGridItems';
-import DefaultListItems from './DefaultListItems';
 
 const items = [
     {
@@ -95,7 +91,7 @@ const LibraryItems = () => {
     }
 
     return (
-        VIEW_COMPONENTS[view]
+        LEFT_SIDEBAR_VIEW_COMPONENTS[view]
     )
 }
 

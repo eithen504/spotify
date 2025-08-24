@@ -17,7 +17,7 @@ const TabsSection: React.FC<TabsSectionProps> = ({ isScrolled }) => {
                         key={tab}
                         className={`${activeTab === tab
                             ? "text-black bg-white"
-                            : "text-white bg-white/15 hover:bg-white/25"
+                            : "text-[#ffffff] bg-white/15 hover:bg-white/25"
                             } cursor-pointer backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium transition-colors`}
                     >
                         {tab}

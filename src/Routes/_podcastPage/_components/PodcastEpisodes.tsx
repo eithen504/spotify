@@ -26,7 +26,7 @@ const PodcastEpisodes = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="text-white p-4 md:p-6 mt-4 rounded-lg">
+        <div className="text-[#ffffff] p-4 md:p-6 mt-4 rounded-lg">
             <h2 className="text-2xl font-bold mb-6">All Episodes</h2>
             {episodes.map((ep, index) => (
                 <div

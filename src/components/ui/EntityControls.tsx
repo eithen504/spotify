@@ -190,7 +190,7 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                                             alt="Entity"
                                             className="w-12 h-12 rounded"
                                         />
-                                        <div className="text-white">
+                                        <div className="text-[#ffffff]">
                                             <div className="font-semibold text-md">{"entityDetails?.title"}</div>
                                             <div className="text-sm text-white/70">{"entityDetails?.moreDetails"}</div>
                                         </div>

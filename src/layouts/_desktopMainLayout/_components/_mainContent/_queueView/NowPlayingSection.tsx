@@ -1,7 +1,7 @@
 const NowPlayingSection = () => {
     return (
         <div className="px-2">
-            <h2 className="text-white text-md font-bold px-2 pb-2">Now Playing</h2>
+            <h2 className="text-[#ffffff] text-md font-bold px-2 pb-2">Now Playing</h2>
 
             <div className="cursor-pointer flex items-center space-x-3 p-2 hover:bg-[#1F1F1F] rounded-sm">
                 <img

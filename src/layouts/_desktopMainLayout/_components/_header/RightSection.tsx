@@ -1,25 +1,105 @@
 import { useState, useRef, useEffect } from "react";
-
-// Array for dropdown items
-const dropdownItems = [
-    { label: "Account", external: true },
-    { label: "Profile", external: false },
-    { label: "Upgrade to Premium", external: true },
-    { label: "Support", external: true },
-    { label: "Download", external: true },
-    { label: "Settings", external: false, dividerBelow: true },
-    { label: "Log out", external: false, isLogout: true },
-];
+import { useCheckAuth } from "../../../../hooks/auth";
+import { useNavigate } from "react-router-dom";
+import type { MenuOption } from "../../../../Types";
+import { ExternalLinkIcon, PlusIcon } from "../../../../Svgs";
+import ProfileDropdown from "./ProfileDropdown";
 
 const RightSection = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const navigate = useNavigate();
+    const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+    const [profileMenuOptions, setProfileMenuOptions] = useState<MenuOption[]>([]);
+    const { data: currentUser, isLoading } = useCheckAuth()
+    const profileDropdownRef = useRef<HTMLDivElement | null>(null);
+
+    const isUnauthenticated = !isLoading && !currentUser;
+
+    useEffect(() => {
+        if (!currentUser) return
+
+        const adminId = import.meta.env.VITE_ADMIN_ID;
+        const isAdminProfile = currentUser._id == adminId;
+
+        if (isAdminProfile) {
+            setProfileMenuOptions([
+                {
+                    icon: <ExternalLinkIcon width="16" height="16" />,
+                    label: 'Account',
+                    action: () => navigate("/account")
+                },
+                {
+                    label: 'Profile',
+                    action: () => navigate(`/show/${currentUser._id}`)
+                },
+                {
+                    icon: <PlusIcon width="16" height="16" />,
+                    label: 'Upload Track',
+                    action: () => { }
+                },
+                {
+                    icon: <PlusIcon width="16" height="16" />,
+                    label: 'Upload Playlist',
+                    action: () => { }
+                },
+                {
+                    icon: <PlusIcon width="16" height="16" />,
+                    label: 'Upload Album',
+                    action: () => { }
+                },
+                {
+                    label: 'Settings',
+                    action: () => { }
+                },
+                {
+                    label: 'Log out',
+                    action: () => { },
+                    hasTopBorder: true
+                },
+            ])
+
+        } else {
+            setProfileMenuOptions([
+                {
+                    icon: <ExternalLinkIcon width="16" height="16" />,
+                    label: 'Account',
+                    action: () => navigate("/account")
+                },
+                {
+                    label: 'Profile',
+                    action: () => navigate(`/show/${currentUser._id}`)
+                },
+                {
+                    icon: <ExternalLinkIcon width="16" height="16" />,
+                    label: 'Upgrade to Premium',
+                    action: () => { },
+                },
+                {
+                    icon: <ExternalLinkIcon width="16" height="16" />,
+                    label: 'Support',
+                    action: () => { }
+                },
+                {
+                    icon: <ExternalLinkIcon width="16" height="16" />,
+                    label: 'Download',
+                    action: () => { },
+                }, {
+                    label: 'Settings',
+                    action: () => { },
+                },
+                {
+                    label: 'Log out',
+                    action: () => { },
+                    hasTopBorder: true
+                },
+            ])
+        }
+    }, [currentUser])
 
     // Close dropdown when clicked outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsDropdownOpen(false);
+            if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+                setIsProfileDropdownOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -28,44 +108,51 @@ const RightSection = () => {
 
     return (
         <div className="relative flex items-center gap-4">
-            {/* Browse Premium */}
-            <button
-                className="hidden lg:block text-black bg-[#ffffff] py-1.5 px-4 rounded-full text-sm font-semibold cursor-pointer"
-                title="Explore Premium"
-            >
-                Explore Premium
-            </button>
+            {
+                isUnauthenticated ? (
+                    <>
+                        <button className="hidden lg:block cursor-pointer text-gray-400 hover:text-white text-sm font-semibold py-1.5 px-4 rounded-full"
+                            onClick={() => navigate("/auth")}
+                        >
+                            Sign up
+                        </button>
 
-            {/* "E" Profile Button */}
-            <button
-                onClick={() => setIsDropdownOpen((prev) => !prev)}
-                className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm"
-            >
-                E
-            </button>
+                        <button className="bg-white text-black cursor-pointer text-sm font-semibold py-2 px-6 rounded-full"
+                            onClick={() => navigate("/auth")}
+                        >
+                            Login
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        {/* Browse Premium */}
+                        <button
+                            className="hidden lg:block text-black bg-[#ffffff] py-1.5 px-4 rounded-full text-sm font-semibold cursor-pointer"
+                            title="Explore Premium"
+                        >
+                            Explore Premium
+                        </button>
 
-            {/* Dropdown */}
-            {isDropdownOpen && (
-                <div
-                    ref={dropdownRef}
-                    className="absolute top-full right-0 mt-[17px] w-56 bg-[#1f1f1f] text-[#ffffff] rounded-lg shadow-lg border border-[#333] text-sm z-100"
-                >
-                    {dropdownItems.map((item, index) => (
-                        <div key={index}>
-                            <div
-                                className={`flex items-center justify-between px-4 py-2 hover:bg-[#2a2a2a] cursor-pointer ${item.isLogout ? "text-red-400 font-medium" : ""
-                                    }`}
+                        {/* Profile Button */}
+                        <div className="relative flex items-center" ref={profileDropdownRef}>
+                            <div className="bg-[#121212] hover:bg-[#1F1F1F] p-2 rounded-full cursor-pointer"
+                                onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
                             >
-                                {item.label}
-                                {item.external && !item.isLogout && (
-                                    <span className="ml-2">↗</span>
-                                )}
+                                <button className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm cursor-pointer">
+                                    {currentUser?.displayName?.[0].toUpperCase()}
+                                </button>
                             </div>
-                            {item.dividerBelow && <div className="border-b border-[#333]" />}
+
+                            {/* Dropdown */}
+                            {isProfileDropdownOpen && (
+                                <ProfileDropdown profileMenuOptions={profileMenuOptions} />
+                            )}
                         </div>
-                    ))}
-                </div>
-            )}
+                    </>
+                )
+            }
+
+
         </div>
     );
 };

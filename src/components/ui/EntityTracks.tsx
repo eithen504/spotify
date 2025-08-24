@@ -141,19 +141,19 @@ const EntityTracks: React.FC<EntityTracksProps> = ({ view, columns }) => {
                             view == "Compact List" ? (
                                 <>
                                     <div className={`flex-1 truncate ml-5 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"}`}>
-                                        <span className=" cursor-pointer text-white/70 dynamic-text-hover hover:underline">
+                                        <span className="text-white/70">
                                             {columns["Artist"] && item.artist}
                                         </span>
                                     </div>
 
-                                    <div className={`w-32 text-white/70 truncate text-sm ml-5 ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"}`}>
+                                    <div className={`w-32 text-white/70 truncate text-sm ml-5 dynamic-text-hover hover:underline cursor-pointer ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"}`}>
                                         {columns["Album"] && item.album}
                                     </div>
                                 </>
                             ) : (
                                 <>
                                     <div className={`flex-1 truncate ml-5 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"}`}>
-                                        <span className=" cursor-pointer text-white/70 dynamic-text-hover hover:underline">
+                                        <span className="text-white/70 dynamic-text-hover hover:underline cursor-pointer">
                                             {columns["Album"] && item.album}
                                         </span>
                                     </div>

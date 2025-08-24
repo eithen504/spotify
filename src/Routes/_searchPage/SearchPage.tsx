@@ -23,7 +23,7 @@ const SearchPage = () => {
                             >
                                 {/* Top-left text */}
                                 <div className="absolute top-4 left-4 z-10">
-                                    <h3 className="text-xl font-bold text-white mb-1 transition-colors">
+                                    <h3 className="text-xl font-bold text-[#ffffff] mb-1 transition-colors">
                                         {genre.title}
                                     </h3>
                                 </div>

@@ -9,6 +9,7 @@ import CollectionTracksPage from './Routes/_collectionTracksPage/CollectionTrack
 import TrackPage from './Routes/_trackPage/TrackPage';
 import EpisodePage from './Routes/_episodePage/EpisodePage';
 import PodcastPage from './Routes/_podcastPage/PodcastPage';
+import AuthPage from './Routes/_authPage/AuthPage';
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         <Route path="/episode/:id" element={<EpisodePage />} />
         <Route path="/collection/tracks" element={<CollectionTracksPage />} />
       </Route>
+      
+      <Route path="/auth" element={<AuthPage />} />
     </Routes>
   );
 }

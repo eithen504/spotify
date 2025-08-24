@@ -14,7 +14,7 @@ interface EntityTableHeaderProps {
 }
 
 const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, setColumns }) => {
-    const { preferences: { leftPanelSize, showNowPlayingView } } = useUIPreferencesStore();
+    const { preferences: { leftPanelSize, showNowPlayingView, showQueueView } } = useUIPreferencesStore();
     const { scrollFromTop } = useScrollStore();
     const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
     const [breakPoint] = useBreakPoint();
@@ -74,7 +74,7 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                             className="w-45 fixed z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
                             style={{
                                 top: `${(columnDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
-                                ...((breakPoint === "md" || !showNowPlayingView) && {
+                                ...((breakPoint === "md" || (!showNowPlayingView && !showQueueView)) && {
                                     right: `47px`,
                                 }),
                             }}
@@ -89,13 +89,17 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                             {
                                 view == "Compact List" ? (
                                     <>
-                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                            onClick={() => setColumns({
-                                                "Artist": !columns["Artist"],
-                                                "Album": columns["Album"],
-                                                "Duration": columns["Duration"],
-                                                "Date added": false,
-                                            })}
+                                        <button
+                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                            style={{
+                                                '--bgHoverColor': '#3E3E3E',
+                                            } as React.CSSProperties}
+                                            onClick={() => {
+                                                setColumns((prev) => ({
+                                                    ...prev,
+                                                    Artist: !prev.Artist,
+                                                }));
+                                            }}
                                         >
                                             <span className={`${columns["Artist"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                                 Artist
@@ -110,13 +114,17 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                                             }
                                         </button>
 
-                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                            onClick={() => setColumns({
-                                                "Artist": columns["Artist"],
-                                                "Album": !columns["Album"],
-                                                "Duration": columns["Duration"],
-                                                "Date added": false,
-                                            })}
+                                        <button
+                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                            style={{
+                                                '--bgHoverColor': '#3E3E3E',
+                                            } as React.CSSProperties}
+                                            onClick={() => {
+                                                setColumns((prev) => ({
+                                                    ...prev,
+                                                    Album: !prev.Album,
+                                                }));
+                                            }}
                                         >
                                             <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                                 Album
@@ -131,13 +139,17 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                                             }
                                         </button>
 
-                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                            onClick={() => setColumns({
-                                                "Artist": columns["Artist"],
-                                                "Album": columns["Album"],
-                                                "Duration": !columns["Duration"],
-                                                "Date added": false,
-                                            })}
+                                        <button
+                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                            style={{
+                                                '--bgHoverColor': '#3E3E3E',
+                                            } as React.CSSProperties}
+                                            onClick={() => {
+                                                setColumns((prev) => ({
+                                                    ...prev,
+                                                    Duration: !prev.Duration,
+                                                }));
+                                            }}
                                         >
                                             <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                                 Duration
@@ -154,13 +166,17 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                                     </>
                                 ) : (
                                     <>
-                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                            onClick={() => setColumns({
-                                                "Artist": false,
-                                                "Album": !columns["Album"],
-                                                "Duration": columns["Duration"],
-                                                "Date added": columns["Date added"],
-                                            })}
+                                        <button
+                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                            style={{
+                                                '--bgHoverColor': '#3E3E3E',
+                                            } as React.CSSProperties}
+                                            onClick={() => {
+                                                setColumns((prev) => ({
+                                                    ...prev,
+                                                    Album: !prev.Album,
+                                                }));
+                                            }}
                                         >
                                             <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                                 Album
@@ -175,13 +191,17 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                                             }
                                         </button>
 
-                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                            onClick={() => setColumns({
-                                                "Artist": false,
-                                                "Album": columns["Album"],
-                                                "Duration": columns["Duration"],
-                                                "Date added": !columns["Date added"],
-                                            })}
+                                        <button
+                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                            style={{
+                                                '--bgHoverColor': '#3E3E3E',
+                                            } as React.CSSProperties}
+                                            onClick={() => {
+                                                setColumns((prev) => ({
+                                                    ...prev,
+                                                    "Date added": !prev["Date added"],
+                                                }));
+                                            }}
                                         >
                                             <span className={`${columns["Date added"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                                 Date added
@@ -196,13 +216,17 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                                             }
                                         </button>
 
-                                        <button className="text-white/90 cursor-pointer w-full hover:bg-[#3E3E3E] flex items-center justify-between p-2.5"
-                                            onClick={() => setColumns({
-                                                "Artist": false,
-                                                "Album": columns["Album"],
-                                                "Duration": !columns["Duration"],
-                                                "Date added": columns["Date added"],
-                                            })}
+                                        <button
+                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
+                                            style={{
+                                                '--bgHoverColor': '#3E3E3E',
+                                            } as React.CSSProperties}
+                                            onClick={() => {
+                                                setColumns((prev) => ({
+                                                    ...prev,
+                                                    Duration: !prev.Duration,
+                                                }));
+                                            }}
                                         >
                                             <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                                                 Duration
