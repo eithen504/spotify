@@ -12,7 +12,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profileMenuOptions })
                 <div className="px-1">
                     <div key={label} className={`${hasTopBorder ? "border-t border-[#3E3E3E]" : ""}`}>
                         <button
-                            className="w-full px-3 py-2.5 text-left text-white hover:bg-[#3E3E3E] rounded-[2px] flex items-center justify-between group transition-colors cursor-pointer"
+                            className="w-full px-3 py-2.5 text-left text-[#ffffff] dynamic-bg-hover rounded-[2px] flex items-center justify-between group transition-colors cursor-pointer"
+                            style={{
+                                '--bgHoverColor': '#3E3E3E',
+                            } as React.CSSProperties}
                             onClick={action}
                         >
                             <span className="text-sm font-semibold">{label}</span>

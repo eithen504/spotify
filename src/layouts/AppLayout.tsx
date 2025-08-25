@@ -1,14 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useBreakPoint from "../hooks/useBreakPoint"
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import DesktopMainLayout from "./_desktopMainLayout/DesktopMainLayout";
 import MobileMainLayout from "./_mobileMainLayout/MobileMainLayout";
 import type { LeftSidebarViewLabel } from "../Types";
 import { LEFT_SIDEBAR_VIEW_COMPONENTS } from "../Constants";
+import { useCheckAuth } from "../hooks/auth";
+import { LogoIcon } from "../Svgs";
 
 export default function AppLayout() {
     const [breakpoint] = useBreakPoint();
+    const [isLoading, setIsLoading] = useState(true);
     const { setPreferences } = useUIPreferencesStore();
+    const { isLoading: isFetchingCurrentUser } = useCheckAuth();
 
     useEffect(() => {
         let leftPanelSize = Number(localStorage.getItem("leftPanelSize")) || 22
@@ -45,6 +49,23 @@ export default function AppLayout() {
             localStorage.setItem("leftPanelSize", `${leftPanelSize}`)
         }
     }, [breakpoint])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 2000)
+    }, [])
+
+    if (isLoading || isFetchingCurrentUser) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-[#000000]">
+                <div className="text-[#3BE477]">
+                    <LogoIcon width="80" height="80" />
+                </div>
+            </div>
+        );
+    }
+
 
     return (
         <div className="overflow-hidden bg-[#121212]">

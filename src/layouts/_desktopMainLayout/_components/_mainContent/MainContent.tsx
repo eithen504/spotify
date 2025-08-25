@@ -8,6 +8,7 @@ import useBreakPoint from '../../../../hooks/useBreakPoint';
 import ExpandedNowPlayingView from './_expandedNowPlayingView/ExpandedNowPlayingView';
 import { useScrollStore } from '../../../../store/useScrollStore';
 import QueueView from './_queueView/QueueView';
+import { useCheckAuth } from '../../../../hooks/auth';
 
 const MainContent = () => {
     const { pathname } = useLocation();
@@ -18,6 +19,7 @@ const MainContent = () => {
     const scrollSectionRef = useRef<HTMLDivElement>(null);
     const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, showQueueView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
     const { setIsScrolled, setScrollFromTop } = useScrollStore()
+    const { data: currentUser } = useCheckAuth();
 
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
@@ -138,21 +140,27 @@ const MainContent = () => {
                 ) : (
                     <>
                         {/* Left Sidebar */}
-                        <LeftSidebar leftPanelSize={leftPanelSize} />
+                        {
+                            currentUser && <LeftSidebar leftPanelSize={leftPanelSize} />
+                        }
 
                         {
                             !isLeftSidebarExpanded && (
                                 <>
-                                    <div
-                                        onMouseDown={() => startResizing('left')}
-                                        onTouchStart={() => startResizing('left')}
-                                        className="w-2 bg-black cursor-grab transition-colors touch-none group relative"
-                                    >
-                                        {/* Center white bar on hover */}
-                                        <div
-                                            className={`w-[0.5px] h-[96%] dynamic-bg-group-hover ${activeResizePanel == "left" ? "bg-[#ffffff]" : ""} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition duration-300 ease-in-out touch-none`}
-                                        />
-                                    </div>
+                                    {
+                                        currentUser && (
+                                            <div
+                                                onMouseDown={() => startResizing('left')}
+                                                onTouchStart={() => startResizing('left')}
+                                                className="w-2 bg-black cursor-grab transition-colors touch-none group relative"
+                                            >
+                                                {/* Center white bar on hover */}
+                                                <div
+                                                    className={`w-[0.5px] h-[96%] dynamic-bg-group-hover ${activeResizePanel == "left" ? "bg-[#ffffff]" : ""} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition duration-300 ease-in-out touch-none`}
+                                                />
+                                            </div>
+                                        )
+                                    }
 
                                     {/* Children/Main Center Content */}
                                     <section className={`flex-1 bg-[#121212] rounded-md overflow-y-auto hide-scrollbar`}

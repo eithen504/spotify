@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useCheckAuth } from "../../../../hooks/auth";
+import { useCheckAuth, useLogoutUser } from "../../../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import type { MenuOption } from "../../../../Types";
 import { ExternalLinkIcon, PlusIcon } from "../../../../Svgs";
@@ -10,6 +10,7 @@ const RightSection = () => {
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const [profileMenuOptions, setProfileMenuOptions] = useState<MenuOption[]>([]);
     const { data: currentUser, isLoading } = useCheckAuth()
+    const { mutateAsync: logoutUser } = useLogoutUser()
     const profileDropdownRef = useRef<HTMLDivElement | null>(null);
 
     const isUnauthenticated = !isLoading && !currentUser;
@@ -52,7 +53,7 @@ const RightSection = () => {
                 },
                 {
                     label: 'Log out',
-                    action: () => { },
+                    action: () => { logoutUser() },
                     hasTopBorder: true
                 },
             ])
@@ -88,7 +89,7 @@ const RightSection = () => {
                 },
                 {
                     label: 'Log out',
-                    action: () => { },
+                    action: () => { logoutUser() },
                     hasTopBorder: true
                 },
             ])
@@ -142,9 +143,16 @@ const RightSection = () => {
                                 } as React.CSSProperties}
                                 onClick={() => setIsProfileDropdownOpen((prev) => !prev)}
                             >
-                                <button className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm cursor-pointer">
-                                    {currentUser?.displayName?.[0].toUpperCase()}
-                                </button>
+
+                                {
+                                    currentUser?.avatarUrl ? (
+                                        <img src={currentUser?.avatarUrl} className="w-8 h-8 rounded-full" />
+                                    ) : (
+                                        <button className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm cursor-pointer">
+                                            {currentUser?.displayName?.[0].toUpperCase()}
+                                        </button>
+                                    )
+                                }
                             </div>
 
                             {/* Profile Dropdown */}

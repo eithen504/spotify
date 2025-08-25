@@ -218,6 +218,14 @@
   opacity: var(--hoverOpacity, 1);
 }
 
+/* group hover rotate */
+.group-hover-rotate {
+  transform: rotate(var(--initialRotate, 0deg));
+}
+
+.group:hover .group-hover-rotate {
+  transform: rotate(var(--hoverRotate, 5deg));
+}
 
 /* group hover translate x-0  */
 .group-hover-translate-x-0 {

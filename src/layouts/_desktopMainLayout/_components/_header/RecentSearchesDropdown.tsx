@@ -2,7 +2,7 @@ import { CrossIcon } from "../../../../Svgs"
 
 const RecentSearchesDropdown = () => {
     return (
-        <div className="absolute top-full p-2 z-800 mt-2 w-full max-h-77 overflow-y-auto custom-scrollbar bg-[#2A2A2A] text-[#ffffff] rounded-lg shadow-lg border border-[#2a2a2a]">
+        <div className="absolute top-full p-2 z-800 mt-2 w-full max-h-77 overflow-y-auto custom-scrollbar bg-[#282828] text-[#ffffff] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-[#2a2a2a]">
             <div className="p-2 border-b border-[#2a2a2a] font-semibold text-md">
                 Recent searches
             </div>

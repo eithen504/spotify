@@ -29,8 +29,14 @@ const SearchPage = () => {
                                 </div>
 
                                 {/* Bottom-right image */}
-                                <div className="rotate-27 group-hover:rotate-0 absolute -bottom-2 -right-3 w-23 h-23 z-0 transform transition-transform duration-300">
-                                    <img src={genre.image} alt={genre.title} className="w-full h-full object-cover rounded shadow-[0_0_20px_rgba(0,0,0,0.4)]" />
+                                <div
+                                    className="absolute -bottom-2 -right-3 group-hover-rotate w-23 h-23 z-0 transform transition-transform duration-300"
+                                    style={{
+                                        '--initialRotate': '20deg',
+                                        '--hoverRotate': '0deg'
+                                    } as React.CSSProperties}
+                                >
+                                    <img src={genre.image} alt={genre.title} className="w-full h-full object-cover rounded shadow-[0_0_20px_rgba(0,0,0,0.8)]" />
                                 </div>
                             </div>
                         ))}

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { type User } from "../Types";
+import { toast } from "sonner";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -62,7 +63,29 @@ const useVerifyGoogleToken = () => {
     })
 }
 
+const useLogoutUser = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => {
+            await fetch(`${baseUrl}/api/v1/auth/logout-user`, {
+                method: "POST", // or POST, PUT, etc.
+                credentials: "include", // IMPORTANT: send cookies along
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        },
+
+        onSuccess: () => {
+            queryClient.setQueryData(['checkAuth'], null)
+            toast.success("Logout Successfully.")
+        }
+    })
+}
+
 export {
     useCheckAuth,
-    useVerifyGoogleToken
+    useVerifyGoogleToken,
+    useLogoutUser
 }
