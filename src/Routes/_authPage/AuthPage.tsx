@@ -12,6 +12,9 @@ const AuthPage = () => {
         console.log("Login Failed");
     };
 
+    console.log("current user", currentUser);
+    
+
     if (currentUser) {
         navigate("/")
         return
