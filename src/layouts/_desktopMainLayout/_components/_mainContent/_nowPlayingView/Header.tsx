@@ -1,3 +1,4 @@
+import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore";
 import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore";
 import { ExpandIcon, MoreIcon, UnCollapsedIcon } from "../../../../../Svgs"
 
@@ -6,6 +7,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
+    const {trackDetails} = useTrackDetailsStore();
     const { setPreferences } = useUIPreferencesStore();
 
     const handleHidedNowPlayingView = () => {
@@ -56,6 +58,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
                     } as React.CSSProperties}
                     title={"Expand Now Playing View"}
                     onClick={handleExpandNowPlayingView}
+                    disabled={!trackDetails._id}
                 >
                     <ExpandIcon width="16" height="16" />
                 </button>

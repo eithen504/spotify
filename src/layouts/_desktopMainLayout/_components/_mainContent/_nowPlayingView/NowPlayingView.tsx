@@ -38,7 +38,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
             style={{ width: `${rightPanelSize}%` }}
             ref={sidebarRef}
         >
-            {/* Header */} 
+            {/* Header */}
             <Header isScrolled={isScrolled} />
 
             {/* Scrollable Content */}

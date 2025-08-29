@@ -3,7 +3,7 @@ import CompactListItems from "./layouts/_desktopMainLayout/_components/_mainCont
 import DefaultGridItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/DefaultGridItems";
 import DefaultListItems from "./layouts/_desktopMainLayout/_components/_mainContent/_leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { Genre, HomePageTabs, LeftSidebarSortOption, LeftSidebarTab, LeftSidebarViewIcon, LeftSidebarViewOption, NavigationItem, LeftSidebarViewComponent } from "./Types"
+import type { GenreItems, HomePageTabs, LeftSidebarSortOption, LeftSidebarTab, LeftSidebarViewIcon, LeftSidebarViewOption, NavigationItem, LeftSidebarViewComponent, Genres } from "./Types"
 
 const LEFT_SIDEBAR_TABS: LeftSidebarTab[] = ["Playlists", "Save Playlists", "Save Albums", "Podcasts"]
 
@@ -71,13 +71,7 @@ const LEFT_SIDEBAR_VIEW_COMPONENTS: LeftSidebarViewComponent = {
 
 const HOMEPAGE_TABS: HomePageTabs = ["All", "Music", "Podcasts"]
 
-const GENRES: Genre[] = [
-    {
-        id: "0JQ5DAqbMKFz6FAsUtgAab",
-        title: "Hindi",
-        bgColor: "bg-[#DC148C]",
-        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84dc9d42bc37d95f153c33fa5b"
-    },
+const GENRE_ITEMS: GenreItems = [
     {
         id: "1KLPoBkeHXzq3NaGMyvCYx",
         title: "Party",
@@ -188,6 +182,29 @@ const GENRES: Genre[] = [
     }
 ];
 
+const GENRES: Genres = [
+    "Party",
+    "Chill",
+    "Summer",
+    "Love",
+    "Emotional & HeartBreaking",
+    "Road Trip",
+    "Sleep",
+    "Strees Relief",
+    "Instrumental",
+    "Happy",
+    "workout",
+    "Focus",
+    "Dance",
+    "Cooking",
+    "Travel",
+    "Rain & Monsoon",
+    "Lofi",
+    "Nature & Noise"
+];
+
+const MAX_AUDIO_DURATION = 420;
+
 export {
     LEFT_SIDEBAR_TABS,
     NAVIGATION_ITEMS,
@@ -196,5 +213,7 @@ export {
     LEFT_SIDEBAR_VIEW_ICONS,
     LEFT_SIDEBAR_VIEW_COMPONENTS,
     HOMEPAGE_TABS,
-    GENRES,
+    GENRE_ITEMS,
+    MAX_AUDIO_DURATION,
+    GENRES
 }

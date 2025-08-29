@@ -1,5 +1,7 @@
 import type React from "react";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
+import type { JSX } from "react";
+import EntityCoverPlaceholder from "./placeholders/EntityCoverPlaceholder";
 
 interface EntityInfo {
     imgUrl: string;
@@ -11,6 +13,7 @@ interface EntityInfo {
 interface EntityInfoSectionProps {
     entity: EntityInfo;
     dominateColor: string;
+    placeHolderIcon?: JSX.Element
 }
 
 const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
@@ -20,24 +23,31 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
         title,
         description
     },
-    dominateColor
+    dominateColor,
+    placeHolderIcon
 }) => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
 
     return (
         <div style={{ background: dominateColor }}>
             <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
-                {/* Entity Cover */}
-                <img
-                    src={imgUrl}
-                    alt="Entity Imgurl"
-                    className={`w-50 h-50 ${leftPanelSize >= 7 && leftPanelSize <= 10
-                        ? "md:w-52 md:h-52"
-                        : leftPanelSize >= 32 && leftPanelSize <= 38
-                            ? "md:w-35 md:h-35"
-                            : "md:w-40 md:h-40"
-                        } shadow-[0_0_20px_rgba(0,0,0,0.4)] rounded-[4px]`}
-                />
+                {/* Conditional :- Entity Cover Or Entity Cover Placeholder */}
+                {
+                    imgUrl ? (
+                        <img
+                            src={imgUrl}
+                            alt="Entity Imgurl"
+                            className={`w-50 h-50 ${leftPanelSize >= 7 && leftPanelSize <= 10
+                                ? "md:w-52 md:h-52"
+                                : leftPanelSize >= 32 && leftPanelSize <= 38
+                                    ? "md:w-35 md:h-35"
+                                    : "md:w-40 md:h-40"
+                                } shadow-[0_0_20px_rgba(0,0,0,0.4)] rounded-[4px]`}
+                        />
+                    ) : (
+                        <EntityCoverPlaceholder placeHolderIcon={placeHolderIcon} />
+                    )
+                }
 
                 {/* Entity Info */}
                 <div className="flex flex-col flex-1 min-w-0 text-center md:text-left">

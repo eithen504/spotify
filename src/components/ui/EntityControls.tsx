@@ -2,9 +2,10 @@ import type React from "react";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { useRef, useState } from "react";
 import useBreakPoint from "../../hooks/useBreakPoint";
-import { AddIcon, AddToQueueIcon, CompactListIcon, DefaultListIcon, LogoIcon, MoreIcon, PlayIcon, ReportIcon, ShareIcon, TickIcon } from "../../Svgs";
+import { AddIcon, AddToQueueIcon, CompactListIcon, DefaultListIcon, LogoIcon, MoreIcon, PauseIcon, PlayIcon, ReportIcon, ShareIcon, TickIcon } from "../../Svgs";
 import { Drawer, DrawerContent } from "./drawer";
 import type { Controls } from "../../Types";
+import { useTrackDetailsStore } from "../../store/useTrackDetailsStore";
 
 const moreMenuOptions = [
     {
@@ -42,10 +43,18 @@ interface EntityControlsProps {
     controls: Controls;
     view?: "Compact List" | "Default List";
     setView?: React.Dispatch<React.SetStateAction<"Default List" | "Compact List">>;
+    handlePlayPause: () => void;
 }
 
-const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView }) => {
+const EntityControls: React.FC<EntityControlsProps> = ({
+    controls,
+    view,
+    setView,
+    handlePlayPause
+}) => {
+
     const { preferences: { leftPanelSize, showNowPlayingView } } = useUIPreferencesStore();
+    const { trackDetails } = useTrackDetailsStore();
     const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
     const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
     const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
@@ -65,8 +74,11 @@ const EntityControls: React.FC<EntityControlsProps> = ({ controls, view, setView
                         style={{
                             '--bgHoverColor': '#3BE477',
                         } as React.CSSProperties}
+                        onClick={handlePlayPause}
                     >
-                        <PlayIcon width="18" height="18" />
+                        {
+                            trackDetails.isPlaying ? <PauseIcon width="18" height="18" /> : <PlayIcon width="18" height="18" />
+                        }
                     </button>
                 )
             }

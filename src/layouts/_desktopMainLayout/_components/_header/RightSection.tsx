@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import type { MenuOption } from "../../../../Types";
 import { ExternalLinkIcon, PlusIcon } from "../../../../Svgs";
 import ProfileDropdown from "./ProfileDropdown";
+import UploadTrackDialog from "./UploadTrackDialog";
 
 const RightSection = () => {
     const navigate = useNavigate();
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const [profileMenuOptions, setProfileMenuOptions] = useState<MenuOption[]>([]);
+    const [isUploadTrackDialogOpen, setIsUploadTrackDialogOpen] = useState(false);
     const { data: currentUser, isLoading } = useCheckAuth()
     const { mutateAsync: logoutUser } = useLogoutUser()
     const profileDropdownRef = useRef<HTMLDivElement | null>(null);
@@ -35,7 +37,10 @@ const RightSection = () => {
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Track',
-                    action: () => { }
+                    action: () => {
+                        setIsUploadTrackDialogOpen(true)
+                        setIsProfileDropdownOpen(false)
+                    }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
@@ -162,6 +167,10 @@ const RightSection = () => {
                         </div>
                     </>
                 )
+            }
+
+            {
+                isUploadTrackDialogOpen && <UploadTrackDialog isOpen={isUploadTrackDialogOpen} onClose={() => setIsUploadTrackDialogOpen(false)} />
             }
         </div>
     );

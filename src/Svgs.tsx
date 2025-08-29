@@ -1047,6 +1047,28 @@ const SavedIcon = ({ width = "24", height = "24" }) => (
     </svg>
 )
 
+const AlertIcon = ({ width = "24", height = "24" }) => (
+    <svg
+        width={`${width}`}
+        height={`${height}`}
+        data-encore-id="icon"
+        role="img"
+        aria-hidden="true"
+        className="e-91000-icon e-91000-baseline"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+    >
+        <path
+            d="M11 18v-2h2v2zm0-4V6h2v8z"
+        >
+        </path>
+        <path
+            d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11-4.925 11-11 11S1 18.075 1 12"
+        >
+        </path>
+    </svg>
+)
+
 export {
     LogoIcon,
     HomeIcon,
@@ -1119,5 +1141,6 @@ export {
     PinIcon,
     DeleteIcon,
     TimerIcon,
-    SavedIcon
+    SavedIcon,
+    AlertIcon
 }

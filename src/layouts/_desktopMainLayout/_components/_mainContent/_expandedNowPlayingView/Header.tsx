@@ -1,8 +1,10 @@
+import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore";
 import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore"
 import { ExitScreenIcon, FullScreenIcon, MinimizeIcon, MoreIcon } from "../../../../../Svgs"
 
 const Header = () => {
     const { preferences: { isNowPlayingViewFullScreen }, setPreferences } = useUIPreferencesStore();
+    const { trackDetails } = useTrackDetailsStore();
 
     const handleMinimizeNowPlayingView = () => {
         setPreferences({ isNowPlayingViewExpanded: false })
@@ -26,7 +28,7 @@ const Header = () => {
     return (
         <div className="w-full h-14 px-6 flex items-center justify-between shadow-sm">
             {/* Left Title */}
-            <h2 className="text-[#ffffff] text-md font-extrabold">Now Playing</h2>
+            <h2 className="text-[#ffffff] text-md font-extrabold">{trackDetails.title}</h2>
 
             {/* Right Icons */}
             <div className="flex items-center gap-2 text-white/70 text-sm">

@@ -6,17 +6,29 @@ import EntityInfoSection from "../../components/ui/EntityInfoSection";
 import useDominantColor from "../../hooks/useDominateColor";
 import EntityControls from "../../components/ui/EntityControls";
 import EntityTracks from "../../components/ui/EntityTracks";
+import { useGetSuggestedTracks, useGetTrack } from "../../hooks/track";
+import { useParams } from "react-router-dom";
+import { TrackPageSkeleton } from "../../components/ui/Skeletons";
+import NotFoundPage from "../../components/ui/NotFoundPage";
+import { MusicIcon } from "../../Svgs";
+import { useTrackDetailsStore } from "../../store/useTrackDetailsStore";
 
 const TrackPage = () => {
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    const { trackDetails, setTrackDetails } = useTrackDetailsStore()
 
-    const imgUrl = "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96"
+    const { id } = useParams();
+
+    const { data: track, isLoading: isfetchingTrack } = useGetTrack(id || "")
+    const { data: suggestedTracks, isLoading: isfetchingSuggestedTracks } = useGetSuggestedTracks()
+
+    const imgUrl = track?.coverImageUrl
     const { dominantColor } = useDominantColor(imgUrl);
 
     const columns = {
-        "Artist": true,
+        "Artist": false,
         "Album": false,
-        "Duration": true, 
+        "Duration": true,
         "Date added": false,
     }
 
@@ -30,6 +42,33 @@ const TrackPage = () => {
         View: false
     };
 
+    const handlePlayPause = () => {
+        const isPlayingCurrentSong = trackDetails.isPlaying && track._id == trackDetails._id
+
+        if (isPlayingCurrentSong) {
+            setTrackDetails({ isPlaying: false })
+        } else {
+            setTrackDetails({
+                _id: track._id,
+                title: track.title,
+                coverImageUrl: track.coverImageUrl,
+                audioUrl: track.audioUrl,
+                artist: track.artist,
+                duration: track.duration,
+                albumId: track.albumId,
+                albumName: track.albumName,
+                hasLiked: track.hasLiked,
+                isPlaying: true
+            })
+        }
+    }
+
+    console.log("tracxj", trackDetails);
+    
+    if (isfetchingTrack || isfetchingSuggestedTracks) return <TrackPageSkeleton />
+
+    if (!isfetchingTrack && !track) return <NotFoundPage title="Couldn't find that song" />
+
     return (
         <div className="relative text-[#ffffff] min-h-screen">
             {/* Background gradient */}
@@ -37,12 +76,12 @@ const TrackPage = () => {
                 className={`w-full absolute inset-0 mt-90 ${leftPanelSize >= 7 && leftPanelSize <= 10 ? "md:mt-64" : leftPanelSize >= 32 && leftPanelSize <= 38 ? "md:mt-47" : "md:mt-52"} h-[700px] opacity-70`}
                 style={{
                     height: '250px',
-                    backgroundImage: `linear-gradient(to bottom, ${dominantColor}, #121212)`
+                    backgroundImage: `linear-gradient(to bottom, ${dominantColor || "#3C3C3C"}, #121212)`
                 }}
             />
 
             {/* Playlist Header */}
-            <EntityHeader title="Perfect" dominateColor={dominantColor || ""} />
+            <EntityHeader title="Perfect" dominateColor={dominantColor || "#3C3C3C"} />
 
             {/* Playlist Info Section */}
             <EntityInfoSection
@@ -50,15 +89,19 @@ const TrackPage = () => {
                     {
                         imgUrl,
                         displayType: "Track",
-                        title: "Perfect",
+                        title: track?.title,
                         description: "Spotify . 5 min"
                     }
                 }
-                dominateColor={dominantColor || ""}
+                dominateColor={dominantColor || "#3C3C3C"}
+                placeHolderIcon={<MusicIcon width="80" height="80" />}
             />
 
             {/* Playlist Controls */}
-            <EntityControls controls={controls} />
+            <EntityControls
+                controls={controls}
+                handlePlayPause={handlePlayPause}
+            />
 
             <div className="relative max-w-[90rem] mx-auto">
                 {/* Recommended section */}
@@ -68,7 +111,7 @@ const TrackPage = () => {
                 </div>
 
                 {/* Playlist Tracks */}
-                <EntityTracks view="Default List" columns={columns} />
+                <EntityTracks tracks={suggestedTracks} view="Default List" columns={columns} />
             </div>
 
             <Footer />

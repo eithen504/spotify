@@ -1,5 +1,5 @@
 import Footer from "../../components/ui/footer";
-import { GENRES } from "../../Constants";
+import { GENRE_ITEMS } from "../../Constants";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore"
 
 const SearchPage = () => {
@@ -16,15 +16,15 @@ const SearchPage = () => {
                         <h1 className="text-md md:text-3xl font-bold">Browse all</h1>
                     </div>
                     <div className={`grid grid-cols-2 ${leftPanelSize > 25 ? "md:grid-cols-2" : "md:grid-cols-3"} gap-6 px-4 md:px-6`}>
-                        {GENRES.map((genre) => (
+                        {GENRE_ITEMS.map((item) => (
                             <div
-                                key={genre.id}
-                                className={`${genre.bgColor} rounded-md p-6 h-28 relative overflow-hidden cursor-pointer transform transition-all duration-300 group`}
+                                key={item.id}
+                                className={`${item.bgColor} rounded-md p-6 h-28 relative overflow-hidden cursor-pointer transform transition-all duration-300 group`}
                             >
                                 {/* Top-left text */}
                                 <div className="absolute top-4 left-4 z-10">
                                     <h3 className="text-xl font-bold text-[#ffffff] mb-1 transition-colors">
-                                        {genre.title}
+                                        {item.title}
                                     </h3>
                                 </div>
 
@@ -36,7 +36,7 @@ const SearchPage = () => {
                                         '--hoverRotate': '0deg'
                                     } as React.CSSProperties}
                                 >
-                                    <img src={genre.image} alt={genre.title} className="w-full h-full object-cover rounded shadow-[0_0_20px_rgba(0,0,0,0.8)]" />
+                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover rounded shadow-[0_0_20px_rgba(0,0,0,0.8)]" />
                                 </div>
                             </div>
                         ))}

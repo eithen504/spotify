@@ -50,12 +50,16 @@ export type GenreTitle =
     | "Lofi"
     | "Nature & Noise";
 
-export type Genre = {
+export type GenreItem = {
     id: string;
     title: GenreTitle;
     bgColor: string;
     image: string;
 }
+
+export type GenreItems = GenreItem[]
+
+export type Genres = GenreTitle[]
 
 export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "Follow" | "More" | "View";
 export type Controls = Record<ControlKeys, boolean>;
@@ -69,11 +73,26 @@ export type MenuOption = {
 }
 
 export type User = {
-  _id: string;
-  email: string;
-  displayName: string;
-  avatarUrl: string;
-  bio: string;
-  createdAt: Date;
-  updatedAt: Date;
+    _id: string;
+    email: string;
+    displayName: string;
+    avatarUrl: string;
+    bio: string;
+    createdAt: Date;
+    updatedAt: Date;
 };
+
+export interface Track {
+    _id: string;
+    title: string;
+    coverImageUrl: string;
+    audioUrl: string;
+    artist: string;
+    duration: string;
+    genre: GenreTitle[];
+    albumId: string | null;
+    albumName: string,
+    hasLiked: boolean,
+    createdAt: Date;
+    updatedAt: Date;
+}

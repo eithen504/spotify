@@ -1,9 +1,12 @@
+import PlaybackMusicPlaceholder from "../../../../components/ui/placeholders/PlaybackMusicPlaceholder";
 import useBreakPoint from "../../../../hooks/useBreakPoint";
+import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore";
 import { useUIPreferencesStore } from "../../../../store/useUIPreferenceStore"
 import { AddIcon, DownArrowIcon, UpArrowIcon } from "../../../../Svgs"
 
 const TrackInfo = () => {
     const { preferences: { showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
+    const { trackDetails } = useTrackDetailsStore();
     const [breakpoint] = useBreakPoint()
 
     const handleToggleShowNowPlayingView = () => {
@@ -82,11 +85,19 @@ const TrackInfo = () => {
     return (
         <div className="flex items-center space-x-3 w-1/4 relative">
             <div className="relative group">
-                <img
-                    src={'https://i.scdn.co/image/ab67616d000048513899712512f50a8d9e01e951'}
-                    alt={'trackDetails.title'}
-                    className={`w-14 h-14 min-w-[56px] min-h-[56px] flex-shrink-0 rounded object-cover transition-opacity`}
-                />
+                {
+                    trackDetails.coverImageUrl ? (
+                        <img
+                            src={trackDetails.coverImageUrl}
+                            alt={trackDetails.title}
+                            className="w-14 h-14 min-w-[56px] min-h-[56px] flex-shrink-0 rounded object-cover transition-opacity"
+                        />
+                    ) : trackDetails._id ? (
+                        <PlaybackMusicPlaceholder shouldShowPlaceholderIcon={true} />
+                    ) : (
+                        <PlaybackMusicPlaceholder shouldShowPlaceholderIcon={false} />
+                    )
+                }
 
                 <button className={`absolute cursor-pointer text-[#b3b3b3] dynamic-text-hover bg-black/60 rounded-full top-0 right-0 group-hover-opacity transition-opacity p-1`}
                     onClick={handleToggleShowNowPlayingView}
@@ -98,10 +109,10 @@ const TrackInfo = () => {
 
             <div className="overflow-hidden">
                 <p className="text-[#ffffff] text-sm font-medium truncate hover:underline cursor-pointer">
-                    {'trackDetails.title'}
+                    {trackDetails.title}
                 </p>
 
-                <p className="text-[#99a1af] text-xs truncate">{'trackDetails.artist'}</p>
+                <p className="text-[#99a1af] text-xs truncate">{trackDetails.artist}</p>
             </div>
 
             <button className={`text-[#b3b3b3] dynamic-text-hover cursor-pointer`}>

@@ -1,4 +1,8 @@
+import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore";
+
 const CreditSection = () => {
+    const { trackDetails } = useTrackDetailsStore();
+
     return (
         <div className="mt-6 bg-[#1e1e1e] p-4 rounded-md shadow-md text-[#ffffff]">
             <div className="flex items-center justify-between mb-4">
@@ -13,11 +17,11 @@ const CreditSection = () => {
             <div className="space-y-4">
                 <div>
                     <p className="font-medium">Title</p>
-                    <p className="text-sm text-[#aaaaaa]">This Is Our Title</p>
+                    <p className="text-sm text-[#aaaaaa]">{trackDetails.title}</p>
                 </div>
                 <div>
                     <p className="font-medium">Artist</p>
-                    <p className="text-sm text-[#aaaaaa]">Michael Keenan</p>
+                    <p className="text-sm text-[#aaaaaa]">{trackDetails.artist}</p>
                 </div>
                 <div>
                     <p className="font-medium">Upload Date</p>

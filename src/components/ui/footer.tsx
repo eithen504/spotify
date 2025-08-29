@@ -6,7 +6,7 @@ const Footer = () => {
     const isHomePage = pathname == "/";
 
     return (
-        <footer className={`p-4 ${isHomePage ? "md:px-10 md:py-10" : "md:px-6 md:py-10"} mt-7 text-[#ffffff] relative max-w-[90rem] mx-auto`}>
+        <footer className={`py-14 px-4 ${isHomePage ? "md:px-10 md:py-14" : "md:px-6 md:py-14"} text-[#ffffff] relative max-w-[90rem] mx-auto`}>
             <div className="flex flex-col  justify-between gap-8">
                 {/* Company */}
                 <div className="space-y-2">
