@@ -18,7 +18,7 @@ export type GenresIdTitleMap = Record<string, Genre>
 export type GenresIdBgColorMap = Record<string, string>;
 
 export type Genre =
-    | "Party" 
+    | "Party"
     | "Chill"
     | "Summer"
     | "Love"
@@ -85,36 +85,56 @@ export type NavigationItem = {
 }
 
 export type Language =
-  | "Arabic"
-  | "Chinese"
-  | "Czech"
-  | "Dutch"
-  | "English"
-  | "Finnish"
-  | "French"
-  | "German"
-  | "Greek"
-  | "Hebrew"
-  | "Indonesian"
-  | "Italian"
-  | "Japanese"
-  | "Korean"
-  | "Malay"
-  | "Norwegian"
-  | "Persian"
-  | "Polish"
-  | "Portuguese"
-  | "Romanian"
-  | "Russian"
-  | "Spanish"
-  | "Swedish"
-  | "Thai"
-  | "Turkish"
-  | "Ukrainian"
-  | "Vietnamese"
-  | "Other";
+    | "Arabic"
+    | "Chinese"
+    | "Czech"
+    | "Dutch"
+    | "English"
+    | "Finnish"
+    | "French"
+    | "German"
+    | "Greek"
+    | "Hebrew"
+    | "Indonesian"
+    | "Italian"
+    | "Japanese"
+    | "Korean"
+    | "Malay"
+    | "Norwegian"
+    | "Persian"
+    | "Polish"
+    | "Portuguese"
+    | "Romanian"
+    | "Russian"
+    | "Spanish"
+    | "Swedish"
+    | "Thai"
+    | "Turkish"
+    | "Ukrainian"
+    | "Vietnamese"
+    | "Other";
 
-  
+export type SearchItemType = "Track" | "Album" | "Playlist" | "Search";
+
+export type SearchItem = {
+    type: SearchItemType,
+    _id: string;
+    title: string;
+    artist?: string;
+    coverImageUrl: string;
+};
+
+export type AlphabetLetter =
+    | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J'
+    | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T'
+    | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z';
+
+export type SearchDictionary = {
+    [key in AlphabetLetter]: SearchItem[];
+};
+
+export type SearchItemIDMap = Record<string, SearchItem>;
+
 export type User = {
     _id: string;
     email: string;
@@ -132,7 +152,7 @@ export type Track = {
     audioUrl: string;
     artist: string;
     duration: number;
-    genre: Genre[];
+    genres: Genre[];
     albumId: string | null;
     albumName: string,
     language: Language,
@@ -147,7 +167,7 @@ export type Playlist = {
     coverImageUrl: string;
     userId: string;
     username: string;
-    genre: Genre[];
+    genres: Genre[];
     tracks: string[];
     hasSaved: boolean;
     createdAt: Date;
@@ -170,3 +190,4 @@ export type Folder = {
     createdAt: Date;
     updatedAt: Date;
 };
+

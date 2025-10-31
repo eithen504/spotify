@@ -18,7 +18,7 @@ export const useTrackDetailsStore = create<TrackDetailsStore>((set) => ({
         audioUrl: "",
         artist: "",
         duration: 0,
-        genre: [],
+        genres: [],
         albumId: null,
         albumName: "",
         language: "English",

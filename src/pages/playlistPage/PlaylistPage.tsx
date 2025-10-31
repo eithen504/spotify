@@ -312,7 +312,7 @@ const PlaylistPage = () => {
                         title: data.playlist.title,
                         coverImageUrl: data.playlist.coverImageUrl,
                         userId: data.playlist.userId,
-                        genre: [],
+                        genres: [],
                         tracks: [],
                         createdAt: new Date(),
                         updatedAt: new Date()

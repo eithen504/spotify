@@ -102,8 +102,11 @@ const CenterSection = () => {
                     </Link>
                 </div>
 
-                {isRecentSearchesDropdownOpen && !searchQuery.trim() && (
-                    <RecentSearchesDropdown />
+                {isRecentSearchesDropdownOpen && (
+                    <RecentSearchesDropdown
+                        searchQuery={searchQuery}
+                        onClose={() => setIsRecentSearchesDropdownOpen(false)}
+                    />
                 )}
             </div>
         </div>

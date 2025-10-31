@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PlaybackMusicPlaceholder } from "../../../../components/Placeholders";
 import { useBreakPoint } from "../../../../hooks/breakPoint";
 import { useLikeTrack, useTrackLikeStatus } from "../../../../hooks/like";
@@ -91,20 +91,7 @@ const TrackInfo = () => {
     }
 
     const handleLikeUnlikeTrack = () => {
-        likeTrack({
-            _id: trackDetails._id,
-            title: trackDetails.title,
-            coverImageUrl: trackDetails.coverImageUrl,
-            audioUrl: trackDetails.audioUrl,
-            artist: trackDetails.artist,
-            duration: trackDetails.duration,
-            genre: [],
-            albumId: trackDetails.albumId,
-            albumName: trackDetails.albumName,
-            hasLiked: trackDetails.hasLiked,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        })
+        likeTrack(trackDetails)
     }
 
     return (
@@ -133,17 +120,11 @@ const TrackInfo = () => {
             </div>
 
             <div className="overflow-hidden">
-                <p
-                    className={`text-[#ffffff] text-sm font-medium truncate ${trackDetails._id ? "hover:underline cursor-pointer" : ""}`}
-                    onClick={() => {
-                        if (trackDetails._id) {
-                            navigate(`/track/${trackDetails._id}`)
-                        }
-                    }}
-
-                >
-                    {trackDetails.title || "No Track Selected"}
-                </p>
+                <Link to={`/track/${trackDetails._id}`}>
+                    <p className={`text-[#ffffff] text-sm font-medium truncate ${trackDetails._id ? "hover:underline cursor-pointer" : ""}`}>
+                        {trackDetails.title || "No Track Selected"}
+                    </p>
+                </Link>
 
                 <p className="text-[#99a1af] text-xs truncate">{trackDetails.artist}</p>
             </div>
