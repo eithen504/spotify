@@ -25,7 +25,7 @@ const ProgressBar: React.FC<ProgessBarProps> = ({ progress, currentTime, handleP
             </div>
             <div className="flex items-center justify-between text-white/70 text-[12px] mt-1">
                 <span>{formatDuration(currentTime)}</span>
-                <span>{trackDetails.duration}</span>
+                <span>{formatDuration(trackDetails.duration)}</span>
             </div>
         </div>
     )

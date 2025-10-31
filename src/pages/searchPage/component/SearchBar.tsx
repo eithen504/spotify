@@ -50,7 +50,10 @@ const SearchBar = () => {
 
                 {/* Recent Searches Dropdown */}
                 {isRecentSearchesDropdownOpen && (
-                    <RecentSearchesDropdown />
+                    <RecentSearchesDropdown
+                        searchQuery={searchQuery}
+                        onClose={() => setIsRecentSearchesDropdownOpen(false)}
+                    />
                 )}
             </div>
         </div>
