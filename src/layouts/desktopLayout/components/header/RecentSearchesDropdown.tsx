@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { AlphabetLetter, SearchItem, SearchItemType } from "../../../../types";
 import { useNavigate } from "react-router-dom";
 import { SEARCH_DICTIONARY, SEARCH_ITEM_ID_MAP } from "../../../../data";
+import { useBreakPoint } from "../../../../hooks/breakPoint";
 
 interface RecentSearchesDropdownProps {
     searchQuery: string
@@ -12,6 +13,7 @@ interface RecentSearchesDropdownProps {
 
 const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQuery, onClose }) => {
     const navigate = useNavigate();
+    const { breakPoint } = useBreakPoint();
     const [recentSearches, setRecentSearches] = useState<SearchItem[]>([]);
     const [searchSuggestions, setSearchSuggestions] = useState<SearchItem[]>([]);
 
@@ -90,7 +92,7 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
     }, [searchQuery]);
 
     return (
-        <div className="absolute top-full p-2 z-800 mt-2 w-full max-h-77 overflow-y-auto custom-scrollbar bg-[#282828] text-[#ffffff] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-[#2a2a2a]">
+        <div className={`absolute top-full p-2 z-800 mt-2 w-full ${breakPoint == "sm" ? "max-h-120" : "max-h-77"} overflow-y-auto custom-scrollbar bg-[#282828] text-[#ffffff] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-[#2a2a2a]`}>
             <div className="p-2 border-b border-[#2a2a2a] font-semibold text-md">
                 Recent searches
             </div>
@@ -150,8 +152,8 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
                     </>
                 ) : (
                     recentSearches.map((item: SearchItem) => {
-                        if(!item) return null;
-                        
+                        if (!item) return null;
+
                         const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : `/playlist/${item._id}`;
 
                         return (
