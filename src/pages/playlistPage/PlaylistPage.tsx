@@ -3,7 +3,7 @@ import { useScrollStore } from "../../store/useScrollStore";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { useAddItemsToPlaylist, useGetPlaylistTracks, useUpdatePlaylist, useUploadPlaylist } from "../../hooks/playlist";
-import { formatTotalAsHMS, getScrollThreshold } from "../../utils";
+import { getScrollThreshold } from "../../utils";
 import { useDominantColor } from "../../hooks/color";
 import type { Columns, Controls, Folder, Handlers, MenuOptions, Playlist, Track } from "../../types";
 import { NotFoundEntity, NotFoundTracks } from "../../components/NotFounds";

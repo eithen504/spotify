@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { CrossIcon, MicIcon, SearchIcon } from '../../../Svgs';
-import RecentSearchesDropdown from '../../../layouts/desktopLayout/components/header/RecentSearchesDropdown';
-import ListeningDialog from '../../../layouts/desktopLayout/components/header/ListeningDialog';
-import { useNavigate } from 'react-router-dom';
-import type { AlphabetLetter, SearchItem, SearchItemType } from '../../../types';
-import { SEARCH_DICTIONARY, SEARCH_ITEM_ID_MAP } from '../../../data';
+import React, { useEffect, useRef, useState } from 'react'
+import { BrowseIcon, BrowserFilledIcon, CrossIcon, MicIcon, SearchIcon } from '../../../../Svgs';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import RecentSearchesDropdown from './RecentSearchesDropdown';
+import ListeningDialog from './ListeningDialog';
+import type { AlphabetLetter, SearchItem, SearchItemType } from '../../../../types';
+import { SEARCH_DICTIONARY, SEARCH_ITEM_ID_MAP } from '../../../../data';
 
 const SearchBar = () => {
     /* ---------- Internal Hooks ---------- */
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     /* ---------- Local States ---------- */
     const [searchQuery, setSearchQuery] = useState("");
@@ -20,6 +21,9 @@ const SearchBar = () => {
     /* ---------- Local References ---------- */
     const searchBarRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    /* ---------- Derived Value ---------- */
+    const isSearchPage = pathname == '/search';
 
     /* ---------- Methods Or Functions ---------- */
     const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
@@ -112,17 +116,33 @@ const SearchBar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.ctrlKey && event.key.toLowerCase() === "k") {
+                event.preventDefault(); // prevent browser’s default find action
+                console.log("Ctrl + K pressed!");
+                // 👉 Example: focus search input
+                inputRef.current?.focus();
+                navigate("/search")
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
     return (
-        <div className={`block md:hidden w-full p-4 md:p-6`}>
-            <h2 className="text-2xl font-bold text-white mb-4">
-                Search
-            </h2>
-            <div className="relative" ref={searchBarRef}>
+        <>
+            <div className="max-w-[470px] w-full relative" ref={searchBarRef}>
                 <div
-                    className="flex items-center gap-2 bg-white text-black rounded-[4px] px-4 py-[9px] w-full max-w-4xl mx-auto cursor-text"
+                    className={`flex items-center bg-[#1f1f1f] rounded-full px-4 py-[11px] cursor-text ${isRecentSearchesDropdownOpen ? "border border-[#ffffff]" : "border border-transparent"}`}
                     onClick={() => inputRef.current?.focus()}
                 >
-                    <SearchIcon />
+                    <button
+                        className={`mr-3 text-[#adadad] ${searchQuery.trim() ? "dynamic-text-hover cursor-pointer" : ""}`}
+                    >
+                        <SearchIcon />
+                    </button>
 
                     <input
                         ref={inputRef}
@@ -130,20 +150,28 @@ const SearchBar = () => {
                         value={searchQuery}
                         onChange={handleSearchQueryChange}
                         onFocus={() => setIsRecentSearchesDropdownOpen(true)}
-                        placeholder="What do you want to listen to?"
-                        className="bg-transparent focus:outline-none w-full placeholder-black"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                const navigateUrl = `/search/${searchQuery}`;
+                                const id = `${searchQuery}-search`;
+                                addItemToRecentSearches(navigateUrl, id);
+                            }
+                        }}
+                        placeholder="What do you want to play?"
+                        className="bg-transparent focus:outline-none flex-grow text-md placeholder:text-[#adadad] text-[#ffffff]"
                     />
 
                     {
                         searchQuery.trim() ? (
                             <button
-                                className="cursor-pointer"
+                                className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
                                 onClick={handleClearSearchQuery}
                             >
-                                <CrossIcon width="22" height="22"/>
+                                <CrossIcon />
                             </button>
                         ) : (
-                            <button className="cursor-pointer"
+                            <button
+                                className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsRecentSearchesDropdownOpen(false);
@@ -154,9 +182,21 @@ const SearchBar = () => {
                             </button>
                         )
                     }
+
+                    <div className="w-px h-6 bg-[#7C7C7C] mx-4"></div>
+
+                    <Link
+                        to={"/search"}
+                        className={`flex flex-col ${isSearchPage ? "text-[#ffffff]" : "text-[#adadad]"} dynamic-text-hover gap-1 cursor-pointer`}
+                        onClick={(e) => e.stopPropagation()}
+                        title="Browse"
+                    >
+                        {
+                            isSearchPage ? <BrowserFilledIcon /> : <BrowseIcon />
+                        }
+                    </Link>
                 </div>
 
-                {/* Recent Searches Dropdown */}
                 {isRecentSearchesDropdownOpen && (
                     <RecentSearchesDropdown
                         searchQuery={searchQuery}
@@ -169,14 +209,16 @@ const SearchBar = () => {
                 )}
             </div>
 
-            {isListeningDialogOpen && (
-                <ListeningDialog
-                    inputRef={inputRef}
-                    setSearchQuery={setSearchQuery}
-                    onClose={() => setIsListeningDialogOpen(false)}
-                />
-            )}
-        </div>
+            {
+                isListeningDialogOpen && (
+                    <ListeningDialog
+                        inputRef={inputRef}
+                        setSearchQuery={setSearchQuery}
+                        onClose={() => setIsListeningDialogOpen(false)}
+                    />
+                )
+            }
+        </>
     )
 }
 

@@ -1,95 +1,26 @@
 import type React from "react"
 import { CrossIcon, SearchIcon } from "../../../../Svgs"
-import { useEffect, useState } from "react";
-import type { AlphabetLetter, SearchItem, SearchItemType } from "../../../../types";
-import { useNavigate } from "react-router-dom";
-import { SEARCH_DICTIONARY, SEARCH_ITEM_ID_MAP } from "../../../../data";
+import type { SearchItem } from "../../../../types";
 import { useBreakPoint } from "../../../../hooks/breakPoint";
 
 interface RecentSearchesDropdownProps {
-    searchQuery: string
-    onClose: () => void;
+    searchQuery: string;
+    recentSearches: SearchItem[];
+    searchSuggestions: SearchItem[];
+    addItemToRecentSearches: (navigateUrl: string, id: string) => void;
+    removeItemFromRecentSearches: (id: string) => void;
+    clearRecentSearchHistory: () => void;
 }
 
-const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQuery, onClose }) => {
-    const navigate = useNavigate();
+const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({
+    searchQuery,
+    recentSearches,
+    searchSuggestions,
+    addItemToRecentSearches,
+    removeItemFromRecentSearches,
+    clearRecentSearchHistory
+}) => {
     const { breakPoint } = useBreakPoint();
-    const [recentSearches, setRecentSearches] = useState<SearchItem[]>([]);
-    const [searchSuggestions, setSearchSuggestions] = useState<SearchItem[]>([]);
-
-    const addItemToRecentSearches = (navigateUrl: string, id: string) => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-        // Remove existing instance of the id
-        itemsIds = itemsIds.filter((i) => i !== id);
-
-        // Add the new id at the beginning
-        itemsIds.unshift(id);
-
-        // If more than 10 items, remove the last one
-        if (itemsIds.length > 10) {
-            itemsIds.pop();
-        }
-
-        // Save back to localStorage
-        localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
-
-        navigate(navigateUrl);
-        onClose();
-    };
-
-    const removeItemFromRecentSearches = (id: string) => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-        const newRecentSearches = recentSearches.filter((item) => item._id != id.split('-')[0]);
-        setRecentSearches(newRecentSearches);
-
-        itemsIds = itemsIds.filter((i) => i != id);
-        localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
-    }
-
-    const clearRecentSearchHistory = () => {
-        setRecentSearches([]);
-        localStorage.setItem("recentSearches", JSON.stringify([]));
-    }
-
-    useEffect(() => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-        const items = itemsIds.map((extandedId) => {
-            const [id, type] = extandedId.split('-');
-
-            if (type == "search") {
-                return {
-                    type: "Search" as SearchItemType,
-                    _id: id,
-                    title: id,
-                }
-            }
-
-            const item = SEARCH_ITEM_ID_MAP[id];
-            return item;
-        })
-
-        setRecentSearches(items);
-    }, [])
-
-    useEffect(() => {
-        if (!searchQuery.trim()) {
-            setSearchSuggestions([]);
-            return;
-        }
-
-        const firstLetter = searchQuery[0].toUpperCase();
-        const suggestions = SEARCH_DICTIONARY[firstLetter.toUpperCase() as AlphabetLetter] || [];
-
-        // filter items where the title includes the query (case-insensitive)
-        const filtered = suggestions.filter(item =>
-            item.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-
-        setSearchSuggestions(filtered);
-    }, [searchQuery]);
 
     return (
         <div className={`absolute top-full p-2 z-800 mt-2 w-full ${breakPoint == "sm" ? "max-h-120" : "max-h-77"} overflow-y-auto custom-scrollbar bg-[#282828] text-[#ffffff] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-[#2a2a2a]`}>
@@ -184,7 +115,7 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
                                     <span className="text-md">{item.title}</span>
                                     <span className="text-sm text-gray-300 truncate mr-6">{`${item.type} . ${item.artist || "Spotify"}`}</span>
                                 </div>
-                                
+
                                 {/* Cross Icon */}
                                 <button
                                     className="mr-1 absolute right-2 text-[#8f8f8f] dynamic-text-hover group-hover-opacity cursor-pointer"
