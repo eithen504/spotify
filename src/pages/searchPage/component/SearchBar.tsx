@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { MicIcon, SearchIcon } from '../../../Svgs';
 import RecentSearchesDropdown from '../../../layouts/desktopLayout/components/header/RecentSearchesDropdown';
+import ListeningInterfaceDialog from '../../../layouts/desktopLayout/components/header/ListeningInterfaceDialog';
 
 const SearchBar = () => {
     const [isListeningInterfaceOpen, setIsListeningInterfaceOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
     const searchBarRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [isRecentSearchesDropdownOpen, setIsRecentSearchesDropdownOpen] = useState(false);
 
@@ -28,20 +30,23 @@ const SearchBar = () => {
             </h2>
             <div className="relative" ref={searchBarRef}>
                 <div className="flex items-center gap-2 bg-white text-black rounded-[4px] px-4 py-[9px] w-full max-w-4xl mx-auto"
-                    onClick={() => setIsRecentSearchesDropdownOpen(true)}
+                    onClick={() => inputRef.current?.focus()}
                 >
                     <SearchIcon />
                     <input
+                        ref={inputRef}
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        onFocus={() => setIsRecentSearchesDropdownOpen(true)}
                         placeholder="What do you want to listen to?"
                         className="bg-transparent focus:outline-none w-full placeholder-black"
                     />
-                    <button className={`${isListeningInterfaceOpen ? "text-red-700" : ""} cursor-pointer`}
+                    <button className="cursor-pointer"
                         onClick={(e) => {
-                            e.stopPropagation()
-                            setIsListeningInterfaceOpen(true)
+                            e.stopPropagation();
+                            setIsRecentSearchesDropdownOpen(false);
+                            setIsListeningInterfaceOpen(true);
                         }}
                     >
                         <MicIcon />
@@ -56,6 +61,14 @@ const SearchBar = () => {
                     />
                 )}
             </div>
+
+            {isListeningInterfaceOpen && (
+                <ListeningInterfaceDialog
+                    inputRef={inputRef}
+                    setSearchQuery={setSearchQuery}
+                    onClose={() => setIsListeningInterfaceOpen(false)}
+                />
+            )}
         </div>
     )
 }

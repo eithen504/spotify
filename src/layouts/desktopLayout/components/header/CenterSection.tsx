@@ -122,7 +122,7 @@ const CenterSection = () => {
                         onClose={() => setIsRecentSearchesDropdownOpen(false)}
                     />
                 )}
-            </div>
+            </div> 
 
             {isListeningInterfaceOpen && (
                 <ListeningInterfaceDialog
