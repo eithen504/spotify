@@ -45,12 +45,6 @@ const CenterSection = () => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current?.focus();
-        }
-    }, [searchQuery])
-
     return (
         <div className="flex items-center flex-1 gap-3 justify-center">
             {/* Home Button */}
@@ -132,6 +126,7 @@ const CenterSection = () => {
 
             {isListeningInterfaceOpen && (
                 <ListeningInterfaceDialog
+                    inputRef={inputRef}
                     setSearchQuery={setSearchQuery}
                     onClose={() => setIsListeningInterfaceOpen(false)}
                 />

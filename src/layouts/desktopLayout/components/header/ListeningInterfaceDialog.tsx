@@ -3,11 +3,12 @@ import { Dialog, DialogContent } from "../../../../components/ui/dialog";
 import { MicIcon } from "../../../../Svgs";
 
 interface ListeningInterfaceDialogProps {
-    setSearchQuery: React.Dispatch<React.SetStateAction<string>>
+    inputRef: React.RefObject<HTMLInputElement | null>;
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
     onClose: () => void;
 }
 
-const ListeningInterfaceDialog: React.FC<ListeningInterfaceDialogProps> = ({ setSearchQuery, onClose }) => {
+const ListeningInterfaceDialog: React.FC<ListeningInterfaceDialogProps> = ({inputRef, setSearchQuery, onClose }) => {
     const [isListening, setIsListening] = useState(true);
     const [error, setError] = useState("");
     const recognitionRef = useRef<any>(null);
@@ -45,6 +46,7 @@ const ListeningInterfaceDialog: React.FC<ListeningInterfaceDialogProps> = ({ set
             // Update search query with final results
             if (finalTranscript) {
                 setSearchQuery(finalTranscript.trim());
+                inputRef.current?.focus();
             }
         };
 
