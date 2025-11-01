@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "../../../../components/ui/dialog";
 import { MicIcon } from "../../../../Svgs";
 
-interface ListeningInterfaceDialogProps {
+interface ListeningDialogProps {
     inputRef: React.RefObject<HTMLInputElement | null>;
     setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
     onClose: () => void;
 }
 
-const ListeningInterfaceDialog: React.FC<ListeningInterfaceDialogProps> = ({inputRef, setSearchQuery, onClose }) => {
+const ListeningDialog: React.FC<ListeningDialogProps> = ({inputRef, setSearchQuery, onClose }) => {
     const [isListening, setIsListening] = useState(true);
     const [error, setError] = useState("");
     const recognitionRef = useRef<any>(null);
@@ -129,4 +129,4 @@ const ListeningInterfaceDialog: React.FC<ListeningInterfaceDialogProps> = ({inpu
     );
 };
 
-export default ListeningInterfaceDialog;
+export default ListeningDialog;

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { MicIcon, SearchIcon } from '../../../Svgs';
 import RecentSearchesDropdown from '../../../layouts/desktopLayout/components/header/RecentSearchesDropdown';
-import ListeningInterfaceDialog from '../../../layouts/desktopLayout/components/header/ListeningInterfaceDialog';
+import ListeningDialog from '../../../layouts/desktopLayout/components/header/ListeningDialog';
 
 const SearchBar = () => {
-    const [isListeningInterfaceOpen, setIsListeningInterfaceOpen] = useState(false);
+    const [isListeningDialogOpen, setIsListeningDialogOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
     const searchBarRef = useRef<HTMLDivElement | null>(null);
@@ -29,10 +29,12 @@ const SearchBar = () => {
                 Search
             </h2>
             <div className="relative" ref={searchBarRef}>
-                <div className="flex items-center gap-2 bg-white text-black rounded-[4px] px-4 py-[9px] w-full max-w-4xl mx-auto"
+                <div
+                    className="flex items-center gap-2 bg-white text-black rounded-[4px] px-4 py-[9px] w-full max-w-4xl mx-auto"
                     onClick={() => inputRef.current?.focus()}
                 >
                     <SearchIcon />
+
                     <input
                         ref={inputRef}
                         type="text"
@@ -42,15 +44,17 @@ const SearchBar = () => {
                         placeholder="What do you want to listen to?"
                         className="bg-transparent focus:outline-none w-full placeholder-black"
                     />
+
                     <button className="cursor-pointer"
                         onClick={(e) => {
                             e.stopPropagation();
                             setIsRecentSearchesDropdownOpen(false);
-                            setIsListeningInterfaceOpen(true);
+                            setIsListeningDialogOpen(true);
                         }}
                     >
                         <MicIcon />
                     </button>
+
                 </div>
 
                 {/* Recent Searches Dropdown */}
@@ -62,11 +66,11 @@ const SearchBar = () => {
                 )}
             </div>
 
-            {isListeningInterfaceOpen && (
-                <ListeningInterfaceDialog
+            {isListeningDialogOpen && (
+                <ListeningDialog
                     inputRef={inputRef}
                     setSearchQuery={setSearchQuery}
-                    onClose={() => setIsListeningInterfaceOpen(false)}
+                    onClose={() => setIsListeningDialogOpen(false)}
                 />
             )}
         </div>

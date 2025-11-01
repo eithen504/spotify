@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { BrowseIcon, BrowserFilledIcon, CrossIcon, HomeFilledIcon, HomeIcon, MicIcon, SearchIcon } from "../../../../Svgs"
 import { useEffect, useRef, useState } from "react";
 import RecentSearchesDropdown from "./RecentSearchesDropdown";
-import ListeningInterfaceDialog from "./ListeningInterfaceDialog";
+import ListeningDialog from "./ListeningDialog";
 
 const CenterSection = () => {
     const { pathname } = useLocation();
@@ -13,7 +13,7 @@ const CenterSection = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [isRecentSearchesDropdownOpen, setIsRecentSearchesDropdownOpen] = useState(false);
-    const [isListeningInterfaceOpen, setIsListeningInterfaceOpen] = useState(false);
+    const [isListeningDialogOpen, setIsListeningDialogOpen] = useState(false);
 
     const handleClearSearchQuery = () => setSearchQuery("");
 
@@ -94,7 +94,7 @@ const CenterSection = () => {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsRecentSearchesDropdownOpen(false);
-                                    setIsListeningInterfaceOpen(true);
+                                    setIsListeningDialogOpen(true);
                                 }}
                             >
                                 <MicIcon />
@@ -124,11 +124,11 @@ const CenterSection = () => {
                 )}
             </div> 
 
-            {isListeningInterfaceOpen && (
-                <ListeningInterfaceDialog
+            {isListeningDialogOpen && (
+                <ListeningDialog
                     inputRef={inputRef}
                     setSearchQuery={setSearchQuery}
-                    onClose={() => setIsListeningInterfaceOpen(false)}
+                    onClose={() => setIsListeningDialogOpen(false)}
                 />
             )}
         </div>

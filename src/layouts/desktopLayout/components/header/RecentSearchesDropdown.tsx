@@ -88,7 +88,7 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
             item.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-        setSearchSuggestions(filtered); 
+        setSearchSuggestions(filtered);
     }, [searchQuery]);
 
     return (
