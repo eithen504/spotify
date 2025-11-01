@@ -383,6 +383,7 @@ const AlbumPage = () => {
                                 isPlaying: isPlayingCurrentAlbum
                             }}
                             entityMenuOptions={albumMenuOptions}
+                            entityDrawerHeight="98"
                         />
 
                         <div className="relative max-w-[90rem] mx-auto">
@@ -408,6 +409,7 @@ const AlbumPage = () => {
                                 setCurrentMenuTrackIndex={setCurrentMenuTrackIndex}
                                 trackMenuOptions={trackMenuOptions}
                                 handlePlayPauseTrack={handlePlayPauseTrack}
+                                entityDrawerHeight="110"
                             />
                         </div>
                     </>

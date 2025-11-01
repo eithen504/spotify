@@ -19,6 +19,7 @@ interface EntityTracksProps {
     currentMenuTrackIndex: number;
     setCurrentMenuTrackIndex: React.Dispatch<React.SetStateAction<number>>
     trackMenuOptions: MenuOptions;
+    entityDrawerHeight?: string;
     handlePlayPauseTrack: (track: Track, isPlayingCurrentTrack: boolean, source?: "PlayButton" | "EntityTracks") => void;
 }
 
@@ -30,6 +31,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
     currentMenuTrackIndex,
     setCurrentMenuTrackIndex,
     trackMenuOptions,
+    entityDrawerHeight,
     handlePlayPauseTrack
 }) => {
     const navigate = useNavigate();
@@ -235,7 +237,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                             }}
                                             options={trackMenuOptions || []}
                                             onClose={() => setCurrentMenuTrackIndex(-1)}
-                                            className="h-134"
+                                            height={entityDrawerHeight}
                                         />
                                     )
                                 }

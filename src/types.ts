@@ -121,7 +121,7 @@ export type SearchItem = {
     _id: string;
     title: string;
     artist?: string;
-    coverImageUrl: string;
+    coverImageUrl?: string;
 };
 
 export type AlphabetLetter =
@@ -148,7 +148,7 @@ export type User = {
 export type Track = {
     _id: string;
     title: string;
-    coverImageUrl: string;
+    coverImageUrl?: string;
     audioUrl: string;
     artist: string;
     duration: number;

@@ -4,8 +4,8 @@ import Header from "./Header";
 import TrackArt from "./TrackArt";
 
 const ExpandedNowPlayingView = () => {
-    const {trackDetails} = useTrackDetailsStore();
-    const {dominantColor} = useDominantColor(trackDetails.coverImageUrl);
+    const { trackDetails } = useTrackDetailsStore();
+    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
 
     return (
         <div className="h-full w-full rounded-lg flex flex-col mt-2"

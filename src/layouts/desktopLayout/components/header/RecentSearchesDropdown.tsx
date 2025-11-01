@@ -17,28 +17,40 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
     const [recentSearches, setRecentSearches] = useState<SearchItem[]>([]);
     const [searchSuggestions, setSearchSuggestions] = useState<SearchItem[]>([]);
 
-    const handleSearcItemClick = (navigateUrl: string, itemId: string) => {
+    const addItemToRecentSearches = (navigateUrl: string, id: string) => {
         let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-        const id = `${itemId}-visit`;
-        if (itemsIds[0] != id) {
-            itemsIds = itemsIds.filter((i) => i != id);
-            itemsIds = [id, ...itemsIds];
-            localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
+
+        // Remove existing instance of the id
+        itemsIds = itemsIds.filter((i) => i !== id);
+
+        // Add the new id at the beginning
+        itemsIds.unshift(id);
+
+        // If more than 10 items, remove the last one
+        if (itemsIds.length > 10) {
+            itemsIds.pop();
         }
+
+        // Save back to localStorage
+        localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
+
         navigate(navigateUrl);
         onClose();
+    };
+
+    const removeItemFromRecentSearches = (id: string) => {
+        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+
+        const newRecentSearches = recentSearches.filter((item) => item._id != id.split('-')[0]);
+        setRecentSearches(newRecentSearches);
+
+        itemsIds = itemsIds.filter((i) => i != id);
+        localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
     }
 
-    const handleSearchQueryClick = (searchQuery: string) => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-        const id = `${searchQuery}-search`;
-        if (itemsIds[0] != id) {
-            itemsIds = itemsIds.filter((i) => i != id);
-            itemsIds = [id, ...itemsIds];
-            localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
-        }
-        navigate(`/search/${searchQuery}`);
-        onClose();
+    const clearRecentSearchHistory = () => {
+        setRecentSearches([]);
+        localStorage.setItem("recentSearches", JSON.stringify([]));
     }
 
     useEffect(() => {
@@ -52,26 +64,14 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
                     type: "Search" as SearchItemType,
                     _id: id,
                     title: id,
-                    coverImageUrl: "https://icon-library.com/images/search-icon-images/search-icon-images-11.jpg"
                 }
             }
 
             const item = SEARCH_ITEM_ID_MAP[id];
             return item;
-
         })
 
         setRecentSearches(items);
-
-        // const firstLetter = searchQuery[0].toUpperCase();
-        // const suggestions = searchData[firstLetter.toUpperCase() as AlphabetLetter] || [];
-
-        // // filter items where the title includes the query (case-insensitive)
-        // const filtered = suggestions.filter(item =>
-        //     item.title.toLowerCase().includes(searchQuery.toLowerCase())
-        // );
-
-        // setSearchSuggestions(filtered);
     }, [])
 
     useEffect(() => {
@@ -101,30 +101,31 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
                 searchQuery.trim() ? (
                     <>
                         <div
-                            className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-1 rounded-sm flex items-center relative"
+                            className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-2 rounded-sm flex items-center relative"
                             style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
-                            onClick={() => handleSearchQueryClick(searchQuery)}
+                            onClick={() => addItemToRecentSearches(`/search/${searchQuery}`, `${searchQuery}-search`)}
                         >
                             <button className="text-[#8f8f8f] dynamic-text-group-hover bg-[#282828] p-3 rounded-full">
                                 <SearchIcon />
                             </button>
 
-                            {/* Saerch query */}
-                            <div className="ml-4 flex flex-col overflow-hidden">
+                            {/* Text Info */}
+                            < div className="ml-3 flex flex-col overflow-hidden" >
                                 <span className="text-md">{searchQuery}</span>
                             </div>
                         </div>
 
                         {
                             searchSuggestions.map((item: SearchItem) => {
-                                const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : `/playlist/${item._id}`;
+                                const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : item.type == "Search" ? `/search/${searchQuery}` : `/playlist/${item._id}`;
+                                const id = `${item._id}-visit`;
 
                                 return (
                                     <div
                                         key={item._id}
                                         className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-2 rounded-sm flex items-center relative"
                                         style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
-                                        onClick={() => handleSearcItemClick(navigateUrl, item._id)}
+                                        onClick={() => addItemToRecentSearches(navigateUrl, id)}
                                     >
                                         {/* coverImageUrl */}
                                         <div className="shrink-0 w-12 h-12">
@@ -140,11 +141,6 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
                                             <span className="text-md">{item.title}</span>
                                             <span className="text-sm text-gray-300 truncate mr-6">{`${item.type} . ${item.artist || "Spotify"}`}</span>
                                         </div>
-
-                                        {/* Cross Icon */}
-                                        <button className="mr-1 absolute right-2 text-[#8f8f8f] dynamic-text-hover group-hover-opacity cursor-pointer">
-                                            <CrossIcon width="15" height="15" />
-                                        </button>
                                     </div>
                                 )
                             })
@@ -154,41 +150,52 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
                     recentSearches.map((item: SearchItem) => {
                         if (!item) return null;
 
-                        const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : `/playlist/${item._id}`;
+                        const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : item.type == "Search" ? `/search/${item._id}` : `/playlist/${item._id}`;
+                        const id = item.type == "Search" ? `${item._id}-search` : `${item._id}-visit`;
 
                         return (
                             <div
                                 key={item._id}
                                 className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-2 rounded-sm flex items-center relative"
                                 style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
-                                onClick={() => {
-                                    if (item.type == "Search") {
-                                        handleSearchQueryClick(item.title);
-                                    } else {
-                                        handleSearcItemClick(navigateUrl, item._id);
-                                    }
-                                }}
+                                onClick={() => addItemToRecentSearches(navigateUrl, id)}
                             >
-                                {/* Thumbnail */}
-                                <div className="shrink-0 w-12 h-12">
-                                    <img
-                                        src={item.coverImageUrl}
-                                        alt="Album Art"
-                                        className="h-full w-full rounded-[4px] object-cover"
-                                    />
-                                </div>
+                                {/* CoverImageUrl */}
+                                {
+                                    item.coverImageUrl ? (
+                                        <div className="shrink-0 w-12 h-12">
+                                            <img
+                                                src={item.coverImageUrl}
+                                                alt="Album Art"
+                                                className="h-full w-full rounded-[4px] object-cover"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <button className="text-[#8f8f8f] dynamic-text-group-hover bg-[#282828] p-3 rounded-full">
+                                                <SearchIcon />
+                                            </button>
+                                        </>
+                                    )
+                                }
 
                                 {/* Text Info */}
-                                <div className="ml-3 flex flex-col overflow-hidden">
+                                < div className="ml-3 flex flex-col overflow-hidden" >
                                     <span className="text-md">{item.title}</span>
                                     <span className="text-sm text-gray-300 truncate mr-6">{`${item.type} . ${item.artist || "Spotify"}`}</span>
                                 </div>
-
+                                
                                 {/* Cross Icon */}
-                                <button className="mr-1 absolute right-2 text-[#8f8f8f] dynamic-text-hover group-hover-opacity cursor-pointer">
+                                <button
+                                    className="mr-1 absolute right-2 text-[#8f8f8f] dynamic-text-hover group-hover-opacity cursor-pointer"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        removeItemFromRecentSearches(id);
+                                    }}
+                                >
                                     <CrossIcon width="15" height="15" />
                                 </button>
-                            </div>
+                            </div >
                         )
                     })
                 )
@@ -197,13 +204,12 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({ searchQ
             <div className="p-2">
                 <button
                     className="py-1.5 px-6 text-sm border border-[#7c7c7c] dynamic-border-hover font-medium rounded-full cursor-pointer"
+                    onClick={clearRecentSearchHistory}
                 >
                     Clear recent searches
                 </button>
             </div>
-        </div>
-
-
+        </div >
     )
 }
 

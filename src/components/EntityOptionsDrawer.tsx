@@ -12,7 +12,7 @@ interface EntityOptionsDrawerProps {
     entity: EntityInfo;
     options: MenuOptions;
     onClose: () => void;
-    className?: string;
+    height?: string;
 }
 
 const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
@@ -22,7 +22,7 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
     },
     options,
     onClose,
-    className
+    height
 }) => {
     const { pathname } = useLocation();
     const isPlaylistPage = pathname.startsWith("/playlist");
@@ -31,7 +31,7 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
     return (
         <Drawer open={true} onClose={onClose}>
             <DrawerContent
-                className={`block md:hidden bg-[#282828] rounded-t-2xl z-700 w-full ${isPlaylistPage ? "h-98" : isAlbumPage ? "h-86" : "h-110"} ${className}`}
+                className={`block md:hidden bg-[#282828] rounded-t-2xl z-700 w-full h-${height || "100"}`}
                 shouldShowDragHandle={true}
             >
 

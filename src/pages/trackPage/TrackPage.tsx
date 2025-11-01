@@ -22,7 +22,7 @@ import { usePlaylistStore } from "../../store/usePlaylistStore";
 import { useShare } from "../../hooks/share";
 import AuthRequiredModal from "../../components/AuthRequiredModal";
 import { useQueueStore } from "../../store/useQueueStore";
-import { formatDuration } from "../../utils";
+import { formatTotalAsHMS } from "../../utils";
 
 const adminId = import.meta.env.VITE_ADMIN_ID;
 const controls: Controls = {
@@ -66,8 +66,8 @@ const TrackPage = () => {
     const isOwnTrack = currentUser?._id == adminId;
     const isPlayingCurrentTrack = (track?.albumId == albumId && activeTrackId == id && id == trackDetails._id && trackDetails.isPlaying);
 
-    // const trackDuration = formatDuration(track?.duration);
-    const description = `Spotify`
+    const trackDuration = formatTotalAsHMS([track?.duration || 0]);
+    const description = `Track . Spotify . ${trackDuration}`
 
     const hasLiked = getTrackLikeStatus({ hasLiked: track?.hasLiked || false, trackId: track?._id || "" });
     const queueItemid = `Album-${track?.albumId}-${track?._id}`;
@@ -82,7 +82,7 @@ const TrackPage = () => {
         },
         {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
-            label: hasLiked ? "Remove From Your Liked Track" : "Add To Your Liked Track",
+            label: hasLiked ? "Remove From Your Liked Tracks" : "Save To Your Liked Tracks",
             action: () => {
                 if (track) likeTrack(track);
             },
@@ -97,7 +97,7 @@ const TrackPage = () => {
                 } else {
                     addItemsToCustomQueue([track], "Album", track.albumId || "");
                 }
-            },
+            }, 
         },
         {
             icon: <ReportIcon width="16" height="16" />,
@@ -106,16 +106,16 @@ const TrackPage = () => {
             hasTopBorder: true,
         },
         {
-            icon: <CreditIcon width="16" height="16" />,
-            label: "View Credits",
-            action: () => { },
-        },
-        {
             icon: <AlbumIcon width="16" height="16" />,
             label: "Go To Album",
             action: () => {
                 navigate(`/album/${track?.albumId}`);
             },
+        },
+        {
+            icon: <CreditIcon width="16" height="16" />,
+            label: "View Credits",
+            action: () => { },
         },
         {
             icon: <ShareIcon width="16" height="16" />,
@@ -237,6 +237,7 @@ const TrackPage = () => {
                     isPlaying: isPlayingCurrentTrack
                 }}
                 entityMenuOptions={trackMenuOptions}
+                entityDrawerHeight="122"
             />
 
             <div className="relative max-w-[90rem] mx-auto">

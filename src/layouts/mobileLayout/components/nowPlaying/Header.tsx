@@ -22,20 +22,7 @@ const Header: React.FC<HeaderProps> = ({ onClose }) => {
     const { share } = useShare();
 
     const handleLikeUnlikeTrack = () => {
-        likeTrack({
-            _id: trackDetails._id,
-            title: trackDetails.title,
-            coverImageUrl: trackDetails.coverImageUrl,
-            audioUrl: trackDetails.audioUrl,
-            artist: trackDetails.artist,
-            duration: trackDetails.duration,
-            genre: [],
-            albumId: trackDetails.albumId,
-            albumName: trackDetails.albumName,
-            hasLiked: trackDetails.hasLiked,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        })
+        likeTrack(trackDetails)
     }
 
     const trackDrawerOptions: MenuOptions = [
@@ -101,14 +88,13 @@ const Header: React.FC<HeaderProps> = ({ onClose }) => {
 
                 {isTrackDrawerOpen && (
                     <EntityOptionsDrawer
-                        isOpen={isTrackDrawerOpen}
                         onClose={() => setIsTrackDrawerOpen(false)}
                         options={trackDrawerOptions}
                         entity={{
                             title: trackDetails.title,
                             imgUrl: trackDetails.coverImageUrl
                         }}
-                        className="h-110"
+                        height="110"
                     />
                 )}
             </div>

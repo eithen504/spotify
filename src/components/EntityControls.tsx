@@ -21,7 +21,8 @@ interface EntityControlsProps {
     view?: "Compact List" | "Default List";
     setView?: React.Dispatch<React.SetStateAction<"Default List" | "Compact List">>;
     entity: EntityInfo;
-    entityMenuOptions?: MenuOptions
+    entityMenuOptions?: MenuOptions;
+    entityDrawerHeight?: string;
 }
 
 const EntityControls: React.FC<EntityControlsProps> = ({
@@ -35,7 +36,8 @@ const EntityControls: React.FC<EntityControlsProps> = ({
         hasSaved,
         isPlaying
     },
-    entityMenuOptions
+    entityMenuOptions,
+    entityDrawerHeight
 }) => {
 
     const { preferences: { leftPanelSize } } = useUIPreferencesStore();
@@ -165,6 +167,7 @@ const EntityControls: React.FC<EntityControlsProps> = ({
                                 }}
                                 options={entityMenuOptions || []}
                                 onClose={() => setIsEntityDrawerOpen(false)}
+                                height={entityDrawerHeight}
                             />
                         )}
                     </div>
@@ -214,7 +217,7 @@ const EntityControls: React.FC<EntityControlsProps> = ({
                         }
                     </button>
                 )
-            } 
+            }
         </div>
     );
 };

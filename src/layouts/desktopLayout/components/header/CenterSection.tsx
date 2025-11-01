@@ -1,7 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { BrowseIcon, BrowserFilledIcon, CrossIcon, HomeFilledIcon, HomeIcon, SearchIcon } from "../../../../Svgs"
+import { BrowseIcon, BrowserFilledIcon, CrossIcon, HomeFilledIcon, HomeIcon, MicIcon, SearchIcon } from "../../../../Svgs"
 import { useEffect, useRef, useState } from "react";
 import RecentSearchesDropdown from "./RecentSearchesDropdown";
+import ListeningInterfaceDialog from "./ListeningInterfaceDialog";
 
 const CenterSection = () => {
     const { pathname } = useLocation();
@@ -12,6 +13,7 @@ const CenterSection = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [isRecentSearchesDropdownOpen, setIsRecentSearchesDropdownOpen] = useState(false);
+    const [isListeningInterfaceOpen, setIsListeningInterfaceOpen] = useState(false);
 
     const handleClearSearchQuery = () => setSearchQuery("");
 
@@ -42,6 +44,12 @@ const CenterSection = () => {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current?.focus();
+        }
+    }, [searchQuery])
 
     return (
         <div className="flex items-center flex-1 gap-3 justify-center">
@@ -79,12 +87,23 @@ const CenterSection = () => {
                     />
 
                     {
-                        searchQuery.trim() && (
+                        searchQuery.trim() ? (
                             <button
                                 className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
                                 onClick={handleClearSearchQuery}
                             >
                                 <CrossIcon />
+                            </button>
+                        ) : (
+                            <button
+                                className="flex flex-col text-[#adadad] dynamic-text-hover gap-1 cursor-pointer"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsRecentSearchesDropdownOpen(false);
+                                    setIsListeningInterfaceOpen(true);
+                                }}
+                            >
+                                <MicIcon />
                             </button>
                         )
                     }
@@ -94,6 +113,7 @@ const CenterSection = () => {
                     <Link
                         to={"/search"}
                         className={`flex flex-col ${isSearchPage ? "text-[#ffffff]" : "text-[#adadad]"} dynamic-text-hover gap-1 cursor-pointer`}
+                        onClick={(e) => e.stopPropagation()}
                         title="Browse"
                     >
                         {
@@ -109,6 +129,13 @@ const CenterSection = () => {
                     />
                 )}
             </div>
+
+            {isListeningInterfaceOpen && (
+                <ListeningInterfaceDialog
+                    setSearchQuery={setSearchQuery}
+                    onClose={() => setIsListeningInterfaceOpen(false)}
+                />
+            )}
         </div>
     )
 }
