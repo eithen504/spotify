@@ -46,6 +46,7 @@ const ListeningInterfaceDialog: React.FC<ListeningInterfaceDialogProps> = ({inpu
             // Update search query with final results
             if (finalTranscript) {
                 setSearchQuery(finalTranscript.trim());
+                onClose();
                 inputRef.current?.focus();
             }
         };
