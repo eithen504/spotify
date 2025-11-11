@@ -68,7 +68,7 @@ function DrawerContent({
         {...props}
       >
         {shouldShowDragHandle && (
-          <div className="bg-[#5F5D5D] mx-auto mt-4 hidden h-1 w-[35px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+          <div className="bg-[#5F5D5D] mx-auto mt-2 hidden h-1 w-[35px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
         )}
         {children}
       </DrawerPrimitive.Content>

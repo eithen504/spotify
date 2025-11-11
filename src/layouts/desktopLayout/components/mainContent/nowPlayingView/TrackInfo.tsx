@@ -5,12 +5,14 @@ import { useTrackDetailsStore } from '../../../../../store/useTrackDetailsStore'
 import { AddIcon, SavedIcon, ShareIcon } from '../../../../../Svgs'
 
 const TrackInfo = () => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { getTrackLikeStatus } = useTrackLikeStatus();
+    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id });
     const { mutateAsync: likeTrack } = useLikeTrack();
     const { share } = useShare();
-
-    const { getTrackLikeStatus } = useTrackLikeStatus()
-    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id })
 
     return (
         <div>
@@ -49,20 +51,7 @@ const TrackInfo = () => {
                     <button
                         className={`${trackDetails._id ? "dynamic-text-hover cursor-pointer" : "cursor-not-allowed"}`}
                         title={trackDetails._id ? (hasLiked ? `Remove ${trackDetails.title} From Liked Tracks` : `Add ${trackDetails.title} To Liked Tracks`) : ("")}
-                        onClick={() => likeTrack({
-                            _id: trackDetails._id,
-                            title: trackDetails.title,
-                            coverImageUrl: trackDetails.coverImageUrl,
-                            audioUrl: trackDetails.audioUrl,
-                            artist: trackDetails.artist,
-                            duration: trackDetails.duration,
-                            genre: [],
-                            albumId: trackDetails.albumId,
-                            albumName: trackDetails.albumName,
-                            hasLiked: trackDetails.hasLiked,
-                            createdAt: new Date(),
-                            updatedAt: new Date()
-                        })}
+                        onClick={() => likeTrack(trackDetails)}
                         disabled={!trackDetails._id}
                     >
                         {

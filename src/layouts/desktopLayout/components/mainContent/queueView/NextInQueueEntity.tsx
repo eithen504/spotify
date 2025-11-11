@@ -7,11 +7,13 @@ import { PlayIcon } from "../../../../../Svgs";
 import type { Track } from "../../../../../types";
 
 const NextInQueueEntity = () => {
+    /* ---------- Stores ---------- */
+    const { setTrackDetails } = useTrackDetailsStore();
     const { entityId: queueEntityId, activeEntityQueueListNode, entityName, setActiveEntityQueueListNode, removeItemFromQueue } = useQueueStore();
     const { setPlaylistData } = usePlaylistStore();
     const { setAlbumData } = useAlbumStore();
-    const { setTrackDetails } = useTrackDetailsStore();
 
+    /* ---------- Methods Or Functions ---------- */
     const handlePlayPause = (track: Track) => {
         const [activeEntityType, activeEntityId, activeTrackId] = activeEntityQueueListNode!.value!._id.split('-');
         const isActiveEntityQueueListNodeCustom = activeEntityId != queueEntityId;

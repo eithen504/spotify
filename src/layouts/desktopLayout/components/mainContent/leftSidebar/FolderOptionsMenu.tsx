@@ -10,10 +10,17 @@ interface FolderOptionsMenuProps {
 }
 
 const FolderOptionsMenu: React.FC<FolderOptionsMenuProps> = ({ options, folderMenuRef, onClose }) => {
-    const { preferences: { isLeftSidebarExpanded, folder: { name } } } = useUIPreferencesStore();
+    /* ---------- Local States ---------- */
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResult, setSearchResult] = useState<MenuOptions>([]);
 
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar, activeFolder } = preferences;
+    const { isExpanded: isLeftSidebarExpanded } = leftSidebar;
+    const { name: activeFolderName } = activeFolder;
+
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const option = options.filter((o) => o.subMenu);
 
@@ -25,7 +32,7 @@ const FolderOptionsMenu: React.FC<FolderOptionsMenuProps> = ({ options, folderMe
             label.toLowerCase().includes(searchQuery.toLowerCase())
         )
 
-        setSearchResult(filteredMenu || [])
+        setSearchResult(filteredMenu || []);
 
     }, [searchQuery, options])
 
@@ -66,7 +73,7 @@ const FolderOptionsMenu: React.FC<FolderOptionsMenuProps> = ({ options, folderMe
                                 </div>
 
                                 {subMenu && (
-                                     <div
+                                    <div
                                         className={`${isLeftSidebarExpanded ? "right-full" : "left-full"} absolute top-0 w-70 p-1 hidden group-hover-flex h-50 overflow-y-auto custom-scrollbar flex-col bg-[#282828] shadow-[0_4px_5px_rgba(0,0,0,0.8)] rounded-[4px] z-900`}
                                     >
                                         <div className="p-1">
@@ -111,7 +118,7 @@ const FolderOptionsMenu: React.FC<FolderOptionsMenuProps> = ({ options, folderMe
                                                             style={{
                                                                 '--textHoverColor': '#EA7836',
                                                             } as React.CSSProperties}
-                                                            title={`Remove ${subLabel} from ${name}`}
+                                                            title={`Remove ${subLabel} from ${activeFolderName}`}
                                                             onClick={subAction}
                                                         >
                                                             <DeleteIcon width="16" height="16" />

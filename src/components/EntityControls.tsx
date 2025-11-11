@@ -5,8 +5,8 @@ import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import { useRef, useState } from "react";
 import { useBreakPoint } from "../hooks/breakPoint";
 import EntityOptionsMenu from "./EntityOptionsMenu";
-import EntityOptionsDrawer from "./EntityOptionsDrawer";
 import EntityViewOptionsMenu from "./EntityViewOptionsMenu";
+import EntityOptionsDrawer from "./EntityOptionsDrawer";
 
 interface EntityInfo {
     title?: string;
@@ -39,14 +39,22 @@ const EntityControls: React.FC<EntityControlsProps> = ({
     entityMenuOptions,
     entityDrawerHeight
 }) => {
-
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    /* ---------- Local States ---------- */
     const [isEntityMenuOpen, setIsEntityMenuOpen] = useState(false);
-    const [isViewMenuOpen, setIsViewMenuOpen] = useState(false);
     const [isEntityDrawerOpen, setIsEntityDrawerOpen] = useState(false);
-    const { breakPoint } = useBreakPoint()
+    const [isEntityViewMenuOpen, setIsEntityViewMenuOpen] = useState(false);
+
+    /* ---------- Local References ---------- */
     const entityMenuRef = useRef<HTMLDivElement>(null);
     const entityViewMenuRef = useRef<HTMLDivElement>(null);
+
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+
+    /* ---------- Custom Hooks ---------- */
+    const { breakPoint } = useBreakPoint();
 
     return (
         <div
@@ -181,21 +189,24 @@ const EntityControls: React.FC<EntityControlsProps> = ({
                         <button
                             className="hidden md:flex text-white/70 dynamic-text-hover cursor-pointer text-sm items-center gap-1.5"
                             onClick={() => {
-                                setIsViewMenuOpen((prev) => !prev)
+                                setIsEntityViewMenuOpen((prev) => !prev)
                             }}
                         >
-                            {leftPanelSize <= 23 && <span className="font-medium">{view}</span>}
+                            {
+                                leftPanelSize <= 23 && <span className="font-medium">{view}</span>
+                            }
+
                             {
                                 view == "Compact List" ? <CompactListIcon width="15" height="15" /> : <DefaultListIcon width="15" height="15" />
                             }
                         </button>
 
-                        {isViewMenuOpen && (
+                        {isEntityViewMenuOpen && (
                             <EntityViewOptionsMenu
                                 view={view}
                                 setView={setView}
                                 entityViewMenuRef={entityViewMenuRef}
-                                onClose={() => setIsViewMenuOpen(false)}
+                                onClose={() => setIsEntityViewMenuOpen(false)}
                             />
                         )}
                     </div>

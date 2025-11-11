@@ -2,11 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { LeftArrowIcon, RightArrowIcon } from '../../../../../Svgs'
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
 import { LEFT_SIDEBAR_TABS } from '../../../../../constants';
+import type { LeftSidebarTab } from '../../../../../types';
 
 const TabsSection = () => {
     const scrollRef = useRef(null);
     const [canScroll, setCanScroll] = useState({ left: false, right: false });
-    const { preferences: { leftPanelSize, leftSidebarActiveTab }, setPreferences } = useUIPreferencesStore();
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { leftSidebar, library } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const { activeTab: libraryActiveTab } = library;
 
     const checkScrollability = (): void => {
         if (scrollRef.current) {
@@ -35,6 +39,13 @@ const TabsSection = () => {
             setTimeout(checkScrollability, 300);
         }
     };
+
+    const handleActiveTabChange = (tab: LeftSidebarTab) => {
+        const updatedLibrary = { ...library, activeTab: tab };
+        const updatedPreferences = { ...preferences, updatedLibrary };
+        setPreferences({ library: updatedLibrary });
+        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+    }
 
     useEffect(() => {
         checkScrollability();
@@ -76,14 +87,11 @@ const TabsSection = () => {
                                 LEFT_SIDEBAR_TABS.map((tab) => (
                                     <button
                                         key={tab}
-                                        className={`${leftSidebarActiveTab == tab ? "text-[#000000] bg-[#ffffff]" : "bg-[#2a2a2a] dynamic-bg-hover"} cursor-pointer px-3 py-[6px] rounded-full text-sm font-medium`}
+                                        className={`${libraryActiveTab == tab ? "text-[#000000] bg-[#ffffff]" : "bg-[#2a2a2a] dynamic-bg-hover"} cursor-pointer px-3 py-[6px] rounded-full text-sm font-medium`}
                                         style={{
                                             '--bgHoverColor': '#303030',
                                         } as React.CSSProperties}
-                                        onClick={() => {
-                                            setPreferences({ leftSidebarActiveTab: tab })
-                                            localStorage.setItem("leftSidebarActiveTab", tab)
-                                        }}
+                                        onClick={() => handleActiveTabChange(tab)}
                                     >
                                         {tab}
                                     </button>

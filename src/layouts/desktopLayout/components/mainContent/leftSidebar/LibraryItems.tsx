@@ -5,21 +5,25 @@ import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore
 import SmallScreenLibraryPanel from './SmallScreenLibraryPanel';
 
 const LibraryItems = () => {
-    const { preferences: { leftPanelSize, view, leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { isLoading } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+    const { preferences } = useUIPreferencesStore();
+    const { library, leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const { activeTab: libraryActiveTab, view: libraryView } = library;
+
+    const { isLoading } = useGetCurrentUserLibraryItems(libraryActiveTab);
 
     if (isLoading) {
         if (leftPanelSize <= 10) {
             return <SmallScreenLibraryPanelSkelton />
         }
-
-        return VIEW_SKELETONS[view];
+ 
+        return VIEW_SKELETONS[libraryView];
     }
 
-    if (leftPanelSize <= 10) return <SmallScreenLibraryPanel />
+    if (leftPanelSize <= 10) return <SmallScreenLibraryPanel />;
 
     return (
-        VIEW_COMPONENTS[view]
+        VIEW_COMPONENTS[libraryView]
     )
 }
 

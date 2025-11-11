@@ -6,11 +6,16 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
-    const { setPreferences } = useUIPreferencesStore();
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { rightSidebar } = preferences;
 
+    /* ---------- Methods Or Functions ---------- */
     const handleHideQueueView = () => {
-        setPreferences({ showQueueView: false })
-        localStorage.setItem("showQueueView", "false")
+        const updatedRightSidebar = { ...rightSidebar, showQueueView: false };
+        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+        setPreferences({ rightSidebar: updatedRightSidebar });
+        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
     }
 
     return (

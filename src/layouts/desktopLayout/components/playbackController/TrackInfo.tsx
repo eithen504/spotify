@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { PlaybackMusicPlaceholder } from "../../../../components/Placeholders";
 import { useBreakPoint } from "../../../../hooks/breakPoint";
 import { useLikeTrack, useTrackLikeStatus } from "../../../../hooks/like";
@@ -7,40 +7,52 @@ import { useUIPreferencesStore } from "../../../../store/useUIPreferenceStore"
 import { AddIcon, DownArrowIcon, SavedIcon, UpArrowIcon } from "../../../../Svgs"
 
 const TrackInfo = () => {
-    const { preferences: { showNowPlayingView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { rightSidebar } = preferences;
+    const { showNowPlayingView, isNowPlayingViewExpanded } = rightSidebar;
     const { trackDetails } = useTrackDetailsStore();
-    const { breakPoint } = useBreakPoint()
-    const { mutateAsync: likeTrack } = useLikeTrack()
 
-    const navigate = useNavigate();
+    /* ---------- Custom Hooks ---------- */
+    const { getTrackLikeStatus } = useTrackLikeStatus();
+    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id });
+    const { breakPoint } = useBreakPoint();
+    const { mutateAsync: likeTrack } = useLikeTrack();
 
-    const { getTrackLikeStatus } = useTrackLikeStatus()
-    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id })
-
+    /* ---------- Methods Or Functions ---------- */
     const handleToggleShowNowPlayingView = () => {
         if (breakPoint == "lg") {
             if (isNowPlayingViewExpanded) {
-                setPreferences({ isNowPlayingViewExpanded: false })
-                localStorage.setItem("isNowPlayingViewExpanded", "false")
+                const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: false };
+                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+                setPreferences({ rightSidebar: updatedRightSidebar });
+                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 return;
             }
             if (showNowPlayingView) {
-                setPreferences({ showNowPlayingView: false })
-                localStorage.setItem("showNowPlayingView", "false")
+                const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: false };
+                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+                setPreferences({ rightSidebar: updatedRightSidebar });
+                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
             } else {
-                setPreferences({ showNowPlayingView: true, showQueueView: false })
-                localStorage.setItem("showNowPlayingView", "true")
-                localStorage.setItem("showQueueView", "false")
+                const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: true, showQueueView: false };
+                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+                setPreferences({ rightSidebar: updatedRightSidebar });
+                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
             }
         }
 
         if (breakPoint == "md") {
             if (isNowPlayingViewExpanded) {
-                setPreferences({ isNowPlayingViewExpanded: false })
-                localStorage.setItem("isNowPlayingViewExpanded", "false")
+                const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: false };
+                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+                setPreferences({ rightSidebar: updatedRightSidebar });
+                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
             } else {
-                setPreferences({ isNowPlayingViewExpanded: true })
-                localStorage.setItem("isNowPlayingViewExpanded", "true")
+                const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: true };
+                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+                setPreferences({ rightSidebar: updatedRightSidebar });
+                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
             }
         }
     }

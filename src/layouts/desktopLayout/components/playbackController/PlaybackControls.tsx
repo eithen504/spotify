@@ -23,12 +23,14 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
     handlePlayPrevTrack,
     handleProgressChange
 }) => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
     const { customQueue, activeEntityQueueListNode } = useQueueStore();
     const { repeatTracks, addToRepeatTracks, removeFromRepeatTrack } = useRepeatTrackStore();
+
+    /* ---------- Derived Values ---------- */
     const hasPrev = activeEntityQueueListNode?.prev?.value;
     const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
-
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
 
     return (
@@ -102,7 +104,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
                     {formatDuration(trackDetails.duration)}
                 </span>
             </div>
-            
+
         </div>
     )
 }

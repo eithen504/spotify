@@ -12,7 +12,9 @@ const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
     imgUrl,
 }) => {
     const navigate = useNavigate();
+
     const containerRef = useRef<HTMLDivElement>(null);
+    
     const { dominantColor } = useDominantColor(imgUrl);
 
     useEffect(() => {

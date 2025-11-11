@@ -11,8 +11,7 @@ import { SmallScreenAlbumPlaceHolder, SmallScreenFolderPlaceHolder, SmallScreenP
 
 const SmallScreenPlaylists = () => {
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: playlists } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+    const { data: playlists } = useGetCurrentUserLibraryItems("Playlists");
     const { navigateToPlaylist } = usePlaylistActions();
 
     return (
@@ -51,8 +50,7 @@ const SmallScreenPlaylists = () => {
 
 const SmallScreenSavePlaylists = () => {
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: playlists } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+    const { data: playlists } = useGetCurrentUserLibraryItems("Save Playlists");
     const { navigateToPlaylist } = usePlaylistActions();
 
     return (
@@ -91,8 +89,7 @@ const SmallScreenSavePlaylists = () => {
 
 const SmallScreenSaveAlbums = () => {
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: albums } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+    const { data: albums } = useGetCurrentUserLibraryItems("Save Albums");
     const { navigateToAlbum } = useAlbumActions();
 
     return (
@@ -130,8 +127,7 @@ const SmallScreenSaveAlbums = () => {
 }
 
 const SmallScreenFolders = () => {
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: folders } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+    const { data: folders } = useGetCurrentUserLibraryItems("Folders");
     const { navigateToFolder } = useFolderActions();
 
     return (
@@ -146,7 +142,7 @@ const SmallScreenFolders = () => {
                         style={{
                             '--bgHoverColor': '#1F1F1F',
                         } as React.CSSProperties}
-                        onClick={() => navigateToFolder({ activeId: folder._id, name: folder.name })}
+                        onClick={() => navigateToFolder({ id: folder._id, name: folder.name })}
                     >
                         {/* Folder Cover */}
                         <SmallScreenFolderPlaceHolder />
@@ -159,11 +155,15 @@ const SmallScreenFolders = () => {
 
 const FolderPlaylists = () => {
     const { pathname } = useLocation();
-    const { preferences: { folder: { activeId } } } = useUIPreferencesStore();
-    const { data: playlists, isLoading } = useGetFolderPlaylists(activeId);
+
+    const { preferences } = useUIPreferencesStore();
+    const { activeFolder } = preferences;
+    const { id: activeFolderId } = activeFolder;
+
+    const { data: playlists, isLoading } = useGetFolderPlaylists(activeFolderId);
     const { navigateToPlaylist } = usePlaylistActions();
 
-    if (isLoading) return <SmallScreenLibraryPanelSkelton />
+    if (isLoading) return <SmallScreenLibraryPanelSkelton />;
 
     return (
         <div className="mb-4">
@@ -211,15 +211,24 @@ const SmallScreenLibraryPanelComponents: Record<LeftSidebarTab, () => JSX.Elemen
 }
 
 const SmallScreenLibraryPanel = () => {
-    const { pathname } = useLocation();
+    /* ---------- Internal Hooks ---------- */
     const navigate = useNavigate();
-    const { preferences: { leftSidebarActiveTab, folder: { activeId } } } = useUIPreferencesStore();
+    const { pathname } = useLocation();
+
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { library, activeFolder } = preferences;
+    const { activeTab: libraryActiveTab } = library;
+    const { id: activeFolderId } = activeFolder;
+
+    /* ---------- Custom Hooks ---------- */
     const { navigateToPlaylist } = usePlaylistActions();
 
-    const Component = SmallScreenLibraryPanelComponents[leftSidebarActiveTab];
+    /* ---------- Derived Values ---------- */
+    const Component = SmallScreenLibraryPanelComponents[libraryActiveTab];
     const isCollectionTracksPage = pathname == "/collection/tracks";
 
-    if (activeId) return <FolderPlaylists />;
+    if (activeFolderId) return <FolderPlaylists />;
 
     return (
         <div className="mb-4">

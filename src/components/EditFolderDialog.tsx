@@ -18,11 +18,12 @@ const EditFolderDialog: React.FC<EditFolderDialogProps> = ({
     handleUpdateFolder
 }) => {
     const [name, setName] = useState(defaultName);
+
     const isSaveButtonDisabled = isPending || name.trim() == "";
     const isNameFiledEmpty = name.trim() == "";
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={isOpen} onOpenChange={onClose}> 
             <DialogContent className="bg-[#282828] text-white border-none rounded-md p-6 z-500 w-[370px]">
                 {/* Title */}
                 <h2 className="text-xl font-semibold mb-4">Rename</h2>
@@ -69,7 +70,6 @@ const EditFolderDialog: React.FC<EditFolderDialogProps> = ({
                 </div>
             </DialogContent>
         </Dialog>
-
     );
 };
 

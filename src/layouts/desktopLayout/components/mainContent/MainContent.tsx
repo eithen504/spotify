@@ -12,16 +12,30 @@ import QueueView from './queueView/QueueView';
 import ExpandedNowPlayingView from './expandedNowPlayingView/ExpandedNowPlayingView';
 
 const MainContent = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation();
+
+    /* ---------- Local States ---------- */
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
     const [isResizing, setIsResizing] = useState<boolean>(false);
-    const { breakPoint } = useBreakPoint();
+
+
+    /* ---------- Local References ---------- */
     const containerRef = useRef<HTMLDivElement>(null);
     const scrollSectionRef = useRef<HTMLDivElement>(null);
-    const { preferences: { leftPanelSize, rightPanelSize, isLeftSidebarExpanded, showNowPlayingView, showQueueView, isNowPlayingViewExpanded }, setPreferences } = useUIPreferencesStore();
-    const { setIsScrolled, setScrollFromTop } = useScrollStore()
-    const { data: currentUser } = useCheckAuth();
 
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { leftSidebar, rightSidebar } = preferences;
+    const { panelSize: leftPanelSize, isExpanded: isLeftSidebarExpanded } = leftSidebar;
+    const { panelSize: rightPanelSize, showNowPlayingView, showQueueView, isNowPlayingViewExpanded } = rightSidebar;
+    const { setIsScrolled, setScrollFromTop } = useScrollStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { data: currentUser } = useCheckAuth();
+    const { breakPoint } = useBreakPoint();
+
+    /* ---------- Methods Or Functions ---------- */
     const startResizing = (panel: 'left' | 'right') => {
         setActiveResizePanel(panel);
         setIsResizing(true);
@@ -45,23 +59,31 @@ const MainContent = () => {
         if (activeResizePanel === 'left') {
             if (breakPoint == "lg") {
                 if (newSize <= 7) {
-                    setPreferences({ leftPanelSize: 7 })
-                    localStorage.setItem("leftPanelSize", "7")
+                    const updatedLeftSidebar = { ...leftSidebar, panelSize: 7 };
+                    const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
+                    setPreferences({ leftSidebar: updatedLeftSidebar });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
                 if (newSize >= 22 && newSize <= 38) {
-                    setPreferences({ leftPanelSize: newSize })
-                    localStorage.setItem("leftPanelSize", `${newSize}`)
+                    const updatedLeftSidebar = { ...leftSidebar, panelSize: newSize };
+                    const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
+                    setPreferences({ leftSidebar: updatedLeftSidebar });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             }
             if (breakPoint == "md") {
                 if (newSize <= 10) {
-                    setPreferences({ leftPanelSize: 10 });
-                    localStorage.setItem("leftPanelSize", "10");
+                    const updatedLeftSidebar = { ...leftSidebar, panelSize: 10 };
+                    const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
+                    setPreferences({ leftSidebar: updatedLeftSidebar });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
 
                 if (newSize >= 32 && newSize <= 38) {
-                    setPreferences({ leftPanelSize: newSize });
-                    localStorage.setItem("leftPanelSize", `${newSize}`);
+                    const updatedLeftSidebar = { ...leftSidebar, panelSize: newSize };
+                    const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
+                    setPreferences({ leftSidebar: updatedLeftSidebar });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             }
 
@@ -70,12 +92,15 @@ const MainContent = () => {
             const rightSize = 100 - newSize;
 
             if (rightSize >= 20 && rightSize <= 25) {
-                setPreferences({ rightPanelSize: rightSize })
-                localStorage.setItem("rightPanelSize", `${rightSize}`);
+                const updatedRightSidebar = { ...rightSidebar, panelSize: rightSize };
+                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+                setPreferences({ rightSidebar: updatedRightSidebar });
+                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
             }
         }
     };
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             resize(e.clientX);
@@ -142,7 +167,7 @@ const MainContent = () => {
                         {
                             currentUser && <LeftSidebar leftPanelSize={leftPanelSize} />
                         }
- 
+
                         {
                             !isLeftSidebarExpanded && (
                                 <>

@@ -3,16 +3,21 @@ import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore"
 import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore";
 
 const QueueSection = () => {
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { rightSidebar } = preferences;
     const { trackDetails } = useTrackDetailsStore();
-    const { setPreferences } = useUIPreferencesStore();
     const { customQueue, activeEntityQueueListNode } = useQueueStore();
 
+    /* ---------- Derived Values ---------- */
     const nextQueueItem = customQueue.head.next?.value || activeEntityQueueListNode?.next?.value;
 
+    /* ---------- Methods Or Functions ---------- */
     const handleOpenQueueView = () => {
-        setPreferences({ showQueueView: true, showNowPlayingView: false });
-        localStorage.setItem("showQueueView", "true");
-        localStorage.setItem("showNowPlayingView", "false");
+        const updatedRightSidebar = { ...rightSidebar, showQueueView: true, showNowPlayingView: false };
+        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+        setPreferences({ rightSidebar: updatedRightSidebar });
+        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
     }
 
     return (

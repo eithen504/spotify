@@ -10,8 +10,8 @@ const useGetAlbumTracks = (id: string) => {
     return useQuery({
         queryKey: ["getAlbumTracks", id],
         queryFn: async () => {
-            if(!id) return null;
-            
+            if (!id) return null;
+
             const res = await fetch(`${baseUrl}/api/v1/album/${id}`, {
                 method: "GET", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
@@ -108,18 +108,22 @@ const useAlbumActions = () => {
         const isAlbumInitialized = albumId == id
 
         if (!isAlbumInitialized) {
-            setAlbumData({
-                playImmediate: true
-            })
+            setTimeout(() => {
+                setAlbumData({ playImmediate: true });
+            }, 100)
 
-            navigate(navigateUrl)
+            navigate(navigateUrl);
             return;
         }
 
         if (isPlayingCurrentAlbum) {
-            setTrackDetails({ isPlaying: false })
+            setTimeout(() => {
+                setTrackDetails({ isPlaying: false });
+            }, 100)
         } else {
-            setTrackDetails({ isPlaying: true })
+            setTimeout(() => {
+                setTrackDetails({ isPlaying: true });
+            }, 100)
         }
     }
 

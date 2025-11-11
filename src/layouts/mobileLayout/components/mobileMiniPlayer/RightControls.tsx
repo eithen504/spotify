@@ -3,10 +3,13 @@ import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore"
 import { AddIcon, PauseIcon, PlayIcon, SavedIcon } from "../../../../Svgs"
 
 const RightControls = () => {
+    /* ---------- Stores ---------- */
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { mutateAsync: likeTrack } = useLikeTrack();
+
+    /* ---------- Custom Hooks ---------- */
     const { getTrackLikeStatus } = useTrackLikeStatus();
-    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id })
+    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id });
+    const { mutateAsync: likeTrack } = useLikeTrack();
 
     return (
         <div className="flex items-center space-x-6 text-[#ffffff]">
@@ -15,21 +18,7 @@ const RightControls = () => {
                 className="text-white/70 dynamic-text-hover cursor-pointer"
                 onClick={(e) => {
                     e.stopPropagation();
-
-                    likeTrack({
-                        _id: trackDetails._id,
-                        title: trackDetails.title,
-                        coverImageUrl: trackDetails.coverImageUrl,
-                        audioUrl: trackDetails.audioUrl,
-                        artist: trackDetails.artist,
-                        duration: trackDetails.duration,
-                        genre: [],
-                        albumId: trackDetails.albumId,
-                        albumName: trackDetails.albumName,
-                        hasLiked: trackDetails.hasLiked,
-                        createdAt: new Date(),
-                        updatedAt: new Date()
-                    })
+                    likeTrack(trackDetails);
                 }}
             >
                 {

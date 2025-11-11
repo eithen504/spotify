@@ -15,8 +15,6 @@ const HomePage = () => {
 
     const { dominantColor } = useDominantColor(playlistCoverImageUrl);
 
-    console.log("p", playlistCoverImageUrl);
-    
     // Split playlists into chunks of 8
     const chunkedPlaylists = [];
     for (let i = 0; i < playlists?.length; i += 8) {

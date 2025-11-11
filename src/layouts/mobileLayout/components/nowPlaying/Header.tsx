@@ -1,51 +1,70 @@
 import type React from "react"
-import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, DownArrowIcon, LogoIcon, MoreIcon, ReportIcon, SavedIcon, ShareIcon } from "../../../../Svgs";
+import { AddIcon, AddToQueueIcon, CreditIcon, DownArrowIcon, LogoIcon, MoreIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../../../Svgs";
 import type { MenuOptions } from "../../../../types";
 import { useLikeTrack, useTrackLikeStatus } from "../../../../hooks/like";
 import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore";
 import { useShare } from "../../../../hooks/share";
 import { useState } from "react";
-import EntityOptionsDrawer from "../../../../components/EntityOptionsDrawer";
+import { useQueueStore } from "../../../../store/useQueueStore";
+import { useAlbumStore } from "../../../../store/useAlbumStore";
+import { usePlaylistStore } from "../../../../store/usePlaylistStore";
+import ActionDrawer from "../../../../components/EntityOptionsDrawer";
 
 interface HeaderProps {
     onClose: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onClose }) => {
-    const { getTrackLikeStatus } = useTrackLikeStatus();
-    const { trackDetails } = useTrackDetailsStore();
-    const { mutateAsync: likeTrack } = useLikeTrack();
-
+    /* ---------- Local States ---------- */
     const [isTrackDrawerOpen, setIsTrackDrawerOpen] = useState(false);
 
+    /* ---------- Stores ---------- */
+    const { trackDetails } = useTrackDetailsStore();
+    const { queueMap, addItemsToCustomQueue, removeItemFromQueue } = useQueueStore();
+    const { albumData: { albumId } } = useAlbumStore();
+    const { playlistData: { playlistId } } = usePlaylistStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { getTrackLikeStatus } = useTrackLikeStatus();
     const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked || false, trackId: trackDetails._id || "" })
+    const { mutateAsync: likeTrack } = useLikeTrack();
     const { share } = useShare();
 
-    const handleLikeUnlikeTrack = () => {
-        likeTrack(trackDetails)
-    }
-
+    /* ---------- Derived Values ---------- */
+    const queueItemid = albumId ? `Album-${albumId}-${trackDetails?._id}` : `Playlist-${playlistId}-${trackDetails?._id}`;
+    const hasTrackInQueue = queueMap[queueItemid];
     const trackDrawerOptions: MenuOptions = [
         {
+            icon: <PlusIcon width="16" height="16" />,
+            label: "Add To Playlist",
+            action: () => { },
+            rightSideIcon: <RightArrowIndicatorIcon width="12" height="12" />
+        },
+        {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
-            label: hasLiked ? "Remove From Your Liked Track" : "Add To Your Liked Track",
+            label: hasLiked ? "Remove From Your Liked Tracks" : "Save To Your Liked Tracks",
             action: () => {
-                handleLikeUnlikeTrack()
+                likeTrack(trackDetails);
             },
         },
         {
-            icon: <AddToQueueIcon width="16" height="16" />,
-            label: "Add To Queue",
-            action: () => { },
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
+            action: () => {
+                const entityType = albumId ? "Album" : "Playlist";
+                const entityId = albumId || playlistId;
+                const trackId = trackDetails._id;
+
+                if (hasTrackInQueue) {
+                    removeItemFromQueue(entityType, entityId || "", trackId);
+                } else {
+                    addItemsToCustomQueue([trackDetails], entityType, entityId || "");
+                }
+            },
         },
         {
             icon: <ReportIcon width="16" height="16" />,
             label: "Report",
-            action: () => { },
-        },
-        {
-            icon: <AlbumIcon width="16" height="16" />,
-            label: "Go To Album",
             action: () => { },
             hasTopBorder: true
         },
@@ -58,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ onClose }) => {
             icon: <ShareIcon width="16" height="16" />,
             label: "Share",
             action: () => {
-                share(`/track/${trackDetails._id || ""}`)
+                share(`/track/${trackDetails?._id || ""}`);
             },
         },
         {
@@ -87,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ onClose }) => {
                 </button>
 
                 {isTrackDrawerOpen && (
-                    <EntityOptionsDrawer
+                    <ActionDrawer
                         onClose={() => setIsTrackDrawerOpen(false)}
                         options={trackDrawerOptions}
                         entity={{

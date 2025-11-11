@@ -17,10 +17,9 @@ import { useLibrarySearchStore } from '../../../../../store/useLibrarySearchStor
 
 const DefaultListPlaylists = () => {
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
     const { trackDetails } = useTrackDetailsStore();
     const { playlistData: { activeTrackId, playlistId } } = usePlaylistStore();
-    const { data: playlists } = useGetCurrentUserLibraryItems(leftSidebarActiveTab)
+    const { data: playlists } = useGetCurrentUserLibraryItems("Playlists")
     const { navigateToPlaylist, handlePlayPausePlaylist } = usePlaylistActions();
 
     const [searchResults, setSearchResults] = useState<Playlist[]>([]);
@@ -93,10 +92,10 @@ const DefaultListPlaylists = () => {
 
 const DefaultListSavePlaylists = () => {
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { trackDetails } = useTrackDetailsStore();
+
     const { playlistData: { activeTrackId, playlistId } } = usePlaylistStore();
-    const { data: playlists } = useGetCurrentUserLibraryItems(leftSidebarActiveTab)
+    const { trackDetails } = useTrackDetailsStore();
+    const { data: playlists } = useGetCurrentUserLibraryItems("Save Playlists");
     const { navigateToPlaylist, handlePlayPausePlaylist } = usePlaylistActions();
 
     const [searchResults, setSearchResults] = useState<Playlist[]>([]);
@@ -168,11 +167,10 @@ const DefaultListSavePlaylists = () => {
 }
 
 const DefaultListSaveAlbums = () => {
-    const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
+    const { pathname } = useLocation()
     const { trackDetails } = useTrackDetailsStore();
     const { albumData: { activeTrackId, albumId } } = useAlbumStore();
-    const { data: albums } = useGetCurrentUserLibraryItems(leftSidebarActiveTab)
+    const { data: albums } = useGetCurrentUserLibraryItems("Save Albums")
     const { navigateToAlbum, handlePlayPauseAlbum } = useAlbumActions();
 
     const [searchResults, setSearchResults] = useState<Album[]>([]);
@@ -244,8 +242,7 @@ const DefaultListSaveAlbums = () => {
 }
 
 const DefaultListFolders = () => {
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: folders } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+    const { data: folders } = useGetCurrentUserLibraryItems("Folders");
     const { navigateToFolder } = useFolderActions();
 
     const [searchResults, setSearchResults] = useState<Folder[]>([]);
@@ -270,7 +267,7 @@ const DefaultListFolders = () => {
                             style={{
                                 '--bgHoverColor': '#1F1F1F',
                             } as React.CSSProperties}
-                            onClick={() => navigateToFolder({ activeId: folder._id, name: folder.name })}
+                            onClick={() => navigateToFolder({ id: folder._id, name: folder.name })}
                         >
                             {/* Folder Cover */}
                             <DefaultListItemsFolderPlaceHolder />
@@ -292,8 +289,10 @@ const DefaultListFolders = () => {
 const FolderPlaylists = () => {
     const { pathname } = useLocation();
     const { trackDetails } = useTrackDetailsStore();
-    const { preferences: { folder: { activeId } } } = useUIPreferencesStore();
-    const { data: playlists, isLoading } = useGetFolderPlaylists(activeId);
+    const { preferences } = useUIPreferencesStore();
+    const { activeFolder } = preferences;
+    const { id: activeFolderId } = activeFolder;
+    const { data: playlists, isLoading } = useGetFolderPlaylists(activeFolderId);
     const { playlistData: { activeTrackId, playlistId } } = usePlaylistStore();
     const { navigateToPlaylist, handlePlayPausePlaylist } = usePlaylistActions();
 
@@ -378,7 +377,10 @@ const DefaultListComponents: Record<LeftSidebarTab, () => JSX.Element> = {
 
 const DefaultListItems = () => {
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab, folder: { activeId } } } = useUIPreferencesStore();
+    const { preferences } = useUIPreferencesStore();
+    const { library, activeFolder } = preferences;
+    const { activeTab: libraryActiveTab } = library;
+    const { id: activeFolderId } = activeFolder;
     const { trackDetails } = useTrackDetailsStore();
     const { playlistData: { activeTrackId, playlistId } } = usePlaylistStore();
     const { navigateToPlaylist, handlePlayPausePlaylist } = usePlaylistActions();
@@ -387,9 +389,9 @@ const DefaultListItems = () => {
     const isPlayingCollectionTracks = (playlistId == id && activeTrackId == trackDetails._id && trackDetails.isPlaying)
     const isCollectionTracksPage = pathname == "/collection/tracks";
 
-    const Component = DefaultListComponents[leftSidebarActiveTab];
+    const Component = DefaultListComponents[libraryActiveTab];
 
-    if (activeId) return <FolderPlaylists />;
+    if (activeFolderId) return <FolderPlaylists />;
 
     return (
         <div className="flex-1 px-3 mb-4">

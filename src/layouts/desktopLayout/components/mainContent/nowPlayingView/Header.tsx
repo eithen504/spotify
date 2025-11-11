@@ -11,18 +11,30 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isScrolled, trackMenuOptions }) => {
-    const { trackDetails } = useTrackDetailsStore();
-    const { setPreferences } = useUIPreferencesStore();
-    const trackMenuRef = useRef<HTMLDivElement>(null);
-    const [isEntityMenuOpen, setIsEntityMenuOpen] = useState(false);
+    /* ---------- Local States ---------- */
+    const [isTrackMenuOpen, setIsTrackMenuOpen] = useState(false);
 
+    /* ---------- Local References ---------- */
+    const trackMenuRef = useRef<HTMLDivElement>(null);
+
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { rightSidebar } = preferences;
+    const { trackDetails } = useTrackDetailsStore();
+
+    /* ---------- Methods Or Functions ---------- */
     const handleHidedNowPlayingView = () => {
-        setPreferences({ showNowPlayingView: false })
-        localStorage.setItem("showNowPlayingView", "false")
+        const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: false };
+        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+        setPreferences({ rightSidebar: updatedRightSidebar });
+        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
     }
 
     const handleExpandNowPlayingView = () => {
-        setPreferences({ isNowPlayingViewExpanded: true })
+        const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: true };
+        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+        setPreferences({ rightSidebar: updatedRightSidebar });
+        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
     }
 
     return (
@@ -60,19 +72,19 @@ const Header: React.FC<HeaderProps> = ({ isScrolled, trackMenuOptions }) => {
                             '--bgHoverColor': '#1E1E1E',
                         } as React.CSSProperties}
                         title={trackDetails._id ? `More Options For ${trackDetails.title}` : ""}
-                        onClick={() => setIsEntityMenuOpen(true)}
+                        onClick={() => setIsTrackMenuOpen(true)}
                         disabled={!trackDetails._id}
                     >
-                        <MoreIcon width="20" height="20" /> 
+                        <MoreIcon width="20" height="20" />
                     </button>
 
-                    {isEntityMenuOpen && (
+                    {isTrackMenuOpen && (
                         <EntityOptionsMenu
                             options={trackMenuOptions || []}
                             entityMenuRef={trackMenuRef}
                             subMenuleftShift={true}
                             rightPosition="60px"
-                            onClose={() => setIsEntityMenuOpen(false)}
+                            onClose={() => setIsTrackMenuOpen(false)}
                         />
                     )}
                 </div>

@@ -10,6 +10,7 @@ interface ProgessBarProps {
 }
 
 const ProgressBar: React.FC<ProgessBarProps> = ({ progress, currentTime, handleProgressChange }) => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
 
     return (

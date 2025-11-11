@@ -2,8 +2,12 @@ import type React from "react"
 import { AlertIcon, LogoIcon, MusicIcon, QueueIcon } from "../Svgs"
 import { Link } from "react-router-dom";
 
+interface NotFoundPageProps {
+  title?: string;
+  description?: string;
+}
 
-const NotFoundPage = () => {
+const NotFoundPage: React.FC<NotFoundPageProps> = ({ title, description }) => {
   return (
     <div className="bg-[#121212] text-white h-screen flex flex-col justify-center items-center text-center px-4">
       {/* Spotify logo */}
@@ -12,11 +16,11 @@ const NotFoundPage = () => {
       </div>
 
       {/* Heading */}
-      <h1 className="text-4xl font-bold mb-4">{"Page not found"}</h1>
+      <h1 className="text-4xl font-bold mb-4">{title || "Page not found"}</h1>
 
       {/* Subtext */}
       <p className="text-gray-400 mb-8">
-        We can’t seem to find the page you are looking for.
+        {description || "We can’t seem to find the page you are looking for."}
       </p>
 
       {/* Home button */}

@@ -3,9 +3,13 @@ import { useScrollStore } from '../../../../store/useScrollStore';
 import { useEffect, useLayoutEffect } from 'react';
 
 const MainContent = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation()
+
+    /* ---------- Stores ---------- */
     const { setIsScrolled, setScrollFromTop } = useScrollStore();
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;

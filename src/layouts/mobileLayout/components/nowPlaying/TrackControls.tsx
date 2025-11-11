@@ -10,8 +10,11 @@ interface TrackControlsProps {
 }
 
 const TrackControls: React.FC<TrackControlsProps> = ({ handlePlayPauseTrack, handlePlayNextTrack, handlePlayPrevTrack }) => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
     const { customQueue, activeEntityQueueListNode } = useQueueStore();
+
+    /* ---------- Derived Values ---------- */
     const hasPrev = activeEntityQueueListNode?.prev?.value;
     const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
 

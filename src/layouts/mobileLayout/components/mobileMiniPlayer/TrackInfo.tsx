@@ -2,6 +2,7 @@ import { MobileMiniPlayerMusicPlaceholder } from "../../../../components/Placeho
 import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore"
 
 const TrackInfo = () => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
 
     return (

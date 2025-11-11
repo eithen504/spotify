@@ -4,7 +4,7 @@ import CompactListItems from "./layouts/desktopLayout/components/mainContent/lef
 import DefaultGridItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultGridItems";
 import DefaultListItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, LeftSidebarTabs, NavigationItem, SortOptions, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language } from "./types";
+import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, LeftSidebarTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language, SortOptionsMap, LeftSidebarTabsMap } from "./types";
 
 const GENRES: Genres = [
     "Party",
@@ -182,9 +182,16 @@ const GENRES_ID_BGCOLOR_MAP: GenresIdBgColorMap = {
 
 const MAX_AUDIO_DURATION = 420;
 
-const HOMEPAGE_TABS: HomePageTabs = ["All", "Music", "Podcasts"]
-const LEFT_SIDEBAR_TABS: LeftSidebarTabs = ["Playlists", "Save Playlists", "Save Albums", "Folders"]
+const HOMEPAGE_TABS: HomePageTabs = ["All", "Music", "Podcasts"];
 
+const LEFT_SIDEBAR_TABS: LeftSidebarTabs = ["Playlists", "Save Playlists", "Save Albums", "Folders"];
+const LEFT_SIDEBAR_TABS_MAP: LeftSidebarTabsMap = {
+  "Playlists": true,
+  "Save Playlists": true,
+  "Save Albums": true,
+  "Folders": true,
+};
+ 
 const VIEW_ICONS: ViewIcon = {
     "Compact List": <CompactListIcon width="16" height="16" />,
     "Default List": <DefaultListIcon width="16" height="16" />,
@@ -206,7 +213,7 @@ const VIEW_SKELETONS: ViewSkelton = {
     "Default Grid": <DefaultGridItemsSkeleton />,
 };
 
-const SORT_OPTIONS: SortOptions = {
+const SORT_OPTIONS_MAP: SortOptionsMap = {
     "Recently Added": true,
     "Alphabetical A To Z": true,
     "Alphabetical Z To A": true,
@@ -226,14 +233,14 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
         ActiveIcon: <SearchFilledIcon width="24" height="24" />,
     },
     {
-        path: "/myLibrary",
+        path: "/my/library",
         name: "Library",
         Icon: <LibraryIcon width="24" height="24" />,
         ActiveIcon: <LibraryFilledIcon width="24" height="24" />,
     },
     {
         path: "",
-        name: "Account",
+        name: "Create",
         Icon: <AccountIcon width="26" height="26" />,
         ActiveIcon: <AccountfilledIcon width="26" height="26" />,
     },
@@ -280,11 +287,12 @@ export {
     MAX_AUDIO_DURATION,
     HOMEPAGE_TABS,
     LEFT_SIDEBAR_TABS,
+    LEFT_SIDEBAR_TABS_MAP,
     VIEW_ICONS,
     VIEW_COMPONENTS,
     VIEW_SKELETONS,
     NAVIGATION_ITEMS,
-    SORT_OPTIONS,
+    SORT_OPTIONS_MAP,
     SHOW_PAGE_TABS,
     LANGUAGES
 }

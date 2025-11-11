@@ -88,6 +88,10 @@ export const useQueueStore = create<QueueStore>((set, get) => ({
         while (current != null) {
             const temp = current.next;
             if (current.value) {
+                console.log("newQueueMap", newQueueMap);
+                
+                console.log("current,vak", current.value._id);
+                
                 if (!newQueueMap[current.value._id]) {
                     newQueueMap = {
                         ...newQueueMap,

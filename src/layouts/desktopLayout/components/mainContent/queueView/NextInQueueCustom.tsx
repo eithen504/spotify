@@ -2,8 +2,10 @@ import { QueueViewMusicPlaceHolder } from "../../../../../components/Placeholder
 import { useQueueStore } from "../../../../../store/useQueueStore";
 
 const NextInQueueCustom = () => {
+    /* ---------- Stores ---------- */
     const { customQueue, clearCustomQueue } = useQueueStore();
 
+    /* ---------- Methods Or Functions ---------- */
     const getQueueItems = () => {
         const items = [];
         let current = customQueue.head.next;

@@ -4,7 +4,7 @@ import { CrossIcon, SearchIcon } from '../Svgs';
 import { NotResultFoundSubMenu } from './NotFounds';
 import { highlightText } from '../hooks/text';
 
-interface EntityOptionsMenuProps {
+type EntityOptionsMenuProps = {
     options: MenuOptions;
     entityMenuRef: React.RefObject<HTMLDivElement | null>;
     subMenuleftShift?: boolean;
@@ -35,7 +35,6 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
         } else {
             setSearchResult(filteredOptions || []);
         }
-
     }, [searchQuery, subMenu])
 
     return (
@@ -52,7 +51,7 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
                 className={`fixed w-65 z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm`}
                 style={{
                     top: `${(entityMenuRef.current?.getBoundingClientRect().bottom ?? 0) + 10}px`,
-                    right: rightPosition
+                    right: rightPosition,
                 }}
             >
                 {

@@ -14,30 +14,41 @@ interface RightSideControlsProps {
 }
 
 const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, currentTime, handleProgressChange, handleVolumeChange }) => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
-    const { preferences: { showNowPlayingView, showQueueView, isNowPlayingViewFullScreen, isMiniPlayerWindowOpen, systemVolume }, setPreferences } = useUIPreferencesStore()
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { rightSidebar, isMiniPlayerWindowOpen, systemVolume } = preferences;
+    const { showNowPlayingView, showQueueView, isNowPlayingViewFullScreen } = rightSidebar;
 
-    const suggestedVolumeIcon = getVolumeIcon(systemVolume[0])
+    /* ---------- Derived Values ---------- */
+    const suggestedVolumeIcon = getVolumeIcon(systemVolume[0]);
 
+    /* ---------- Methods Or Functions ---------- */
     const handleToggleNowPlayingView = () => {
         if (showNowPlayingView) {
-            setPreferences({ showNowPlayingView: false })
-            localStorage.setItem("showNowPlayingView", "false")
+            const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: false };
+            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+            setPreferences({ rightSidebar: updatedRightSidebar });
+            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
         } else {
-            setPreferences({ showNowPlayingView: true, showQueueView: false })
-            localStorage.setItem("showNowPlayingView", "true")
-            localStorage.setItem("showQueueView", "false")
+            const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: true, showQueueView: false };
+            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+            setPreferences({ rightSidebar: updatedRightSidebar });
+            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
         }
     }
 
     const handleToggleQueueView = () => {
         if (showQueueView) {
-            setPreferences({ showQueueView: false })
-            localStorage.setItem("showQueueView", "false")
+            const updatedRightSidebar = { ...rightSidebar, showQueueView: false };
+            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+            setPreferences({ rightSidebar: updatedRightSidebar });
+            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
         } else {
-            setPreferences({ showQueueView: true, showNowPlayingView: false })
-            localStorage.setItem("showQueueView", "true")
-            localStorage.setItem("showNowPlayingView", "false")
+            const updatedRightSidebar = { ...rightSidebar, showQueueView: true, showNowPlayingView: false };
+            setPreferences({ rightSidebar: updatedRightSidebar });
+            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
         }
     }
 
@@ -48,10 +59,16 @@ const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, current
             elem.requestFullscreen().catch((err) => {
                 console.error(`Error enabling full-screen mode: ${err.message}`);
             });
-            setPreferences({ isNowPlayingViewExpanded: true, isNowPlayingViewFullScreen: true })
+            const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: true, isNowPlayingViewFullScreen: true };
+            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+            setPreferences({ rightSidebar: updatedRightSidebar });
+            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
         } else {
             document.exitFullscreen();
-            setPreferences({ isNowPlayingViewExpanded: false, isNowPlayingViewFullScreen: false })
+            const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: false, isNowPlayingViewFullScreen: false };
+            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
+            setPreferences({ rightSidebar: updatedRightSidebar });
+            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
         }
     };
 

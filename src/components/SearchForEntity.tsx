@@ -1,11 +1,11 @@
 import type React from "react";
 import { SearchIcon } from "../Svgs";
 
-interface SearchForEntityProps {
+type SearchForEntityProps = {
     title: string
 }
 
-const SearchForEntity: React.FC<SearchForEntityProps> = ({title}) => {
+const SearchForEntity: React.FC<SearchForEntityProps> = ({ title }) => {
     return (
         <div className="w-full text-white  rounded-lg relative pt-10 px-6  max-w-[90rem] mx-auto">
             {/* Header */}

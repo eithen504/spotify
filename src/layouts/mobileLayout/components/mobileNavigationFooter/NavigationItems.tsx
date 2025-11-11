@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { NAVIGATION_ITEMS } from '../../../../constants';
 
 const NavigationItems = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation();
 
     return (

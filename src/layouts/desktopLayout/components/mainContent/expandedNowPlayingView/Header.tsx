@@ -3,12 +3,14 @@ import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore
 import { ExitScreenIcon, FullScreenIcon, MinimizeIcon, MoreIcon } from "../../../../../Svgs"
 
 const Header = () => {
-    const { preferences: { isNowPlayingViewFullScreen }, setPreferences } = useUIPreferencesStore();
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { rightSidebar } = preferences;
+    const { isNowPlayingViewFullScreen } = rightSidebar;
+
     const { trackDetails } = useTrackDetailsStore();
 
     const handleMinimizeNowPlayingView = () => {
-        setPreferences({ isNowPlayingViewExpanded: false })
-        localStorage.setItem("isNowPlayingViewExpanded", "false")
+        setPreferences({ rightSidebar: { ...rightSidebar, isNowPlayingViewExpanded: false } });
     }
 
     const handleToggleFullscreen = () => {
@@ -18,10 +20,10 @@ const Header = () => {
             elem.requestFullscreen().catch((err) => {
                 console.error(`Error enabling full-screen mode: ${err.message}`);
             });
-            setPreferences({ isNowPlayingViewFullScreen: true })
+            setPreferences({ rightSidebar: { ...rightSidebar, isNowPlayingViewFullScreen: true } });
         } else {
             document.exitFullscreen();
-            setPreferences({ isNowPlayingViewFullScreen: false })
+            setPreferences({ rightSidebar: { ...rightSidebar, isNowPlayingViewFullScreen: false } });
         }
     };
 

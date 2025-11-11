@@ -19,8 +19,9 @@ import { useTrackDetailsStore } from "../../store/useTrackDetailsStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useQueueStore } from "../../store/useQueueStore";
-import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, RemoveFromQueueIcon, ReportIcon, SavedIcon, ShareIcon } from "../../Svgs";
+import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, AlreadyAddedToQueueIcon, ReportIcon, SavedIcon, ShareIcon } from "../../Svgs";
 import { useShare } from "../../hooks/share";
+import { CollectionTracksPageSkeleton } from "../../components/Skeletons";
 
 const id = "collectionTracks";
 const imgUrl = "https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
@@ -50,8 +51,10 @@ const CollectionTracksPage = () => {
     const [currentMenuTrackIndex, setCurrentMenuTrackIndex] = useState(-1);
 
     /*----------Stores----------*/
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const { setAlbumData } = useAlbumStore();
     const { playlistData: { playlistId, activeTrackId, playImmediate }, setPlaylistData } = usePlaylistStore();
     const { queueMap, initializeEntityQueue, addItemsToCustomQueue, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
@@ -79,13 +82,13 @@ const CollectionTracksPage = () => {
     const trackMenuOptions: MenuOptions = [
         {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
-            label: hasLiked ? "Remove From Your Liked Track" : "Add To Your Liked Track",
+            label: hasLiked ? "Remove From Your Liked Tracks" : "Save To Your Liked Tracks",
             action: () => {
                 if (currentMenuTrack) likeTrack(currentMenuTrack);
             },
         },
         {
-            icon: hasTrackInQueue ? <RemoveFromQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
             label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
             action: () => {
                 if (!currentMenuTrack) return;
@@ -242,7 +245,7 @@ const CollectionTracksPage = () => {
         }
     }, [playImmediate, isLoading])
 
-    if (isLoading) return null;
+    if (isLoading) return <CollectionTracksPageSkeleton />;
 
     if (!currentUser) {
         navigate('/');

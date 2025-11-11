@@ -3,8 +3,10 @@ import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore"
 import { PauseIcon, PlayIcon } from "../../../../../Svgs";
 
 const NowPlayingSection = () => {
+    /* ---------- Stores ---------- */
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
 
+    /* ---------- Methods Or Functions ---------- */
     const handlePlayPause = () => {
         setTrackDetails({ isPlaying: !trackDetails.isPlaying });
     }

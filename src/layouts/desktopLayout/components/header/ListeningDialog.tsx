@@ -8,10 +8,23 @@ interface ListeningDialogProps {
     onClose: () => void;
 }
 
-const ListeningDialog: React.FC<ListeningDialogProps> = ({inputRef, setSearchQuery, onClose }) => {
+const ListeningDialog: React.FC<ListeningDialogProps> = ({ inputRef, setSearchQuery, onClose }) => {
     const [isListening, setIsListening] = useState(true);
     const [error, setError] = useState("");
+
     const recognitionRef = useRef<any>(null);
+
+    const handleToggle = () => {
+        if (recognitionRef.current) {
+            if (isListening) {
+                recognitionRef.current.stop();
+                setIsListening(false);
+            } else {
+                recognitionRef.current.start();
+                setIsListening(true);
+            }
+        }
+    };
 
     useEffect(() => {
         // Check if browser supports speech recognition
@@ -75,18 +88,6 @@ const ListeningDialog: React.FC<ListeningDialogProps> = ({inputRef, setSearchQue
             }
         };
     }, [setSearchQuery, onClose]);
-
-    const handleToggle = () => {
-        if (recognitionRef.current) {
-            if (isListening) {
-                recognitionRef.current.stop();
-                setIsListening(false);
-            } else {
-                recognitionRef.current.start();
-                setIsListening(true);
-            }
-        }
-    };
 
     return (
         <Dialog open={true} onOpenChange={onClose}>

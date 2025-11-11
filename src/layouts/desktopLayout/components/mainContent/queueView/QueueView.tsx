@@ -12,17 +12,23 @@ interface QueueViewProps {
 }
 
 const QueueView: React.FC<QueueViewProps> = ({ rightPanelSize }) => {
+    /* ---------- Local States ---------- */
     const [isScrolled, setIsScrolled] = useState(false);
+
+    /* ---------- Local References ---------- */
     const sidebarRef = useRef<HTMLDivElement | null>(null);
+
+    /* ---------- Stores ---------- */
+    const { trackDetails } = useTrackDetailsStore();
     const { customQueue, entityQueue, activeEntityQueueListNode } = useQueueStore();
 
-    const { trackDetails } = useTrackDetailsStore();
-
+    /* ---------- Derived Values ---------- */
     const isCustomQueueEmpty = !customQueue.head.next?.value;
     const isEntityQueueEmpty = !entityQueue.head.next?.value
     const hasNextEntityQueueItem = activeEntityQueueListNode?.next?.value;
     const isQueueEmpty = isCustomQueueEmpty && isEntityQueueEmpty;
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const sidebarEl = sidebarRef.current
         if (!sidebarEl) return

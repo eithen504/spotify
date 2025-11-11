@@ -13,7 +13,7 @@ import EntityTableHeader from "../../components/EntityTableHeader";
 import Footer from "../../components/Footer";
 import EntityTracks from "../../components/EntityTracks"
 import { useGetAlbumTracks, useUpdateAlbum } from "../../hooks/album";
-import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, PlusIcon, RemoveFromQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../Svgs";
+import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../Svgs";
 import { useTrackDetailsStore } from "../../store/useTrackDetailsStore";
 import EditEntityDialog from "../../components/EditEntityDialog";
 import { useCheckAuth } from "../../hooks/auth";
@@ -29,7 +29,9 @@ import { useLikeTrack, useTrackLikeStatus } from "../../hooks/like";
 import { useGetCurrentUserLibraryItems } from "../../hooks/library";
 import { useAddItemsToPlaylist, useUploadPlaylist } from "../../hooks/playlist";
 import SearchForEntity from "../../components/SearchForEntity";
+import { AlbumPageSkeleton } from "../../components/Skeletons";
 
+/* ---------- Constants ---------- */
 const adminId = import.meta.env.VITE_ADMIN_ID
 const controls: Controls = {
     Play: true,
@@ -59,11 +61,13 @@ const AlbumPage = () => {
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
 
     /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const { albumData: { albumId, activeTrackId, playImmediate }, setAlbumData } = useAlbumStore();
     const { setPlaylistData } = usePlaylistStore();
-    const { entityQueue, queueMap, initializeEntityQueue, addItemsToCustomQueue, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
+    const { queueMap, initializeEntityQueue, addItemsToCustomQueue, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
     const { scrollFromTop } = useScrollStore();
 
     /* ---------- Custom Hooks ---------- */
@@ -94,7 +98,6 @@ const AlbumPage = () => {
     const hasLiked = getTrackLikeStatus({ hasLiked: currentMenuTrack?.hasLiked || false, trackId: currentMenuTrack?._id || "" });
     const queueItemid = `Album-${id}-${currentMenuTrack?._id}`;
     const hasTrackInQueue = queueMap[queueItemid];
-    const isEntityQueueEmpty = !entityQueue.head.next?.value;
 
     const albumMenuOptions: MenuOptions = [
         {
@@ -176,13 +179,13 @@ const AlbumPage = () => {
         },
         {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
-            label: hasLiked ? "Remove From Your Liked Track" : "Add To Your Liked Track",
+            label: hasLiked ? "Remove From Your Liked Tracks" : "Save To Your Liked Tracks",
             action: () => {
                 if (currentMenuTrack) likeTrack(currentMenuTrack);
             },
         },
         {
-            icon: hasTrackInQueue ? <RemoveFromQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
             label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
             action: () => {
                 if (!currentMenuTrack) return;
@@ -232,8 +235,10 @@ const AlbumPage = () => {
         }
 
         const isAlbumInitialized = albumId == id;
+        console.log("albumid", id);
 
-        if (!isAlbumInitialized || isEntityQueueEmpty) {
+
+        if (!isAlbumInitialized) {
             setAlbumData({ activeTrackId: track._id, albumId: id || "" });
 
             setPlaylistData({ activeTrackId: "", playlistId: "" });
@@ -321,14 +326,14 @@ const AlbumPage = () => {
     }, [view])
 
     useEffect(() => {
-        if (isLoading) return;
+        if (isLoading || !data || !data?.tracks || data?.tracks?.length == 0) return;
 
         if (playImmediate) {
             handlers["Play"]();
         }
-    }, [playImmediate, isLoading])
+    }, [playImmediate, isLoading, id])
 
-    if (isLoading) return null;
+    if (isLoading) return <AlbumPageSkeleton />;
 
     if (!isLoading && !data) return <NotFoundEntity title="Couldn't Find That Album" />;
 

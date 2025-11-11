@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import type { MenuOptions, } from '../../../../../types'
+import type { LibrarySort, LibraryView, MenuOptions, } from '../../../../../types'
 import { CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, TickIcon } from '../../../../../Svgs'
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
 
@@ -9,32 +9,44 @@ interface SortViewOptionsMenuProps {
 }
 
 const SortViewOptionsMenu: React.FC<SortViewOptionsMenuProps> = ({ sortViewMenuRef, onClose }) => {
-    const { preferences: { isLeftSidebarExpanded, sort, view } } = useUIPreferencesStore();
-    const { setPreferences } = useUIPreferencesStore();
-    const [viewMenuOptions, setViewMenuOptions] = useState<MenuOptions>([])
-    const [sortMenuOptions, setSortMenuOptions] = useState<MenuOptions>([])
+    /* ---------- Local States ---------- */
+    const [viewMenuOptions, setViewMenuOptions] = useState<MenuOptions>([]);
+    const [sortMenuOptions, setSortMenuOptions] = useState<MenuOptions>([]);
 
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { leftSidebar, library } = preferences;
+    const { isExpanded: isLeftSidebarExpanded } = leftSidebar;
+    const { sort: librarySort, view: libraryView } = library;
+
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         setSortMenuOptions([
             {
                 label: "Recently Added",
                 action: () => {
-                    setPreferences({ sort: "Recently Added" })
-                    localStorage.setItem("sort", "Recently Added")
+                    const updatedLibrary = { ...library, sort: "Recently Added" as LibrarySort };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
             {
                 label: "Alphabetical A To Z",
                 action: () => {
-                    setPreferences({ sort: "Alphabetical A To Z" })
-                    localStorage.setItem("sort", "Alphabetical A To Z")
+                    const updatedLibrary = { ...library, sort: "Alphabetical A To Z" as LibrarySort };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
             {
                 label: "Alphabetical Z To A",
                 action: () => {
-                    setPreferences({ sort: "Alphabetical Z To A" })
-                    localStorage.setItem("sort", "Alphabetical Z To A")
+                    const updatedLibrary = { ...library, sort: "Alphabetical Z To A" as LibrarySort };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
         ])
@@ -44,32 +56,40 @@ const SortViewOptionsMenu: React.FC<SortViewOptionsMenuProps> = ({ sortViewMenuR
                 label: "Compact List",
                 icon: <CompactListIcon width="16" height="16" />,
                 action: () => {
-                    setPreferences({ view: "Compact List" })
-                    localStorage.setItem("view", "Compact List")
+                    const updatedLibrary = { ...library, view: "Compact List" as LibraryView };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
             {
                 label: "Default List",
                 icon: <DefaultListIcon width="16" height="16" />,
                 action: () => {
-                    setPreferences({ view: "Default List" })
-                    localStorage.setItem("view", "Default List")
+                    const updatedLibrary = { ...library, view: "Default List" as LibraryView };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
             {
                 label: "Compact Grid",
                 icon: <CompactGridIcon width="16" height="16" />,
                 action: () => {
-                    setPreferences({ view: "Compact Grid" })
-                    localStorage.setItem("view", "Compact Grid")
+                    const updatedLibrary = { ...library, view: "Compact Grid" as LibraryView };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
             {
                 label: "Default Grid",
                 icon: <DefaultGridIcon width="16" height="16" />,
                 action: () => {
-                    setPreferences({ view: "Default Grid" })
-                    localStorage.setItem("view", "Default Grid")
+                    const updatedLibrary = { ...library, view: "Default Grid" as LibraryView };
+                    const updatedPreferences = { ...preferences, updatedLibrary };
+                    setPreferences({ library: updatedLibrary });
+                    localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
                 }
             },
         ])
@@ -88,7 +108,7 @@ const SortViewOptionsMenu: React.FC<SortViewOptionsMenuProps> = ({ sortViewMenuR
                 style={{
                     top: `${(sortViewMenuRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
                     ...((isLeftSidebarExpanded) && {
-                        right: `30px`,
+                        right: `27px`,
                     }),
                 }}
             >
@@ -98,7 +118,7 @@ const SortViewOptionsMenu: React.FC<SortViewOptionsMenuProps> = ({ sortViewMenuR
                         sortMenuOptions.map(({ label, action }) => (
                             <div
                                 key={label}
-                                className={`flex ${sort == label ? "text-[#1ED45F]" : "text-[#e5e7eb]"} p-2 dynamic-bg-hover justify-between items-center cursor-pointer`}
+                                className={`flex ${librarySort == label ? "text-[#1ED45F]" : "text-[#e5e7eb]"} p-2 dynamic-bg-hover justify-between items-center cursor-pointer`}
                                 style={{
                                     '--bgHoverColor': '#3E3E3E',
                                 } as React.CSSProperties}
@@ -106,7 +126,7 @@ const SortViewOptionsMenu: React.FC<SortViewOptionsMenuProps> = ({ sortViewMenuR
                             >
                                 {label}
                                 {
-                                    sort == label && (
+                                    librarySort == label && (
                                         <TickIcon width="14" height="14" />
                                     )
                                 }
@@ -124,7 +144,7 @@ const SortViewOptionsMenu: React.FC<SortViewOptionsMenuProps> = ({ sortViewMenuR
                             viewMenuOptions.map(({ icon, label, action }) => (
                                 <button
                                     key={label}
-                                    className={`px-4 py-2 text-[#8f8f8f] dynamic-text-hover ${label == view ? "text-[#ffffff] bg-[#3e3e3e]" : ""} rounded-sm cursor-pointer`}
+                                    className={`px-4 py-2 text-[#8f8f8f] dynamic-text-hover ${label == libraryView ? "text-[#ffffff] bg-[#3e3e3e]" : ""} rounded-sm cursor-pointer`}
                                     onClick={action}
                                 >
                                     {icon}

@@ -9,8 +9,11 @@ interface MobileMiniPlayerProps {
 }
 
 const MobileMiniPlayer: React.FC<MobileMiniPlayerProps> = ({ onOpen }) => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
-    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl);
+
+    /* ---------- Custom Hooks ---------- */
+    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
 
     return (
         <div className="fixed bottom-[71px] left-0 w-full px-2 z-40 cursor-pointer animate-in slide-in-from-bottom duration-300 ease-out"

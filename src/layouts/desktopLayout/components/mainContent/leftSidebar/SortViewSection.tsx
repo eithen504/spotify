@@ -4,13 +4,17 @@ import { VIEW_ICONS } from '../../../../../constants';
 import SortViewOptionsMenu from './SortViewOptionsMenu';
 
 interface SortViewSectionProps {
-    isSearchActive: boolean;
+    isSearchBarActive: boolean;
 }
 
-const SortViewSection: React.FC<SortViewSectionProps> = ({ isSearchActive }) => {
-    const { preferences: { isLeftSidebarExpanded, sort, view } } = useUIPreferencesStore();
+const SortViewSection: React.FC<SortViewSectionProps> = ({ isSearchBarActive }) => {
     const [isSortViewMenuOpen, setIsSortViewMenuOpen] = useState(false);
     const sortViewMenuRef = useRef<HTMLDivElement>(null);
+
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar, library } = preferences;
+    const { isExpanded: isLeftSidebarExpanded } = leftSidebar;
+    const { sort: librarySort, view: libraryView } = library;
 
     return (
         <div
@@ -22,13 +26,13 @@ const SortViewSection: React.FC<SortViewSectionProps> = ({ isSearchActive }) => 
                 onClick={() => setIsSortViewMenuOpen(true)}
             >
                 {
-                    (!isSearchActive || isLeftSidebarExpanded) && (
-                        <span className="text-sm font-semibold min-w-0">{sort}</span>
+                    (!isSearchBarActive || isLeftSidebarExpanded) && (
+                        <span className="text-sm font-semibold min-w-0">{librarySort}</span>
                     )
                 }
                 <button className="transition-colors cursor-pointer">
                     {
-                        VIEW_ICONS[view]
+                        VIEW_ICONS[libraryView]
                     }
                 </button>
             </div>

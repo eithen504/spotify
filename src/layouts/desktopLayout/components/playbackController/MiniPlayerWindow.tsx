@@ -54,26 +54,13 @@ interface MiniPlayerWindowProps {
 
 const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose, progress, currentTime, handleProgressChange }) => {
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl);
+    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
     const { getTrackLikeStatus } = useTrackLikeStatus()
     const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id })
     const { mutateAsync: likeTrack } = useLikeTrack();
 
     const handleLikeUnlikeTrack = () => {
-        likeTrack({
-            _id: trackDetails._id,
-            title: trackDetails.title,
-            coverImageUrl: trackDetails.coverImageUrl,
-            audioUrl: trackDetails.audioUrl,
-            artist: trackDetails.artist,
-            duration: trackDetails.duration,
-            genre: [],
-            albumId: trackDetails.albumId,
-            albumName: trackDetails.albumName,
-            hasLiked: trackDetails.hasLiked,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        })
+        likeTrack(trackDetails);
     }
 
     const initialWidth = 300;

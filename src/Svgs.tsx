@@ -470,7 +470,7 @@ const AddToQueueIcon = ({ width = "24", height = "24" }) => (
     </svg>
 )
 
-const RemoveFromQueueIcon = ({ width = "24", height = "24" }) => (
+const AlreadyAddedToQueueIcon = ({ width = "24", height = "24" }) => (
     <svg
         width={`${width}`}
         height={`${height}`}
@@ -479,11 +479,9 @@ const RemoveFromQueueIcon = ({ width = "24", height = "24" }) => (
         aria-hidden="true"
         className="e-91000-icon e-91000-baseline"
         viewBox="0 0 16 16"
-        fill="currentColor"
+        fill="#3BE477"
     >
-        <path
-            d="M16 15H2v-1.5h14zm0-4.5H2V9h14zm-8.034-6A5.5 5.5 0 0 1 7.187 6H13.5a2.5 2.5 0 0 0 0-5H7.966c.159.474.255.978.278 1.5H13.5a1 1 0 1 1 0 2zM0 2h5v1.5H0z"
-        />
+        <path d="M6.46 1.5 5.4.44l-3 3L1 2.04-.06 3.1 2.4 5.56zM7.188 6c.331-.452.596-.957.778-1.5H13.5a1 1 0 1 0 0-2H8.244A5.5 5.5 0 0 0 7.966 1H13.5a2.5 2.5 0 0 1 0 5zM16 10.5H2V9h14zm0 4.5H2v-1.5h14z"></path>
     </svg>
 )
 
@@ -1189,7 +1187,7 @@ export {
     RepeatIcon,
     NowPlayingIcon,
     AddToQueueIcon,
-    RemoveFromQueueIcon,
+    AlreadyAddedToQueueIcon,
     QueueIcon,
     HighVolumeIcon,
     MediumVolumeIcon,

@@ -11,8 +11,8 @@ interface EntityInfo {
 interface EntityOptionsDrawerProps {
     entity: EntityInfo;
     options: MenuOptions;
-    onClose: () => void;
     height?: string;
+    onClose: () => void;
 }
 
 const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
@@ -21,20 +21,21 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
         imgUrl
     },
     options,
-    onClose,
-    height
+    height,
+    onClose
 }) => {
     const { pathname } = useLocation();
+
     const isPlaylistPage = pathname.startsWith("/playlist");
     const isAlbumPage = pathname.startsWith("/album");
 
     return (
         <Drawer open={true} onClose={onClose}>
             <DrawerContent
-                className={`block md:hidden bg-[#282828] rounded-t-2xl z-700 w-full h-${height || "100"}`}
+                className="bg-[#282828] rounded-t-2xl z-1000 w-full"
+                style={{ height: height || "100%" }}
                 shouldShowDragHandle={true}
             >
-
                 {/* Track Info */}
                 <div className="flex items-center gap-3 p-4 border-b border-[#3E3E3E]">
                     <img

@@ -1,13 +1,9 @@
 import { create } from "zustand";
-import type { Track } from "../types";
-
-type Details = Track & {
-    isPlaying: boolean;
-};
+import type { TrackDetails } from "../types";
 
 interface TrackDetailsStore {
-    trackDetails: Details;
-    setTrackDetails: (details: Partial<Details>) => void;
+    trackDetails: TrackDetails;
+    setTrackDetails: (details: Partial<TrackDetails>) => void;
 }
 
 export const useTrackDetailsStore = create<TrackDetailsStore>((set) => ({

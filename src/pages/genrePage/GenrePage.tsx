@@ -140,7 +140,11 @@ const GenrePage = () => {
     const bgColor = GENRES_ID_BGCOLOR_MAP[id || ""];
     const title = GENRES_ID_TITLE_MAP[id || ""];
 
-    const { preferences: { leftPanelSize, showNowPlayingView, showQueueView } } = useUIPreferencesStore();
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar, rightSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const { showNowPlayingView, showQueueView } = rightSidebar;
+
     const { breakPoint } = useBreakPoint();
     const { playlistData: { playlistId, activeTrackId } } = usePlaylistStore();
 
@@ -207,7 +211,7 @@ const GenrePage = () => {
                     {playlists?.map((playlist: Playlist) => {
                         const isPlayingCurrentPlaylist = (playlistId == playlist._id && activeTrackId == trackDetails._id && trackDetails.isPlaying)
                         const navigateUrl = `/playlist/${playlist._id}`;
-                        
+
                         return (
                             <div
                                 key={playlist._id}

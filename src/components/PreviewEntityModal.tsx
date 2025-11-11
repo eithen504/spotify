@@ -1,51 +1,80 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { AddIcon, BackArrowIcon, CrossIcon, DownArrowIcon, HighVolumeIcon, MoreIcon, MuteVolumeIcon, QueueIcon, SavedIcon, ShareIcon } from '../Svgs'
+import { AddIcon, AddToQueueIcon, AlbumIcon, AlreadyAddedToQueueIcon, BackArrowIcon, CreditIcon, CrossIcon, DownArrowIcon, HighVolumeIcon, LogoIcon, MoreIcon, MuteVolumeIcon, PlusIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from '../Svgs'
 import { Slider } from './ui/slider'
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from './ui/carousel'
-import type { Track } from '../types'
+import type { MenuOptions, Track, TrackDetails } from '../types'
 import { useDominantColor } from '../hooks/color'
 import { PreviewEntityDialogMusicPlaceHolder } from './Placeholders'
+import { useQueueStore } from '../store/useQueueStore'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import EntityOptionsMenu from './EntityOptionsMenu'
+import { useLikeTrack, useTrackLikeStatus } from '../hooks/like'
+import { useShare } from '../hooks/share'
+import { useBreakPoint } from '../hooks/breakPoint'
+import EntityOptionsDrawer from './EntityOptionsDrawer'
 
-interface PreviewEntityModalProps {
+type PreviewEntityModalProps = {
     tracks: Track[]
     onClose: () => void
 }
 
 const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [canScroll, setCanScroll] = useState({ next: false, prev: false });
+    /*----------Internal Hooks----------*/
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const { id } = useParams();
 
-    const scrollNextFnRef = useRef<() => void>(() => { });
-    const scrollPrevFnRef = useRef<() => void>(() => { });
-    const [trackDetails, setTrackDetails] = useState({
-        id: "",
+    /* ---------- Local States ---------- */
+    const [trackDetails, setTrackDetails] = useState<TrackDetails>({
+        _id: "",
         title: "",
         coverImageUrl: "",
         audioUrl: "",
         artist: "",
-        duration: "",
+        duration: 0,
+        genres: [],
         albumId: "",
         albumName: "",
+        language: "English",
         hasLiked: false,
-        isPlaying: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isPlaying: false
     });
-
-    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl)
-
-    const setScrollFunctions = (nextFn: () => void, prevFn: () => void) => {
-        scrollNextFnRef.current = nextFn;
-        scrollPrevFnRef.current = prevFn;
-    };
-
+    const [activeIndex, setActiveIndex] = useState(0);
     const [progress, setProgress] = useState([0]);
-    const [volumeEnabled, setVolumeEnabled] = useState(true)
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [volumeEnabled, setVolumeEnabled] = useState(true);
+    const [canScroll, setCanScroll] = useState({ next: false, prev: false });
+    const [isTrackMenuOpen, setIsTrackMenuOpen] = useState(false);
+    const [isTrackDrawerOpen, setIsTrackDrawerOpen] = useState(false);
 
+    /* ---------- Local References ---------- */
+    const containerRef = useRef<HTMLDivElement>(null);
+    const trackMenuRef = useRef<HTMLDivElement | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const scrollNextFnRef = useRef<() => void>(() => { });
+    const scrollPrevFnRef = useRef<() => void>(() => { });
+
+    /* ---------- Stores ---------- */
+    const { queueMap, addItemsToCustomQueue, removeItemFromQueue } = useQueueStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
+    const { getTrackLikeStatus } = useTrackLikeStatus();
+    const {breakPoint} = useBreakPoint();
+    const { mutateAsync: likeTrack } = useLikeTrack();
+    const { share } = useShare();
+
+    /* ---------- Derived Values ---------- */
+    const isAlbumPage = pathname.startsWith("/album");
+    const queueItemid = isAlbumPage ? `Album-${id}-${trackDetails?._id}` : `Playlist-${id}-${trackDetails?._id}`;
+    const hasTrackInQueue = queueMap[queueItemid];
+    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails?.hasLiked || false, trackId: trackDetails?._id || "" });
+
+    /* ---------- Methods Or Functions ---------- */
     const handleProgressChange = (value: number[]) => {
         const audio = audioRef.current
         if (audio) {
-            // Convert percentage to seconds
             const newTimeInSeconds = (value[0] / 100) * audio.duration;
             audio.currentTime = newTimeInSeconds;
         }
@@ -63,24 +92,102 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
         }
     }
 
+    const setScrollFunctions = (nextFn: () => void, prevFn: () => void) => {
+        scrollNextFnRef.current = nextFn;
+        scrollPrevFnRef.current = prevFn;
+    }
+
+    const handleAddOrRemoveQueue = () => {
+        const entityType = isAlbumPage ? "Album" : "Playlist";
+        const entityId = id;
+        const trackId = trackDetails._id;
+
+        if (hasTrackInQueue) {
+            removeItemFromQueue(entityType, entityId || "", trackId);
+        } else {
+            addItemsToCustomQueue([trackDetails], entityType, entityId || "");
+        }
+    }
+
+    const handleLikeUnlikeTrack = () => {
+        likeTrack(trackDetails);
+    }
+
+    const handleShare = () => {
+        share(`/track/${trackDetails._id}`);
+    }
+
+    const trackMenuOptions: MenuOptions = [
+        {
+            icon: <PlusIcon width="16" height="16" />,
+            label: "Add To Playlist",
+            action: () => { },
+            rightSideIcon: <RightArrowIndicatorIcon width="12" height="12" />
+        },
+        {
+            icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
+            label: hasLiked ? "Remove From Your Liked Tracks" : "Save To Your Liked Tracks",
+            action: handleLikeUnlikeTrack,
+        },
+        {
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
+            action: handleAddOrRemoveQueue,
+        },
+        {
+            icon: <ReportIcon width="16" height="16" />,
+            label: "Report",
+            action: () => { },
+            hasTopBorder: true,
+        },
+        {
+            icon: <AlbumIcon width="16" height="16" />,
+            label: "Go To Album",
+            action: () => {
+                navigate(`/album/${trackDetails?.albumId}`);
+            },
+        },
+        {
+            icon: <CreditIcon width="16" height="16" />,
+            label: "View Credits",
+            action: () => { },
+        },
+        {
+            icon: <ShareIcon width="16" height="16" />,
+            label: "Share",
+            action: handleShare,
+        },
+        {
+            icon: <LogoIcon width="16" height="16" />,
+            label: "Open In Desktop App",
+            action: () => { },
+            hasTopBorder: true,
+        },
+    ]
+
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         setTrackDetails({
-            id: tracks[activeIndex]._id,
+            _id: tracks[activeIndex]._id,
             title: tracks[activeIndex].title,
-            coverImageUrl: tracks[activeIndex].coverImageUrl,
+            coverImageUrl: tracks[activeIndex].coverImageUrl || "",
             audioUrl: tracks[activeIndex].audioUrl,
             artist: tracks[activeIndex].artist,
-            duration: tracks[activeIndex].duration,
+            duration: tracks[activeIndex].duration || 0,
+            genres: tracks[activeIndex].genres,
             albumId: tracks[activeIndex].albumId || "",
             albumName: tracks[activeIndex].albumName,
+            language: tracks[activeIndex].language,
             hasLiked: tracks[activeIndex].hasLiked,
+            createdAt: tracks[activeIndex].createdAt,
+            updatedAt: tracks[activeIndex].updatedAt,
             isPlaying: true,
         })
     }, [activeIndex]);
 
     useEffect(() => {
         const audio = audioRef.current;
-        if (!audio || !trackDetails.id) return;
+        if (!audio || !trackDetails._id) return;
 
         // Handle browser media control events
         const handlePlay = () => {
@@ -129,7 +236,7 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
     }, []);
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-grayscale-[100%] z-100">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-grayscale-[100%] z-700">
             {/* Your modal content */}
             <div
                 ref={containerRef}
@@ -272,36 +379,70 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
                     {/* Part 3: Track Controls */}
                     <div className="flex flex-col justify-between items-center gap-7 mr-6">
                         {/* More Icon */}
-                        <div className="relative">
-                            <button className="text-white/70 dynamic-text-hover cursor-pointer"
-                            // onClick={() => setIsMoreDropdownOpen(!isMoreDropdownOpen)}
+                        <div className="relative -mb-3.5" ref={trackMenuRef}>
+                            <button
+                                className="text-white/70 dynamic-text-hover cursor-pointer"
+                                onClick={() => {
+                                    if(breakPoint == "md"){
+                                        setIsTrackMenuOpen(true);
+                                    } else {
+                                        setIsTrackDrawerOpen(true);
+                                    }
+                                }}
                             >
                                 <MoreIcon width="30" height="30" />
                             </button>
 
-                            {/* {isMoreDropdownOpen && (
-                                <div className={`absolute right-10 top-7 z-200`}>
-                                    <MoreDropdown moreMenuOptions={moreMenuOptions} />
-                                </div>
-                            )} */}
+                            {
+                                isTrackMenuOpen && (
+                                    <EntityOptionsMenu
+                                        options={trackMenuOptions}
+                                        entityMenuRef={trackMenuRef}
+                                        onClose={() => setIsTrackMenuOpen(false)}
+                                    />
+                                )
+                            }
+
+                            {
+                                isTrackDrawerOpen && ( // todo
+                                    <EntityOptionsDrawer
+                                        entity={{
+                                            title: trackDetails.title,
+                                            imgUrl: trackDetails.coverImageUrl || ""
+                                        }}
+                                        options={trackMenuOptions}
+                                        height="500px"
+                                        onClose={() => setIsTrackDrawerOpen(false)}
+                                    />
+                                )
+                            }
                         </div>
 
                         {/* Share Icon */}
-                        <button className="text-white/70 dynamic-text-hover cursor-pointer">
+                        <button
+                            className="text-white/70 dynamic-text-hover cursor-pointer"
+                            onClick={handleShare}
+                        >
                             <ShareIcon width="21" height="21" />
                         </button>
 
                         {/* Queue Icon */}
-                        <button className="text-white/70 dynamic-text-hover cursor-pointer">
-                            <QueueIcon width="21" height="21" />
+                        <button
+                            className="text-white/70 dynamic-text-hover cursor-pointer"
+                            onClick={handleAddOrRemoveQueue}
+                        >
+                            {
+                                hasTrackInQueue ? <AlreadyAddedToQueueIcon width="21" height="21" /> : <AddToQueueIcon width="21" height="21" />
+                            }
                         </button>
 
                         {/* Add Icon */}
-                        <button className="text-white/70 dynamic-text-hover cursor-pointer"
-                        // onClick={handleLike}
+                        <button
+                            className="text-white/70 dynamic-text-hover cursor-pointer"
+                            onClick={handleLikeUnlikeTrack}
                         >
                             {
-                                false ? (
+                                hasLiked ? (
                                     <SavedIcon width="24" height="24" />
                                 ) : (
                                     <AddIcon width="24" height="24" />
@@ -354,7 +495,7 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
                     }
 
                     {
-                        trackDetails.id && (
+                        trackDetails._id && (
                             <audio ref={audioRef} src={trackDetails.audioUrl} autoPlay />
                         )
                     }

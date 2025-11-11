@@ -10,9 +10,16 @@ interface EntityViewOptionsMenuProps {
     onClose: () => void;
 }
 
-const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({ view, setView, entityViewMenuRef, onClose }) => {
+const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
+    view,
+    setView,
+    entityViewMenuRef,
+    onClose
+}) => {
     const { breakPoint } = useBreakPoint();
-    const { preferences: { showNowPlayingView, showQueueView } } = useUIPreferencesStore();
+    const { preferences } = useUIPreferencesStore();
+    const { rightSidebar } = preferences;
+    const { showNowPlayingView, showQueueView } = rightSidebar;
 
     return (
         <>

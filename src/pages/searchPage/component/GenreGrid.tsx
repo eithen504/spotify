@@ -4,7 +4,9 @@ import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
 
 const GenreGrid = () => {
     const navigate = useNavigate()
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore()
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
         <>

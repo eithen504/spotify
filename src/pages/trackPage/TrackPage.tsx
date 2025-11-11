@@ -1,6 +1,6 @@
 
 import { useNavigate, useParams } from "react-router-dom";
-import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, MusicIcon, PlusIcon, RemoveFromQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../Svgs";
+import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, MusicIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../Svgs";
 import { useTrackDetailsStore } from "../../store/useTrackDetailsStore";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { useGetTrack, useUpdateTrack } from "../../hooks/track";
@@ -24,6 +24,7 @@ import AuthRequiredModal from "../../components/AuthRequiredModal";
 import { useQueueStore } from "../../store/useQueueStore";
 import { formatTotalAsHMS } from "../../utils";
 
+/*---------- Constants ----------*/
 const adminId = import.meta.env.VITE_ADMIN_ID;
 const controls: Controls = {
     Play: true,
@@ -36,7 +37,7 @@ const controls: Controls = {
 };
 
 const TrackPage = () => {
-    /*----------Internal Hooks----------*/
+    /*---------- Internal Hooks ----------*/
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -45,8 +46,10 @@ const TrackPage = () => {
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
 
     /*----------Stores----------*/
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const { albumData: { albumId, activeTrackId }, setAlbumData } = useAlbumStore();
     const { setPlaylistData } = usePlaylistStore();
     const { queueMap, addItemsToCustomQueue, removeItemFromQueue } = useQueueStore();
@@ -88,7 +91,7 @@ const TrackPage = () => {
             },
         },
         {
-            icon: hasTrackInQueue ? <RemoveFromQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
             label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
             action: () => {
                 if (!track) return;
@@ -97,7 +100,7 @@ const TrackPage = () => {
                 } else {
                     addItemsToCustomQueue([track], "Album", track.albumId || "");
                 }
-            }, 
+            },
         },
         {
             icon: <ReportIcon width="16" height="16" />,

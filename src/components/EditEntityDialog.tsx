@@ -30,11 +30,21 @@ const EditEntityDialog: React.FC<EditEntityDialogProps> = ({
     isPending,
     handleUpdateEntity
 }) => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    /* ---------- Local States ---------- */
     const [name, setName] = useState(defaultTitle);
+
+    /* ---------- Local References ---------- */
     const imageInputRef = useRef<HTMLInputElement | null>(null);
+
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+
+    /* ---------- Custom Hooks ---------- */
     const { handleFileChange: handleImgChange, fileURL: selectedImgUrl } = usePreviewFile("image");
 
+    /* ---------- Derived Values ---------- */
     const isNameFiledEmpty = name.trim() == "";
     const isSaveButtonDisabled = isPending || isNameFiledEmpty;
 

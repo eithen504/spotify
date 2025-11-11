@@ -11,9 +11,12 @@ interface LeftSidebarProps {
 
 const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
     const [isScrolled, setIsScrolled] = useState(false);
+
     const sidebarRef = useRef<HTMLDivElement | null>(null);
-    const { preferences: { folder: { activeId } } } = useUIPreferencesStore();
     
+    const { preferences } = useUIPreferencesStore();
+    const { activeFolder: { id: activeFolderId } } = preferences;
+
     useEffect(() => {
         const sidebarEl = sidebarRef.current
         if (!sidebarEl) return
@@ -39,17 +42,17 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
             style={{ width: `${leftPanelSize}%` }}
             ref={sidebarRef}
         >
-            <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} sticky top-0 bg-[#121212] z-100`}>
+            <div className={`${isScrolled ? "shadow-[0_4px_5px_rgba(0,0,0,0.8)]" : ""} sticky top-0 bg-[#121212] z-110`}>
                 {/* Header */}
                 <Header />
 
                 {/* Tabs Section */}
                 {
-                    !activeId && <TabsSection />
+                    !activeFolderId && <TabsSection />
                 }
 
                 {/* Library Toolbar :- Search Section + Sort & View Section */}
-                <LibraryToolbar sidebarRef={sidebarRef}/>
+                <LibraryToolbar sidebarRef={sidebarRef} />
             </div>
 
             {/* Library Items */}

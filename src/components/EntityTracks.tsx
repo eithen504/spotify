@@ -7,9 +7,9 @@ import { EntityTrackMusicPlaceholder } from './Placeholders';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useLikeTrack, useTrackLikeStatus } from '../hooks/like';
 import { useTrackDetailsStore } from '../store/useTrackDetailsStore';
-import EntityOptionsDrawer from './EntityOptionsDrawer';
 import { useBreakPoint } from '../hooks/breakPoint';
 import EntityOptionsMenu from './EntityOptionsMenu';
+import EntityOptionsDrawer from './EntityOptionsDrawer';
 
 interface EntityTracksProps {
     tracks: Track[]
@@ -34,19 +34,28 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
     entityDrawerHeight,
     handlePlayPauseTrack
 }) => {
+    /* ---------- Internal Hooks ---------- */
     const navigate = useNavigate();
-    const { breakPoint } = useBreakPoint();
     const { pathname } = useLocation();
-    const { preferences: { leftPanelSize, showNowPlayingView, showQueueView } } = useUIPreferencesStore();
-    const { trackDetails } = useTrackDetailsStore();
-    const { mutateAsync: likeTrack } = useLikeTrack();
-    const isAlbumPage = pathname.startsWith("/album");
 
-    const currentMenuTrack = tracks[currentMenuTrackIndex];
-
+    /* ---------- Local States ---------- */
     const trackMenuRefs = useRef<Array<HTMLDivElement | null>>([]);
 
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar, rightSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const { showNowPlayingView, showQueueView } = rightSidebar;
+    const { trackDetails } = useTrackDetailsStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { breakPoint } = useBreakPoint();
     const { getTrackLikeStatus } = useTrackLikeStatus();
+    const { mutateAsync: likeTrack } = useLikeTrack();
+
+    /* ---------- Derived Values ---------- */
+    const isAlbumPage = pathname.startsWith("/album");
+    const currentMenuTrack = tracks[currentMenuTrackIndex];
 
     return (
         <div className='px-1 md:px-6'>
@@ -227,7 +236,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                     <MoreIcon />
                                 </button>
 
-                                {/* Track Options Menu */}
+                                {/* Track Options Drawer */}
                                 {
                                     breakPoint == "sm" && isTrackMenuOpen && (
                                         <EntityOptionsDrawer

@@ -11,15 +11,15 @@ import { useRepeatTrackStore } from '../../store/useRepeatTrackStore';
 import { useAlbumStore } from '../../store/useAlbumStore';
 
 export default function MobileLayout() {
-    // Local States
+    /* ---------- Local States ---------- */
     const [progress, setProgress] = useState([0]);
     const [currentTime, setCurrentTime] = useState(0);
     const [isNowPlayingDrawerOpen, setIsNowPlayingDrawerOpen] = useState(false);
 
-    // Local Reference
+    /* ---------- Local References ---------- */
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    // Store
+    /* ---------- Stores ---------- */
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
     const { preferences: { systemVolume }, setPreferences } = useUIPreferencesStore();
     const { albumData: { albumId }, setAlbumData } = useAlbumStore();
@@ -27,10 +27,10 @@ export default function MobileLayout() {
     const { customQueue, activeEntityQueueListNode, entityId: queueEntityId, insertAfterActiveEntityListNode, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
     const { repeatTracks } = useRepeatTrackStore();
 
-    // Derived Value
+    /* ---------- Derived Values ---------- */
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
 
-    // Methods Or Functions
+    /* ---------- Methods Or Functions ---------- */
     const handlePlayPauseTrack = () => {
         setTrackDetails({ isPlaying: !trackDetails.isPlaying })
     }
@@ -177,7 +177,7 @@ export default function MobileLayout() {
         }
     }
 
-    // UseEffects
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio || !trackDetails._id) return;
@@ -209,10 +209,10 @@ export default function MobileLayout() {
 
         const handleAudioEnd = () => {
             if (hasTrackInRepeat) {
-                setTrackDetails({ isPlaying: true })
+                setTrackDetails({ isPlaying: true });
                 return;
             }
-            handlePlayNextTrack()
+            handlePlayNextTrack();
         }
 
         // Attach event listeners
@@ -231,7 +231,7 @@ export default function MobileLayout() {
     }, [trackDetails]);
 
     useEffect(() => {
-        const audio = audioRef.current
+        const audio = audioRef.current;
         if (audio) {
             audio.volume = systemVolume[0] / 100;
         }

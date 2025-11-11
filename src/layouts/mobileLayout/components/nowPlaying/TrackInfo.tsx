@@ -3,10 +3,13 @@ import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore"
 import { AddIcon, SavedIcon } from "../../../../Svgs"
 
 const TrackInfo = () => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
-    const { mutateAsync: likeTrack } = useLikeTrack();
+
+    /* ---------- Custom Hooks ---------- */
     const { getTrackLikeStatus } = useTrackLikeStatus();
-    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id })
+    const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id });
+    const { mutateAsync: likeTrack } = useLikeTrack();
 
     return (
         <div className="px-6 py-2 flex items-center justify-between flex-shrink-0 w-full mb-4">
@@ -20,20 +23,7 @@ const TrackInfo = () => {
             </div>
             <button
                 className="text-white/70 dynamic-text-hover cursor-pointer flex-shrink-0 ml-4"
-                onClick={() => likeTrack({
-                    _id: trackDetails._id,
-                    title: trackDetails.title,
-                    coverImageUrl: trackDetails.coverImageUrl,
-                    audioUrl: trackDetails.audioUrl,
-                    artist: trackDetails.artist,
-                    duration: trackDetails.duration,
-                    genre: [],
-                    albumId: trackDetails.albumId,
-                    albumName: trackDetails.albumName,
-                    hasLiked: trackDetails.hasLiked,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                })}
+                onClick={() => likeTrack(trackDetails)}
             >
                 {
                     hasLiked ? <SavedIcon /> : <AddIcon />

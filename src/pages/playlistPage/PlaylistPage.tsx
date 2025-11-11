@@ -14,7 +14,7 @@ import EntityTableHeader from "../../components/EntityTableHeader";
 import Footer from "../../components/Footer";
 import EntityTracks from "../../components/EntityTracks";
 import { useCheckAuth } from "../../hooks/auth";
-import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, DeleteIcon, FolderIcon, LogoIcon, PlaylistIcon, PlusIcon, RemoveFromQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../Svgs";
+import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, DeleteIcon, FolderIcon, LogoIcon, PlaylistIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../Svgs";
 import EditEntityDialog from "../../components/EditEntityDialog";
 import { toast } from "sonner";
 import SearchForEntity from "../../components/SearchForEntity";
@@ -31,7 +31,7 @@ import { useLikeTrack, useTrackLikeStatus } from "../../hooks/like";
 import { useGetCurrentUserLibraryItems } from "../../hooks/library";
 import { useAddItemToFolder, useUploadFolder } from "../../hooks/folder";
 
-// Constants
+/* ---------- Constants ---------- */
 const adminId = import.meta.env.VITE_ADMIN_ID;
 const controls: Controls = {
     Play: true,
@@ -63,8 +63,10 @@ const PlaylistPage = () => {
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
 
     /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
     const { setAlbumData } = useAlbumStore();
     const { playlistData: { playlistId, activeTrackId, playImmediate }, setPlaylistData } = usePlaylistStore();
     const { queueMap, initializeEntityQueue, addItemsToCustomQueue, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
@@ -87,7 +89,7 @@ const PlaylistPage = () => {
     const imgUrl = data?.playlist?.coverImageUrl;
     const { dominantColor } = useDominantColor(imgUrl);
 
-    /* ---------- Derived Value ---------- */
+    /* ---------- Derived Values ---------- */
     const isOwnPlaylist = currentUser?._id == data?.playlist?.userId;
     const showFullBorder = scrollFromTop >= getScrollThreshold(leftPanelSize);
     const isPlayingCurrentPlaylist = (playlistId == id && activeTrackId == trackDetails._id && trackDetails.isPlaying);
@@ -223,13 +225,13 @@ const PlaylistPage = () => {
         },
         {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
-            label: hasLiked ? "Remove From Your Liked Track" : "Add To Your Liked Track",
+            label: hasLiked ? "Remove From Your Liked Tracks" : "Save To Your Liked Tracks",
             action: () => {
                 if (currentMenuTrack) likeTrack(currentMenuTrack);
             },
         },
         {
-            icon: hasTrackInQueue ? <RemoveFromQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
             label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
             action: () => {
                 if (!currentMenuTrack) return;

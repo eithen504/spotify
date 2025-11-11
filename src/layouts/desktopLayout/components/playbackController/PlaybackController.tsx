@@ -10,31 +10,26 @@ import { useRepeatTrackStore } from "../../../../store/useRepeatTrackStore"
 import { useAlbumStore } from "../../../../store/useAlbumStore"
 
 const PlaybackController = () => {
-    // Local States
+    /* ---------- Local States ---------- */
     const [progress, setProgress] = useState([0]);
     const [currentTime, setCurrentTime] = useState(0);
 
-    // Local Reference
+    /* ---------- Local References ---------- */
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    // Store
+    /* ---------- Stores ---------- */
+    const { preferences, setPreferences } = useUIPreferencesStore();
+    const { systemVolume } = preferences;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { preferences: { systemVolume }, setPreferences } = useUIPreferencesStore();
     const { albumData: { albumId }, setAlbumData } = useAlbumStore();
     const { playlistData: { playlistId }, setPlaylistData } = usePlaylistStore();
-    const { customQueue, entityQueue, queueMap, activeEntityQueueListNode, entityId: queueEntityId, insertAfterActiveEntityListNode, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
+    const { customQueue, activeEntityQueueListNode, entityId: queueEntityId, insertAfterActiveEntityListNode, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
     const { repeatTracks } = useRepeatTrackStore();
 
-    console.log("queurmap", queueMap);
-    console.log("enenenne", entityQueue);
-    console.log("custo ", customQueue);
-
-
-
-    // Derived Value
+    /* ---------- Derived Values ---------- */
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
 
-    // Methods Or Functions
+    /* ---------- Methods Or Functions ---------- */
     const handlePlayPauseTrack = () => {
         setTrackDetails({ isPlaying: !trackDetails.isPlaying })
     }
@@ -58,7 +53,6 @@ const PlaybackController = () => {
         }
     };
 
-    console.log("actovebefore", activeEntityQueueListNode);
     const handlePlayNextTrack = () => {
         const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
 
@@ -69,7 +63,6 @@ const PlaybackController = () => {
 
         const [activeEntityType, activeEntityId, activeTrackId] = activeEntityQueueListNode!.value!._id.split('-');
         const isActiveQueueListNodeCustom = activeEntityId != queueEntityId;
-        console.log("ax", isActiveQueueListNodeCustom);
 
         if (nextCustomQueueItem) {
             const nextCustomQueueListNode = customQueue!.head!.next!;
@@ -146,8 +139,6 @@ const PlaybackController = () => {
         }
     }
 
-    console.log("ne");
-
     const handlePlayPrevTrack = () => {
         const prevEntityQueueItem = activeEntityQueueListNode!.prev!.value;
         const [activeEntityType, activeEntityId, activeTrack] = activeEntityQueueListNode!.value!._id.split('-');
@@ -185,7 +176,7 @@ const PlaybackController = () => {
         }
     }
 
-    // UseEffects
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio || !trackDetails._id) return;

@@ -1,5 +1,9 @@
 import type { JSX } from "react";
 
+export type TrackDetails = Track & {
+    isPlaying: boolean;
+};
+
 export type MenuOption = {
     icon?: JSX.Element;
     label: string;
@@ -52,18 +56,19 @@ export type HomePageTab = "All" | "Music" | "Podcasts";
 export type HomePageTabs = HomePageTab[];
 
 export type LeftSidebarTab = "Playlists" | "Save Playlists" | "Save Albums" | "Folders";
-export type LeftSidebarTabs = LeftSidebarTab[]
+export type LeftSidebarTabs = LeftSidebarTab[];
+export type LeftSidebarTabsMap = Record<LeftSidebarTab, boolean>;
 
-export type Sort = "Recently Added" | "Alphabetical A To Z" | "Alphabetical Z To A";
-export type View = 'Compact List' | 'Default List' | 'Compact Grid' | 'Default Grid';
+export type LibrarySort = "Recently Added" | "Alphabetical A To Z" | "Alphabetical Z To A";
+export type LibraryView = 'Compact List' | 'Default List' | 'Compact Grid' | 'Default Grid';
 
-export type SortOptions = Record<Sort, boolean>
+export type LibrarySortOptionsMap = Record<LibrarySort, boolean>;
 
-export type ViewIcon = Record<View, JSX.Element>
+export type ViewIcon = Record<LibraryView, JSX.Element>
 
-export type ViewComponent = Record<View, JSX.Element>
+export type ViewComponent = Record<LibraryView, JSX.Element>
 
-export type ViewSkelton = Record<View, JSX.Element>
+export type ViewSkelton = Record<LibraryView, JSX.Element>
 
 export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "Follow" | "More" | "View";
 export type Controls = Record<ControlKeys, boolean>;

@@ -1,48 +1,66 @@
 import { create } from "zustand";
-import type { LeftSidebarTab, Sort, View } from "../types";
+import type { LeftSidebarTab, LibrarySort, LibraryView } from "../types";
 
-interface FolderInfo {
-  activeId: string;
-  name: string;
+type LeftSidebarState = {
+  panelSize: number;
+  isExpanded: boolean;
 }
 
-interface Preferences {
-  leftPanelSize: number;
-  rightPanelSize: number;
-  isLeftSidebarExpanded: boolean;
+type LibraryState = {
+  activeTab: LeftSidebarTab;
+  sort: LibrarySort;
+  view: LibraryView;
+}
+
+type RightSidebarState = {
+  panelSize: number;
   showNowPlayingView: boolean;
   showQueueView: boolean;
   isNowPlayingViewExpanded: boolean;
   isNowPlayingViewFullScreen: boolean;
-  isMiniPlayerWindowOpen: boolean;
-  sort: Sort;
-  view: View;
-  systemVolume: number[];
-  leftSidebarActiveTab: LeftSidebarTab;
-  folder: FolderInfo;
 }
 
-interface UIPreferencesStore {
+type Folder = {
+  id: string;
+  name: string;
+}
+
+type Preferences = {
+  leftSidebar: LeftSidebarState;
+  library: LibraryState;
+  rightSidebar: RightSidebarState;
+  isMiniPlayerWindowOpen: boolean;
+  systemVolume: number[];
+  activeFolder: Folder;
+}
+
+type UIPreferencesStore = {
   preferences: Preferences;
   setPreferences: (newPreferences: Partial<Preferences>) => void;
 }
 
 export const useUIPreferencesStore = create<UIPreferencesStore>((set) => ({
   preferences: {
-    leftPanelSize: 22,
-    rightPanelSize: 20,
-    isLeftSidebarExpanded: false,
-    showNowPlayingView: false,
-    showQueueView: false,
-    isNowPlayingViewExpanded: false,
-    isNowPlayingViewFullScreen: false,
+    leftSidebar: {
+      panelSize: 22,
+      isExpanded: false,
+    },
+    library: {
+      activeTab: "Playlists",
+      sort: "Recently Added",
+      view: "Default List",
+    },
+    rightSidebar: {
+      panelSize: 20,
+      showNowPlayingView: false,
+      showQueueView: false,
+      isNowPlayingViewExpanded: false,
+      isNowPlayingViewFullScreen: false,
+    },
     isMiniPlayerWindowOpen: false,
-    sort: "Recently Added",
-    view: "Default List",
     systemVolume: [100],
-    leftSidebarActiveTab: "Playlists",
-    folder: {
-      activeId: "",
+    activeFolder: {
+      id: "",
       name: ""
     }
   },

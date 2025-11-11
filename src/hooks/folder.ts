@@ -64,14 +64,14 @@ const useUploadFolder = () => {
 
 const useUpdateFolder = () => {
     const queryClient = useQueryClient();
-    const { preferences: { folder: { activeId } }, setPreferences } = useUIPreferencesStore();
+    const { preferences: { activeFolder: { id: activeFolderId } }, setPreferences } = useUIPreferencesStore();
 
     return useMutation({
         mutationFn: async (payload: { name?: string, playlists?: Playlist[] }) => {
             const { name, playlists } = payload;
             const playlistIds = playlists?.map((p) => p._id);
 
-            const res = await fetch(`${baseUrl}/api/v1/folder/${activeId}`, {
+            const res = await fetch(`${baseUrl}/api/v1/folder/${activeFolderId}`, {
                 method: "PATCH",
                 credentials: "include",
                 headers: {
@@ -96,11 +96,11 @@ const useUpdateFolder = () => {
 
         onSuccess: ({ updatedFolder, playlists }: { updatedFolder: Folder, playlists?: Playlist[] }) => {
             toast.success("Folder updated Successfully");
-            
-            const folder = { activeId: updatedFolder._id, name: updatedFolder.name }
-            setPreferences({ folder });
+
+            const folder = { id: updatedFolder._id, name: updatedFolder.name }
+            setPreferences({ activeFolder: folder });
             localStorage.setItem("folder", JSON.stringify(folder));
-            
+
             queryClient.setQueryData(["getCurrentUserFolders"], (prev: Folder[]) => {
                 if (!prev) return prev;
 
@@ -130,12 +130,12 @@ const useUpdateFolder = () => {
 }
 
 const useDeleteFolder = () => {
-    const { preferences: { folder: { activeId } }, setPreferences } = useUIPreferencesStore();
+    const { preferences: { activeFolder: { id: activeFolderId } }, setPreferences } = useUIPreferencesStore();
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async () => {
-            const res = await fetch(`${baseUrl}/api/v1/folder/${activeId}`, {
+            const res = await fetch(`${baseUrl}/api/v1/folder/${activeFolderId}`, {
                 method: "DELETE",
                 credentials: "include",
             });
@@ -152,8 +152,8 @@ const useDeleteFolder = () => {
         onSuccess: (folder: Folder) => {
             toast.success("Folder Deleted Successfully");
 
-            const updatedFolder = { activeId: "", name: "" };
-            setPreferences({ folder: updatedFolder });
+            const updatedFolder = { id: "", name: "" };
+            setPreferences({ activeFolder: updatedFolder });
             localStorage.setItem("folder", JSON.stringify(updatedFolder));
 
             queryClient.setQueryData(["getCurrentUserFolders"], (prev: Folder[]) => {
@@ -217,8 +217,8 @@ const useAddItemToFolder = () => {
 const useFolderActions = () => {
     const { setPreferences } = useUIPreferencesStore();
 
-    const navigateToFolder = (folderData: { activeId: string, name: string }) => {
-        setPreferences({ folder: folderData });
+    const navigateToFolder = (folderData: { id: string, name: string }) => {
+        setPreferences({ activeFolder: folderData });
         localStorage.setItem("folder", JSON.stringify(folderData));
     }
 

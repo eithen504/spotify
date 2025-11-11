@@ -32,8 +32,11 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
     handlePlayNextTrack,
     handlePlayPrevTrack
 }) => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
-    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "")
+
+    /* ---------- Custom Hooks ---------- */
+    const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
 
     return (
         <Drawer open={isOpen} onClose={onClose}>

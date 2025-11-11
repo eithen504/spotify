@@ -79,7 +79,7 @@ const useLikeTrack = () => {
 
         onSuccess: ({ track, isLiked }) => {
             if (isLiked) {
-                toast.success("Added To Liked Tracks")
+                toast.success(`Added To Liked Tracks`)
                 addLikedTrack(track)
 
                 queryClient.setQueryData(['getLikedTracks'], (prev: Track[]) => {

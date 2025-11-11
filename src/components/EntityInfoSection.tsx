@@ -31,7 +31,9 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
     dominateColor,
     onEditEntity
 }) => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
         <div style={{ background: dominateColor }}>

@@ -12,8 +12,8 @@ const ShowCreditDialog: React.FC<ShowCreditDialogProps> = ({
     isOpen,
     onClose,
 }) => {
-
     const { trackDetails } = useTrackDetailsStore();
+    
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="bg-[#282828] text-white border-none rounded-md p-6 z-500 w-[320px]">

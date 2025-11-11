@@ -6,7 +6,7 @@ import TrackInfo from "./TrackInfo"
 import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore"
 import { useQueueStore } from "../../../../../store/useQueueStore"
 import type { MenuOptions, Playlist } from "../../../../../types"
-import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, PlusIcon, RemoveFromQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../../../../Svgs"
+import { AddIcon, AddToQueueIcon, AlbumIcon, CreditIcon, LogoIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../../../../Svgs"
 import { useLikeTrack, useTrackLikeStatus } from "../../../../../hooks/like"
 import { useAlbumStore } from "../../../../../store/useAlbumStore"
 import { usePlaylistStore } from "../../../../../store/usePlaylistStore"
@@ -20,24 +20,34 @@ interface NowPlayingViewProps {
 }
 
 const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
+    /* ---------- Internal Hooks ---------- */
     const navigate = useNavigate();
-    const { trackDetails } = useTrackDetailsStore()
+
+    /* ---------- Local States ---------- */
     const [isScrolled, setIsScrolled] = useState(false);
+
+    /* ---------- Local References ---------- */
     const sidebarRef = useRef<HTMLDivElement | null>(null)
-    const { addItemToCustomQueue, removeItemFromQueue, queueMap, customQueue, activeEntityQueueListNode } = useQueueStore();
+
+    /* ---------- Stores ---------- */
+    const { trackDetails } = useTrackDetailsStore();
     const { albumData: { albumId } } = useAlbumStore();
     const { playlistData: { playlistId } } = usePlaylistStore();
-    const nextQueueItem = customQueue.head.next?.value || activeEntityQueueListNode?.next?.value;
+    const { customQueue, queueMap, activeEntityQueueListNode, addItemsToCustomQueue, removeItemFromQueue } = useQueueStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { data: playlists } = useGetCurrentUserLibraryItems("Playlists");
     const { getTrackLikeStatus } = useTrackLikeStatus();
     const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails?.hasLiked || false, trackId: trackDetails?._id || "" });
     const { mutateAsync: likeTrack } = useLikeTrack();
-    const queueItemid = albumId ? `Album-${albumId}-${trackDetails?._id}` : `Playlist-${playlistId}-${trackDetails?._id}`;
-    const hasTrackInQueue = queueMap[queueItemid];
-    const { share } = useShare();
-    const { data: playlists } = useGetCurrentUserLibraryItems("Playlists");
     const { mutateAsync: uploadPlaylist } = useUploadPlaylist();
     const { mutateAsync: addItemsToPlaylist } = useAddItemsToPlaylist();
+    const { share } = useShare();
 
+    /* ---------- Derived Values ---------- */
+    const nextQueueItem = customQueue.head.next?.value || activeEntityQueueListNode?.next?.value;
+    const queueItemId = albumId ? `Album-${albumId}-${trackDetails?._id}` : `Playlist-${playlistId}-${trackDetails?._id}`;
+    const hasTrackInQueue = queueMap[queueItemId];
     const trackMenuOptions: MenuOptions = [
         {
             icon: <PlusIcon width="16" height="16" />,
@@ -49,7 +59,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
                     icon: <PlusIcon width="16" height="16" />,
                     label: "Create Playlist",
                     action: () => {
-                        uploadPlaylist({ title: `New Playlist ${Date.now()}`, coverImageUrl: "", genre: [], tracks: [trackDetails._id] });
+                        uploadPlaylist({ title: `New Playlist ${Date.now()}`, coverImageUrl: "", genres: [], tracks: [trackDetails._id], visibility: "Public" });
                     }
                 },
                 ...(Array.isArray(playlists)
@@ -62,20 +72,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
                             // })
                             addItemsToPlaylist({
                                 playlistId: playlist._id,
-                                tracks: [{
-                                    _id: trackDetails._id,
-                                    title: trackDetails.title,
-                                    coverImageUrl: trackDetails.coverImageUrl,
-                                    audioUrl: trackDetails.audioUrl,
-                                    artist: trackDetails.artist,
-                                    duration: trackDetails.duration,
-                                    genre: [],
-                                    albumId: trackDetails.albumId,
-                                    albumName: trackDetails.albumName,
-                                    hasLiked: trackDetails.hasLiked,
-                                    createdAt: new Date(),
-                                    updatedAt: new Date()
-                                }]
+                                tracks: [trackDetails]
                             })
                         }
                     }))
@@ -86,24 +83,11 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
             label: hasLiked ? "Remove From Your Liked Track" : "Add To Your Liked Track",
             action: () => {
-                likeTrack({
-                    _id: trackDetails._id,
-                    title: trackDetails.title,
-                    coverImageUrl: trackDetails.coverImageUrl,
-                    audioUrl: trackDetails.audioUrl,
-                    artist: trackDetails.artist,
-                    duration: trackDetails.duration,
-                    genre: [],
-                    albumId: trackDetails.albumId,
-                    albumName: trackDetails.albumName,
-                    hasLiked: trackDetails.hasLiked,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                })
+                likeTrack(trackDetails)
             },
         },
         {
-            icon: hasTrackInQueue ? <RemoveFromQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
+            icon: hasTrackInQueue ? <AlreadyAddedToQueueIcon width="16" height="16" /> : <AddToQueueIcon width="16" height="16" />,
             label: hasTrackInQueue ? "Remove From Queue" : "Add To Queue",
             action: () => {
                 if (hasTrackInQueue) {
@@ -114,40 +98,14 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
                     }
                 } else {
                     if (albumId) {
-                        addItemToCustomQueue(
-                            {
-                                _id: trackDetails._id,
-                                title: trackDetails.title,
-                                coverImageUrl: trackDetails.coverImageUrl,
-                                audioUrl: trackDetails.audioUrl,
-                                artist: trackDetails.artist,
-                                duration: trackDetails.duration,
-                                genre: [],
-                                albumId: trackDetails.albumId,
-                                albumName: trackDetails.albumName,
-                                hasLiked: trackDetails.hasLiked,
-                                createdAt: new Date(),
-                                updatedAt: new Date()
-                            },
+                        addItemsToCustomQueue(
+                            [trackDetails],
                             "Album",
                             albumId
                         );
                     } else {
-                        addItemToCustomQueue(
-                            {
-                                _id: trackDetails._id,
-                                title: trackDetails.title,
-                                coverImageUrl: trackDetails.coverImageUrl,
-                                audioUrl: trackDetails.audioUrl,
-                                artist: trackDetails.artist,
-                                duration: trackDetails.duration,
-                                genre: [],
-                                albumId: trackDetails.albumId,
-                                albumName: trackDetails.albumName,
-                                hasLiked: trackDetails.hasLiked,
-                                createdAt: new Date(),
-                                updatedAt: new Date()
-                            },
+                        addItemsToCustomQueue(
+                            [trackDetails],
                             "Playlist",
                             playlistId
                         );
@@ -188,6 +146,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
         },
     ]
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const sidebarEl = sidebarRef.current
         if (!sidebarEl) return

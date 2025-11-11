@@ -2,6 +2,7 @@ import { NowPlayingMusicPlaceholder } from "../../../../components/Placeholders"
 import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore";
 
 const TrackArt = () => {
+    /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
 
     return (
@@ -15,7 +16,7 @@ const TrackArt = () => {
                             className="now-playing-track-size"
                         />
                     ) : (
-                        <NowPlayingMusicPlaceholder/>
+                        <NowPlayingMusicPlaceholder />
                     )
                 }
             </div>

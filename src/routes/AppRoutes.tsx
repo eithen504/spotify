@@ -10,12 +10,14 @@ import SearchPage from "../pages/searchPage/SearchPage"
 import AlbumPage from "../pages/albumPage/AlbumPage"
 import GenrePage from "../pages/genrePage/GenrePage"
 import ShowPage from "../pages/showPage/ShowPage"
+import LibraryPage from "../pages/libraryPage/LibraryPage"
 
 const AppRoutes = () => {
     return (
         <Routes>
             <Route element={<AppLayout />}>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/my/library" element={<LibraryPage />} />
                 <Route path="/album/:id" element={<AlbumPage />} />
                 <Route path="/track/:id" element={<TrackPage />} />
                 <Route path="/playlist/:id" element={<PlaylistPage />} />

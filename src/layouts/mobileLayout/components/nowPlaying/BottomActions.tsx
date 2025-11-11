@@ -10,9 +10,14 @@ interface BottomActionsProps {
 }
 
 const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => {
+    /* ---------- Local States ---------- */
     const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
+
+    /* ---------- Stores ---------- */
     const { preferences: { systemVolume } } = useUIPreferencesStore();
-    const suggestedVolumeIcon = getVolumeIcon(systemVolume[0])
+
+    /* ---------- Derived Values ---------- */
+    const suggestedVolumeIcon = getVolumeIcon(systemVolume[0]);
 
     return (
         <div className="px-6 pb-4 flex-shrink-0">

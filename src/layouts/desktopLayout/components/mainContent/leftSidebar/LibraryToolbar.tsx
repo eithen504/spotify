@@ -9,21 +9,27 @@ interface LibraryToolbarProps {
 }
 
 const LibraryToolbar: React.FC<LibraryToolbarProps> = ({ sidebarRef }) => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-    const [isSearchActive, setIsSearchActive] = useState(false);
+    /* ---------- Local States ---------- */
+    const [isSearchBarActive, setIsSearchBarActive] = useState(false);
+
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar: { panelSize: leftPanelSize } } = preferences;
     const { setSearchQuery } = useLibrarySearchStore();
 
-    const handleSearchIconClick = () => setIsSearchActive(!isSearchActive);
+    /* ---------- Methods Or Functions ---------- */
+    const handleSearchIconClick = () => setIsSearchBarActive(!isSearchBarActive);
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
     const handleClearSearchQuery = () => setSearchQuery("");
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 sidebarRef.current &&
                 !sidebarRef.current.contains(event.target as Node)
             ) {
-                setIsSearchActive(false);
+                setIsSearchBarActive(false);
             }
         };
 
@@ -41,7 +47,7 @@ const LibraryToolbar: React.FC<LibraryToolbarProps> = ({ sidebarRef }) => {
                         {/* Search Section */}
                         <div className="flex items-center">
                             <SearchSection
-                                isSearchActive={isSearchActive}
+                                isSearchBarActive={isSearchBarActive}
                                 handleSearchIconClick={handleSearchIconClick}
                                 handleInputChange={handleInputChange}
                                 handleClearSearchQuery={handleClearSearchQuery}
@@ -49,7 +55,7 @@ const LibraryToolbar: React.FC<LibraryToolbarProps> = ({ sidebarRef }) => {
                         </div>
 
                         {/* Sort Section */}
-                        <SortViewSection isSearchActive={isSearchActive} />
+                        <SortViewSection isSearchBarActive={isSearchBarActive} />
                     </div>
                 )
             }

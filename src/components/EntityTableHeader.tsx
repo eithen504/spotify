@@ -13,13 +13,23 @@ interface EntityTableHeaderProps {
 }
 
 const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, setColumns }) => {
-    const { preferences: { leftPanelSize, showNowPlayingView, showQueueView } } = useUIPreferencesStore();
-    const { scrollFromTop } = useScrollStore();
-    const [isColumnDropdownOpen, setIsColumnDropdownOpen] = useState(false);
-    const {breakPoint} = useBreakPoint();
-    const columnDropdownRef = useRef<HTMLDivElement>(null);
+    /* ---------- Local States ---------- */
+    const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
 
-    // Calculate the background class based on conditions
+    /* ---------- Stores ---------- */
+    const { preferences } = useUIPreferencesStore();
+    const { leftSidebar, rightSidebar } = preferences;
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const { showNowPlayingView, showQueueView } = rightSidebar;
+    const { scrollFromTop } = useScrollStore();
+ 
+    /* ---------- Local References ---------- */
+    const columnMenuRef = useRef<HTMLDivElement>(null);
+
+    /* ---------- Custom Hooks ---------- */
+    const { breakPoint } = useBreakPoint();
+
+    /* ---------- Derived Values ---------- */
     const showBackground = scrollFromTop >= getScrollThreshold(leftPanelSize);
 
     return (
@@ -52,27 +62,27 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                 {columns["Duration"] && <ClockIcon width="18" height="18" />}
             </div>
 
-            <div className="relative flex items-center" ref={columnDropdownRef}>
+            <div className="relative flex items-center" ref={columnMenuRef}>
                 <button className="cursor-pointer group-hover-opacity dynamic-text-hover"
                     onClick={() => {
-                        setIsColumnDropdownOpen((prev) => !prev);
+                        setIsColumnMenuOpen((prev) => !prev);
                     }}
                 >
                     <DropdownIcon width="15" height="15" />
                 </button>
 
-                {isColumnDropdownOpen && (
+                {isColumnMenuOpen && (
                     <>
                         {/* Full-screen overlay to prevent scrolling */}
                         <div
                             className="fixed inset-0 z-800"
-                            onClick={() => setIsColumnDropdownOpen(false)}
+                            onClick={() => setIsColumnMenuOpen(false)}
                         />
 
                         <div
                             className="w-45 fixed z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
                             style={{
-                                top: `${(columnDropdownRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
+                                top: `${(columnMenuRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
                                 ...((breakPoint === "md" || (!showNowPlayingView && !showQueueView)) && {
                                     right: `47px`,
                                 }),

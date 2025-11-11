@@ -9,23 +9,29 @@ import UploadAlbumDialog from "../../../../components/UploadAlbumDialog";
 import UserOptionsMenu from "./UserOptionsMenu";
 
 const RightSection = () => {
+    /* ---------- Internal Hooks ---------- */
     const navigate = useNavigate();
 
-    const { data: currentUser, isLoading } = useCheckAuth();
-    const { mutateAsync: logoutUser } = useLogoutUser();
-
-    const userMenuRef = useRef<HTMLDivElement | null>(null);
-
-    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    /* ---------- Local States ---------- */
     const [userMenuOptions, setUserMenuOptions] = useState<MenuOptions>([]);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isUploadTrackDialogOpen, setIsUploadTrackDialogOpen] = useState(false);
     const [isUploadPlaylistDialogOpen, setIsUploadPlaylistDialogOpen] = useState(false);
     const [isUploadAlbumDialogOpen, setIsUploadAlbumDialogOpen] = useState(false);
 
+    /* ---------- Local References ---------- */
+    const userMenuRef = useRef<HTMLDivElement | null>(null);
+
+    /* ---------- Stores ---------- */
+    const { data: currentUser, isLoading } = useCheckAuth();
+    const { mutateAsync: logoutUser } = useLogoutUser();
+
+    /* ---------- Derived Values ---------- */
     const isUnauthenticated = !isLoading && !currentUser;
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
-        if (!currentUser) return
+        if (!currentUser) return;
 
         const adminId = import.meta.env.VITE_ADMIN_ID;
         const isAdminProfile = currentUser._id == adminId;
@@ -45,24 +51,24 @@ const RightSection = () => {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Track',
                     action: () => {
-                        setIsUploadTrackDialogOpen(true)
-                        setIsUserMenuOpen(false)
+                        setIsUploadTrackDialogOpen(true);
+                        setIsUserMenuOpen(false);
                     }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Playlist',
                     action: () => {
-                        setIsUploadPlaylistDialogOpen(true)
-                        setIsUserMenuOpen(false)
+                        setIsUploadPlaylistDialogOpen(true);
+                        setIsUserMenuOpen(false);
                     }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Album',
                     action: () => {
-                        setIsUploadAlbumDialogOpen(true)
-                        setIsUserMenuOpen(false)
+                        setIsUploadAlbumDialogOpen(true);
+                        setIsUserMenuOpen(false);
                     }
                 },
                 {
