@@ -12,10 +12,10 @@ const AuthPage = () => {
         console.log("Login Failed");
     };
 
-    if (currentUser) {
-        navigate("/")
-        return
-    }
+    // if (currentUser) {
+    //     navigate("/")
+    //     return
+    // }
 
     return (
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID}>
