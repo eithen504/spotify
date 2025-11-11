@@ -1,5 +1,5 @@
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { useCheckAuth, useVerifyGoogleToken } from "../../hooks/auth";
+import { useCheckAuth, useLogoutUser, useVerifyGoogleToken } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { LogoIcon } from "../../Svgs";
 
@@ -7,6 +7,7 @@ const AuthPage = () => {
     const navigate = useNavigate()
     const { data: currentUser } = useCheckAuth()
     const { mutateAsync: verifyGoogleToken } = useVerifyGoogleToken()
+    const {mutateAsync: logoutUser} = useLogoutUser();
 
     const handleLoginError = () => {
         console.log("Login Failed");
@@ -36,7 +37,7 @@ const AuthPage = () => {
                         <div className="mx-auto mb-2 rounded-full flex items-center justify-center">
                             <LogoIcon width="60" height="60" />
                         </div>
-                        <h1 className="text-4xl font-bold mb-2">Millions of songs.</h1>
+                        <h1 className="text-4xl font-bold mb-2" onClick={() => logoutUser()}>Millions of songs.</h1>
                         <h2 className="text-4xl font-bold mb-4">Free on Spotify.</h2>
                     </div>
 
