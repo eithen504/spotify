@@ -453,7 +453,7 @@ const AlbumPage = () => {
             }
 
             {
-                true && 
+                isAlbumImageDialogOpen && 
                 <EntityImageDialog
                     imageUrl={imgUrl}
                     onClose={() => setIsAlbumImageDialogOpen(false)}
