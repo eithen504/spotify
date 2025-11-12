@@ -467,6 +467,7 @@ const PlaylistPage = () => {
                                 isPlaying: isPlayingCurrentPlaylist
                             }}
                             entityMenuOptions={playlistMenuOptions}
+                            entityDrawerHeight="381px"
                         />
 
                         <div className="relative max-w-[90rem] mx-auto">

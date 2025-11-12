@@ -223,7 +223,11 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
+            if(isTrackDrawerOpen) return;
+
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                console.log("why call");
+                
                 onClose();
             }
         }
@@ -233,7 +237,7 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [isTrackDrawerOpen]);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-grayscale-[100%] z-700">
@@ -404,14 +408,14 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
                             }
 
                             {
-                                isTrackDrawerOpen && ( // todo
+                                isTrackDrawerOpen && (
                                     <EntityOptionsDrawer
                                         entity={{
                                             title: trackDetails.title,
                                             imgUrl: trackDetails.coverImageUrl || ""
                                         }}
                                         options={trackMenuOptions}
-                                        height="500px"
+                                        height="477px"
                                         onClose={() => setIsTrackDrawerOpen(false)}
                                     />
                                 )

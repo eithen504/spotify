@@ -30,6 +30,7 @@ import { useGetCurrentUserLibraryItems } from "../../hooks/library";
 import { useAddItemsToPlaylist, useUploadPlaylist } from "../../hooks/playlist";
 import SearchForEntity from "../../components/SearchForEntity";
 import { AlbumPageSkeleton } from "../../components/Skeletons";
+import EntityImageDialog from "../../components/EntityImageDialog";
 
 /* ---------- Constants ---------- */
 const adminId = import.meta.env.VITE_ADMIN_ID
@@ -57,6 +58,7 @@ const AlbumPage = () => {
     });
     const [currentMenuTrackIndex, setCurrentMenuTrackIndex] = useState(-1);
     const [isEditAlbumDialogOpen, setIsEditAlbumDialogOpen] = useState(false);
+    const [isAlbumImageDialogOpen, setIsAlbumImageDialogOpen] = useState(false);
     const [isPreviewAlbumModalOpen, setIsPreviewAlbumModalOpen] = useState(false);
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
 
@@ -278,8 +280,11 @@ const AlbumPage = () => {
     }
 
     const onEditAlbum = () => {
-        if (!isOwnAlbum) return;
-        setIsEditAlbumDialogOpen(true);
+        if (isOwnAlbum) {
+            setIsEditAlbumDialogOpen(true);
+        } else {
+            setIsAlbumImageDialogOpen(true);
+        }
     }
 
     const handlers: Handlers = {
@@ -388,7 +393,7 @@ const AlbumPage = () => {
                                 isPlaying: isPlayingCurrentAlbum
                             }}
                             entityMenuOptions={albumMenuOptions}
-                            entityDrawerHeight="98"
+                            entityDrawerHeight="381px"
                         />
 
                         <div className="relative max-w-[90rem] mx-auto">
@@ -414,7 +419,7 @@ const AlbumPage = () => {
                                 setCurrentMenuTrackIndex={setCurrentMenuTrackIndex}
                                 trackMenuOptions={trackMenuOptions}
                                 handlePlayPauseTrack={handlePlayPauseTrack}
-                                entityDrawerHeight="110"
+                                entityDrawerHeight="429px"
                             />
                         </div>
                     </>
@@ -427,10 +432,6 @@ const AlbumPage = () => {
             }
 
             <Footer />
-
-            {
-                isPreviewAlbumModalOpen && <PreviewEntityModal tracks={data.tracks} onClose={() => setIsPreviewAlbumModalOpen(false)} />
-            }
 
             {
                 isAuthRequiredModalOpen && <AuthRequiredModal onClose={() => setIsAuthRequiredModalOpen(false)} imgUrl={imgUrl} />
@@ -450,6 +451,18 @@ const AlbumPage = () => {
                     handleUpdateEntity={handleUpdateAlbum}
                 />
             }
+
+            {
+                isAlbumImageDialogOpen && <EntityImageDialog
+                    imageUrl={imgUrl}
+                    onClose={() => setIsAlbumImageDialogOpen(false)}
+                />
+            }
+
+            {
+                isPreviewAlbumModalOpen && <PreviewEntityModal tracks={data.tracks} onClose={() => setIsPreviewAlbumModalOpen(false)} />
+            }
+
         </div>
     );
 };

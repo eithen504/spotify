@@ -240,7 +240,7 @@ const TrackPage = () => {
                     isPlaying: isPlayingCurrentTrack
                 }}
                 entityMenuOptions={trackMenuOptions}
-                entityDrawerHeight="122"
+                entityDrawerHeight="477px"
             />
 
             <div className="relative max-w-[90rem] mx-auto">

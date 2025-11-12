@@ -47,8 +47,9 @@ const PlaybackController = () => {
         const audio = audioRef.current
 
         if (audio) {
-            setPreferences({ systemVolume: value })
-            localStorage.setItem("systemVolume", `${value[0]}`);
+            const newPreferences = { ...preferences, systemVolume: value };
+            setPreferences(newPreferences)
+            localStorage.setItem("preferences", JSON.stringify(newPreferences));
             audio.volume = value[0] / 100;
         }
     };
