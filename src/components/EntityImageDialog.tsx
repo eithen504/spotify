@@ -11,7 +11,7 @@ const EntityImageDialog: React.FC<EntityImageDialogProps> = ({ imageUrl, onClose
         <Dialog open={true} onOpenChange={onClose}>
             <DialogContent
                 showCloseButton={false}
-                className="bg-transparent"
+                className="bg-transparent border-transparent"
             >
                 <img src={imageUrl} />
             </DialogContent>
