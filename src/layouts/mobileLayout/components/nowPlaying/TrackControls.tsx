@@ -34,7 +34,7 @@ const TrackControls: React.FC<TrackControlsProps> = ({ handlePlayPauseTrack, han
         <div className="px-6 py-3 flex-shrink-0">
             <div className="text-[#ffffff] flex items-center justify-between">
                 <button
-                    className="cursor-pointer"
+                    className={`${hasTrackInRepeat ? "text-[#3BE477]" : "text-[#ffffff]"} cursor-pointer`}
                     onClick={handleRepeatTrack}
                 >
                     <RepeatIcon width="23" height="23" />
