@@ -33,6 +33,15 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
     const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
 
+    /* ---------- Methods Or Functions ---------- */
+    const handleRepeatTrack = () => {
+        if (hasTrackInRepeat) {
+            removeFromRepeatTrack(trackDetails._id);
+        } else {
+            addToRepeatTracks(trackDetails._id);
+        }
+    }
+
     return (
         <div className="flex flex-col items-center w-1/2">
             <div className="flex items-center space-x-6 mb-2 text-[#b3b3b3]">
@@ -74,13 +83,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
 
                 <button className={`${trackDetails._id ? (hasTrackInRepeat ? "text-[#3BE477]" : "dynamic-text-hover") + " cursor-pointer" : "cursor-not-allowed"}`}
                     title={trackDetails._id ? (hasTrackInRepeat ? "Disable Repeat" : "Enable Repeat") : ""}
-                    onClick={() => {
-                        if (hasTrackInRepeat) {
-                            removeFromRepeatTrack(trackDetails._id)
-                        } else {
-                            addToRepeatTracks(trackDetails._id)
-                        }
-                    }}
+                    onClick={handleRepeatTrack}
                     disabled={!trackDetails._id}
                 >
                     <RepeatIcon width="16" height="16" />

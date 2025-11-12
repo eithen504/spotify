@@ -4,6 +4,8 @@ import { getVolumeIcon } from "../../../../utils"
 import { useUIPreferencesStore } from "../../../../store/useUIPreferenceStore"
 import { useState } from "react"
 import { Slider } from "../../../../components/ui/slider"
+import { useShare } from "../../../../hooks/share"
+import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore"
 
 interface BottomActionsProps {
     handleVolumeChange: (value: number[]) => void
@@ -15,6 +17,10 @@ const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => 
 
     /* ---------- Stores ---------- */
     const { preferences: { systemVolume } } = useUIPreferencesStore();
+    const { trackDetails } = useTrackDetailsStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { share } = useShare();
 
     /* ---------- Derived Values ---------- */
     const suggestedVolumeIcon = getVolumeIcon(systemVolume[0]);
@@ -42,7 +48,9 @@ const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => 
                     )}
                 </div>
 
-                <button className="cursor-pointer">
+                <button className="cursor-pointer"
+                    onClick={() => share(`/track/${trackDetails._id}`)}
+                >
                     <ShareIcon width="17" height="17" />
                 </button>
             </div>

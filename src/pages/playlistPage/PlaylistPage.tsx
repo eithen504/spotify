@@ -45,8 +45,8 @@ const controls: Controls = {
 
 const PlaylistPage = () => {
     /* ---------- Internal Hooks ---------- */
-    const { id } = useParams();
     const navigate = useNavigate();
+    const { id } = useParams();
     const queryClient = useQueryClient();
 
     /* ---------- Local States ---------- */

@@ -1,5 +1,5 @@
 import type React from "react"
-import { AddIcon, AddToQueueIcon, CreditIcon, DownArrowIcon, LogoIcon, MoreIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon } from "../../../../Svgs";
+import { AddIcon, AddToQueueIcon, CreditIcon, DownArrowIcon, LogoIcon, MoreIcon, PlusIcon, AlreadyAddedToQueueIcon, ReportIcon, RightArrowIndicatorIcon, SavedIcon, ShareIcon, AlbumIcon } from "../../../../Svgs";
 import type { MenuOptions } from "../../../../types";
 import { useLikeTrack, useTrackLikeStatus } from "../../../../hooks/like";
 import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore";
@@ -8,13 +8,17 @@ import { useState } from "react";
 import { useQueueStore } from "../../../../store/useQueueStore";
 import { useAlbumStore } from "../../../../store/useAlbumStore";
 import { usePlaylistStore } from "../../../../store/usePlaylistStore";
-import ActionDrawer from "../../../../components/EntityOptionsDrawer";
+import EntityOptionsDrawer from "../../../../components/EntityOptionsDrawer";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
     onClose: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onClose }) => {
+    /* ---------- Internal Hooks ---------- */
+    const navigate = useNavigate();
+
     /* ---------- Local States ---------- */
     const [isTrackDrawerOpen, setIsTrackDrawerOpen] = useState(false);
 
@@ -74,6 +78,13 @@ const Header: React.FC<HeaderProps> = ({ onClose }) => {
             action: () => { },
         },
         {
+            icon: <AlbumIcon width="16" height="16" />,
+            label: "Go To Album",
+            action: () => {
+                navigate(`/album/${trackDetails?.albumId}`);
+            }
+        },
+        {
             icon: <ShareIcon width="16" height="16" />,
             label: "Share",
             action: () => {
@@ -106,14 +117,14 @@ const Header: React.FC<HeaderProps> = ({ onClose }) => {
                 </button>
 
                 {isTrackDrawerOpen && (
-                    <ActionDrawer
+                    <EntityOptionsDrawer
                         onClose={() => setIsTrackDrawerOpen(false)}
                         options={trackDrawerOptions}
                         entity={{
                             title: trackDetails.title,
                             imgUrl: trackDetails.coverImageUrl
                         }}
-                        height="110"
+                        height="477px"
                     />
                 )}
             </div>

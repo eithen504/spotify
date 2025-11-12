@@ -44,7 +44,7 @@ const PlaybackController = () => {
     }
 
     const handleVolumeChange = (value: number[]) => {
-        const audio = audioRef.current
+        const audio = audioRef.current 
 
         if (audio) {
             const newPreferences = { ...preferences, systemVolume: value };
