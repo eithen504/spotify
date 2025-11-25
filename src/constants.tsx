@@ -293,6 +293,7 @@ const LANGUAGES: Language[] = [
     "Other"
 ];
 
+const SPOTIFY_IMAGE_URL = "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c438d2441afb02250f8cd040e";
 
 const FUSION_SEARCH_HISTORY_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:fusionSearchHistory";
 
@@ -332,6 +333,7 @@ export {
     SHOW_PAGE_TABS,
     LANGUAGES,
     SEARCH_ITEM_TYPES,
+    SPOTIFY_IMAGE_URL,
     FUSION_SEARCH_HISTORY_KEY,
     TABLE_VIEW_KEY,
     TABLE_COLUMNS_CONFIG_KEY,

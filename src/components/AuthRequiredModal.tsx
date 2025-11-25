@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { useDominantColor } from "../hooks/color";
 import { Link, useNavigate } from "react-router-dom";
+import { PlaylistSectionItemPlaceholder } from "./Placeholders";
+import { SPOTIFY_IMAGE_URL } from "../constants";
 
 interface AuthRequiredModalProps {
     onClose: () => void;
@@ -15,7 +17,7 @@ const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
 
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const { dominantColor } = useDominantColor(imgUrl);
+    const { dominantColor } = useDominantColor(imgUrl || SPOTIFY_IMAGE_URL);
 
     useEffect(() => {
         // Prevent body scroll when modal is open
@@ -45,13 +47,13 @@ const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
                 <div
                     className="flex animate-slide-up flex-col md:flex-row items-center gap-6 md:gap-10 p-8 md:p-16 text-white border border-[#1F1F1F] rounded-md w-full max-w-[815px] shadow-lg relative"
                     style={{
-                        background: `linear-gradient(${dominantColor || "#3C3C3C"}, #121212)`,
+                        background: `linear-gradient(${dominantColor}, #121212)`,
                     }}
                 >
                     {/* Left: Album/Poster */}
                     <div className="flex-shrink-0 w-[180px] h-[180px] md:w-[290px] md:h-[290px] overflow-hidden rounded-md">
                         <img
-                            src={imgUrl}
+                            src={imgUrl || SPOTIFY_IMAGE_URL}
                             alt="Auth Required"
                             className="w-full h-full object-cover rounded-md"
                         />
