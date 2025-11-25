@@ -1,21 +1,16 @@
-import React from "react";
-import { Dialog, DialogContent } from "../../../../../components/ui/dialog";
-import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore";
-import { formatDate } from "../../../../../utils";
+import type React from "react";
+import type { Track } from "../types";
+import { Dialog, DialogContent } from "./ui/dialog";
+import { formatDate } from "../utils";
 
-interface ShowCreditDialogProps {
-    isOpen: boolean;
+interface TrackCreditsDialogProps {
+    track: Track | null
     onClose: () => void;
 }
 
-const ShowCreditDialog: React.FC<ShowCreditDialogProps> = ({
-    isOpen,
-    onClose,
-}) => {
-    const { trackDetails } = useTrackDetailsStore();
-    
+const TrackCreditsDialog: React.FC<TrackCreditsDialogProps> = ({ track, onClose }) => {
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={true} onOpenChange={onClose}>
             <DialogContent className="bg-[#282828] text-white border-none rounded-md p-6 z-500 w-[320px]">
                 {/* Title */}
                 <h2 className="text-xl font-semibold mb-4">Credits</h2>
@@ -25,19 +20,19 @@ const ShowCreditDialog: React.FC<ShowCreditDialogProps> = ({
                     <div className="space-y-4">
                         <div>
                             <p className="font-medium">Title</p>
-                            <p className="text-sm text-[#aaaaaa]">{trackDetails.title}</p>
+                            <p className="text-sm text-[#aaaaaa]">{track?.title}</p>
                         </div>
                         <div>
                             <p className="font-medium">Artist</p>
-                            <p className="text-sm text-[#aaaaaa]">{trackDetails.artist}</p>
+                            <p className="text-sm text-[#aaaaaa]">{track?.artist}</p>
                         </div>
                         <div>
                             <p className="font-medium">Upload Date</p>
-                            <p className="text-sm text-[#aaaaaa]">{formatDate(trackDetails.createdAt)}</p>
+                            <p className="text-sm text-[#aaaaaa]">{formatDate(track?.createdAt || new Date)}</p>
                         </div>
                         <div>
                             <p className="font-medium">Langauge</p>
-                            <p className="text-sm text-[#aaaaaa]">{trackDetails.language}</p>
+                            <p className="text-sm text-[#aaaaaa]">{track?.language}</p>
                         </div>
                     </div>
                 </div>
@@ -47,4 +42,4 @@ const ShowCreditDialog: React.FC<ShowCreditDialogProps> = ({
     );
 };
 
-export default ShowCreditDialog
+export default TrackCreditsDialog

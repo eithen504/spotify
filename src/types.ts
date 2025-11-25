@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import type { LIBRARY_SORTS, LIBRARY_TABS, LIBRARY_VIEWS, SEARCH_ITEM_TYPES } from "./constants";
 
 export type TrackDetails = Track & {
     isPlaying: boolean;
@@ -32,7 +33,7 @@ export type Genre =
     | "Strees Relief"
     | "Instrumental"
     | "Happy"
-    | "workout"
+    | "Workout"
     | "Focus"
     | "Dance"
     | "Cooking"
@@ -55,12 +56,16 @@ export type ResizePanel = 'left' | 'right' | null;
 export type HomePageTab = "All" | "Music" | "Podcasts";
 export type HomePageTabs = HomePageTab[];
 
-export type LeftSidebarTab = "Playlists" | "Save Playlists" | "Save Albums" | "Folders";
-export type LeftSidebarTabs = LeftSidebarTab[];
-export type LeftSidebarTabsMap = Record<LeftSidebarTab, boolean>;
 
-export type LibrarySort = "Recently Added" | "Alphabetical A To Z" | "Alphabetical Z To A";
-export type LibraryView = 'Compact List' | 'Default List' | 'Compact Grid' | 'Default Grid';
+
+export type LibraryTab = typeof LIBRARY_TABS[number];
+export type LibraryTabs = LibraryTab[];
+
+export type LibrarySort = typeof LIBRARY_SORTS[number];
+
+export type LibraryView = typeof LIBRARY_VIEWS[number];
+
+
 
 export type LibrarySortOptionsMap = Record<LibrarySort, boolean>;
 
@@ -74,9 +79,6 @@ export type ControlKeys = "Play" | "Preview" | "Save" | "Share" | "Follow" | "Mo
 export type Controls = Record<ControlKeys, boolean>;
 export type Handlers = Record<ControlKeys, () => void>;
 
-export type Column = "Artist" | "Album" | "Duration" | "Date added";
-export type Columns = Record<Column, boolean>
-
 export type ShowPageTab = "All" | "Public" | "Private";
 export type ShowPageTabs = ShowPageTab[];
 
@@ -88,6 +90,11 @@ export type NavigationItem = {
     Icon: JSX.Element;
     ActiveIcon: JSX.Element;
 }
+
+export type TrackMenuState = {
+    isOpen: boolean;
+    track: Track | null;
+};
 
 export type Language =
     | "Arabic"
@@ -119,15 +126,18 @@ export type Language =
     | "Vietnamese"
     | "Other";
 
-export type SearchItemType = "Track" | "Album" | "Playlist" | "Search";
+
+export type SearchItemType = typeof SEARCH_ITEM_TYPES[number];
 
 export type SearchItem = {
     type: SearchItemType,
     _id: string;
     title: string;
-    artist?: string;
-    coverImageUrl?: string;
+    artist: string;
+    coverImageUrl: string;
 };
+
+export type SearchItems = SearchItem[];
 
 export type AlphabetLetter =
     | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J'
@@ -139,6 +149,24 @@ export type SearchDictionary = {
 };
 
 export type SearchItemIDMap = Record<string, SearchItem>;
+
+/* Table Column */
+export type ColumnVisibility = {
+    visible: boolean;
+};
+
+export type TableView = "Compact List" | "Default List";
+
+export type TableColumns = {
+    INDEX: ColumnVisibility;
+    TITLE: ColumnVisibility;
+    ARTIST: ColumnVisibility;
+    ALBUM?: ColumnVisibility;
+    "DATE ADDED"?: ColumnVisibility;
+    DURATION: ColumnVisibility;
+};
+
+export type TableColumnKey = keyof TableColumns
 
 export type User = {
     _id: string;

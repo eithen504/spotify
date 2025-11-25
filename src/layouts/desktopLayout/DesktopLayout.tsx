@@ -7,8 +7,7 @@ import PlaybackController from "./components/playbackController/PlaybackControll
 
 export default function DesktopLayout() {
   /* ---------- Stores ---------- */
-  const { preferences } = useUIPreferencesStore();
-  const { rightSidebar } = preferences;
+  const { rightSidebar } = useUIPreferencesStore();
   const { isNowPlayingViewExpanded } = rightSidebar;
 
   /* ---------- Custom Hooks ---------- */

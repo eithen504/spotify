@@ -23,6 +23,7 @@ import { useShare } from "../../hooks/share";
 import AuthRequiredModal from "../../components/AuthRequiredModal";
 import { useQueueStore } from "../../store/useQueueStore";
 import { formatTotalAsHMS } from "../../utils";
+import TrackCreditsDialog from "../../components/TrackCreditsDialog";
 
 /*---------- Constants ----------*/
 const adminId = import.meta.env.VITE_ADMIN_ID;
@@ -44,10 +45,10 @@ const TrackPage = () => {
     /* ----------Local States---------- */
     const [isEditTrackDialogOpen, setIsEditTrackDialogOpen] = useState(false);
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
+    const [isTrackCreditsDialogOpen, setIsTrackCreditsDialogOpen] = useState(false);
 
     /*----------Stores----------*/
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
     const { albumData: { albumId, activeTrackId }, setAlbumData } = useAlbumStore();
@@ -118,13 +119,15 @@ const TrackPage = () => {
         {
             icon: <CreditIcon width="16" height="16" />,
             label: "View Credits",
-            action: () => { },
+            action: () => {
+                setIsTrackCreditsDialogOpen(true);
+            },
         },
         {
             icon: <ShareIcon width="16" height="16" />,
             label: "Share",
             action: () => {
-                share(`/track/${id || ""}`)
+                share(`/track/${id || ""}`);
             },
         },
         {
@@ -192,7 +195,7 @@ const TrackPage = () => {
 
     if (isfetchingTrack) return <TrackPageSkeleton />;
 
-    if (!isfetchingTrack && !track) return <NotFoundEntity title="Couldn't Find That Track" />;
+    if (!track) return <NotFoundEntity title="Couldn't Find That Track" />;
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -279,6 +282,15 @@ const TrackPage = () => {
                     isPending={isPending}
                     handleUpdateEntity={handleUpdateTrack}
                 />
+            }
+
+            {
+                isTrackCreditsDialogOpen && (
+                    <TrackCreditsDialog
+                        track={track}
+                        onClose={() => setIsTrackCreditsDialogOpen(false)}
+                    />
+                )
             }
         </div>
     );

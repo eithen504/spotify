@@ -13,9 +13,9 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
     const [isScrolled, setIsScrolled] = useState(false);
 
     const sidebarRef = useRef<HTMLDivElement | null>(null);
-    
-    const { preferences } = useUIPreferencesStore();
-    const { activeFolder: { id: activeFolderId } } = preferences;
+
+    const { openedFolder } = useUIPreferencesStore();
+    const { id: openedFolderId } = openedFolder;
 
     useEffect(() => {
         const sidebarEl = sidebarRef.current
@@ -48,7 +48,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
 
                 {/* Tabs Section */}
                 {
-                    !activeFolderId && <TabsSection />
+                    !openedFolderId && <TabsSection />
                 }
 
                 {/* Library Toolbar :- Search Section + Sort & View Section */}

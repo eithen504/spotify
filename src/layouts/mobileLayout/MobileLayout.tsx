@@ -9,6 +9,7 @@ import { useQueueStore } from '../../store/useQueueStore';
 import { usePlaylistStore } from '../../store/usePlaylistStore';
 import { useRepeatTrackStore } from '../../store/useRepeatTrackStore';
 import { useAlbumStore } from '../../store/useAlbumStore';
+import { toast } from 'sonner';
 
 export default function MobileLayout() {
     /* ---------- Local States ---------- */
@@ -21,38 +22,19 @@ export default function MobileLayout() {
 
     /* ---------- Stores ---------- */
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
-    const { preferences: { systemVolume }, setPreferences } = useUIPreferencesStore();
+    const { systemVolume, setSystemVolume } = useUIPreferencesStore();
     const { albumData: { albumId }, setAlbumData } = useAlbumStore();
     const { playlistData: { playlistId }, setPlaylistData } = usePlaylistStore();
     const { customQueue, activeEntityQueueListNode, entityId: queueEntityId, insertAfterActiveEntityListNode, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
-    const { repeatTracks } = useRepeatTrackStore();
+    const { repeatTracks, addToRepeatTracks, removeFromRepeatTrack } = useRepeatTrackStore();
 
     /* ---------- Derived Values ---------- */
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
- 
+
     /* ---------- Methods Or Functions ---------- */
     const handlePlayPauseTrack = () => {
         setTrackDetails({ isPlaying: !trackDetails.isPlaying })
     }
-
-    const handleProgressChange = (value: number[]) => {
-        const audio = audioRef.current
-        if (audio) {
-            // Convert percentage to seconds
-            const newTimeInSeconds = (value[0] / 100) * audio.duration;
-            audio.currentTime = newTimeInSeconds;
-        }
-    }
-
-    const handleVolumeChange = (value: number[]) => {
-        const audio = audioRef.current
-
-        if (audio) {
-            setPreferences({ systemVolume: value })
-            localStorage.setItem("systemVolume", `${value[0]}`);
-            audio.volume = value[0] / 100;
-        }
-    };
 
     const handlePlayNextTrack = () => {
         const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
@@ -177,6 +159,34 @@ export default function MobileLayout() {
         }
     }
 
+    const handleRepeatTrack = () => {
+        if (hasTrackInRepeat) {
+            removeFromRepeatTrack(trackDetails._id);
+            toast.success("Track Is Remove From Repeat");
+        } else {
+            addToRepeatTracks(trackDetails._id);
+            toast.success("Track Is Set To Repeat");
+        }
+    }
+
+    const handleProgressChange = (value: number[]) => {
+        const audio = audioRef.current
+        if (audio) {
+            // Convert percentage to seconds
+            const newTimeInSeconds = (value[0] / 100) * audio.duration;
+            audio.currentTime = newTimeInSeconds;
+        }
+    }
+
+    const handleVolumeChange = (value: number[]) => {
+        const audio = audioRef.current
+
+        if (audio) {
+            setSystemVolume(value);
+            audio.volume = value[0] / 100;
+        }
+    };
+
     /* ---------- UseEffects ---------- */
     useEffect(() => {
         const audio = audioRef.current;
@@ -243,17 +253,21 @@ export default function MobileLayout() {
             <MainContent />
 
             {/* Now Playing */}
-            <NowPlaying
-                isOpen={isNowPlayingDrawerOpen}
-                onClose={() => setIsNowPlayingDrawerOpen(false)}
-                progress={progress}
-                currentTime={currentTime}
-                handlePlayPauseTrack={handlePlayPauseTrack}
-                handleProgressChange={handleProgressChange}
-                handleVolumeChange={handleVolumeChange}
-                handlePlayNextTrack={handlePlayNextTrack}
-                handlePlayPrevTrack={handlePlayPrevTrack}
-            />
+            {
+                isNowPlayingDrawerOpen && (
+                    <NowPlaying
+                        onClose={() => setIsNowPlayingDrawerOpen(false)}
+                        progress={progress}
+                        currentTime={currentTime}
+                        handlePlayPauseTrack={handlePlayPauseTrack}
+                        handlePlayNextTrack={handlePlayNextTrack}
+                        handlePlayPrevTrack={handlePlayPrevTrack}
+                        handleRepeatTrack={handleRepeatTrack}
+                        handleProgressChange={handleProgressChange}
+                        handleVolumeChange={handleVolumeChange}
+                    />
+                )
+            }
 
             {/* Mobile Mini Player */}
             {

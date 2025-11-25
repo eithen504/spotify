@@ -4,7 +4,7 @@ import CompactListItems from "./layouts/desktopLayout/components/mainContent/lef
 import DefaultGridItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultGridItems";
 import DefaultListItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, LeftSidebarTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language, SortOptionsMap, LeftSidebarTabsMap } from "./types";
+import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, LibraryTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language, LibrarySortOptionsMap } from "./types";
 
 const GENRES: Genres = [
     "Party",
@@ -17,7 +17,7 @@ const GENRES: Genres = [
     "Strees Relief",
     "Instrumental",
     "Happy",
-    "workout",
+    "Workout",
     "Focus",
     "Dance",
     "Cooking",
@@ -90,7 +90,7 @@ const GENRE_OPTIONS: GenreOption[] = [
     },
     {
         id: "11FYRxapWUkowNzXFtVLyB",
-        title: "workout",
+        title: "Workout",
         bgColor: "bg-[#bcbfba]",
         image: "https://i.scdn.co/image/ab67706f00000002681908e31127979d43c8dbc6"
     },
@@ -149,7 +149,7 @@ const GENRES_ID_TITLE_MAP: GenresIdTitleMap = {
     "8DLoXEHwnZpVuJkNHgwUex": "Strees Relief",
     "9NKebCaYi6TH1VRGyxVtBP": "Instrumental",
     "10JXpYKDwxUR6LsZyGbUVo": "Happy",
-    "11FYRxapWUkowNzXFtVLyB": "workout",
+    "11FYRxapWUkowNzXFtVLyB": "Workout",
     "12HBETGksRQzyXtDjVqvMe": "Focus",
     "13MYkJpzyXTvCAWDtzJKVE": "Dance",
     "14QJFnkPLTqEVdSgXLHkZe": "Cooking",
@@ -184,14 +184,28 @@ const MAX_AUDIO_DURATION = 420;
 
 const HOMEPAGE_TABS: HomePageTabs = ["All", "Music", "Podcasts"];
 
-const LEFT_SIDEBAR_TABS: LeftSidebarTabs = ["Playlists", "Save Playlists", "Save Albums", "Folders"];
-const LEFT_SIDEBAR_TABS_MAP: LeftSidebarTabsMap = {
-  "Playlists": true,
-  "Save Playlists": true,
-  "Save Albums": true,
-  "Folders": true,
-};
- 
+const LIBRARY_TABS = [
+  "Playlists",
+  "Save Playlists",
+  "Save Albums",
+  "Folders",
+] as const;
+
+const LIBRARY_SORTS = [
+  "Recently Added",
+  "Alphabetical A To Z",
+  "Alphabetical Z To A",
+] as const;
+
+const LIBRARY_VIEWS = [
+  "Compact List",
+  "Default List",
+  "Compact Grid",
+  "Default Grid",
+] as const;
+
+const SEARCH_ITEM_TYPES = ["Album", "Track", "Playlist"] as const;
+
 const VIEW_ICONS: ViewIcon = {
     "Compact List": <CompactListIcon width="16" height="16" />,
     "Default List": <DefaultListIcon width="16" height="16" />,
@@ -213,7 +227,7 @@ const VIEW_SKELETONS: ViewSkelton = {
     "Default Grid": <DefaultGridItemsSkeleton />,
 };
 
-const SORT_OPTIONS_MAP: SortOptionsMap = {
+const SORT_OPTIONS_MAP: LibrarySortOptionsMap = {
     "Recently Added": true,
     "Alphabetical A To Z": true,
     "Alphabetical Z To A": true,
@@ -279,6 +293,27 @@ const LANGUAGES: Language[] = [
     "Other"
 ];
 
+
+const FUSION_SEARCH_HISTORY_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:fusionSearchHistory";
+
+const TABLE_VIEW_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:table-view";
+
+const TABLE_COLUMNS_CONFIG_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:table-columns-config";
+
+const LEFT_SIDEBAR_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:left-sidebar";
+
+const LIBRARY_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:library";
+
+const RIGHT_SIDEBAR_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:right-sidebar";
+
+const MINI_PLAYER_WINDOW_OPEN_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:mini-player-window-open";
+
+const SYSTEM_VOLUME_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:system-volume";
+
+const OPENED_FOLDER_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:opened-folder";
+
+const RECENT_PLAYLISTS_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:recent-playlist";
+
 export {
     GENRES,
     GENRE_OPTIONS,
@@ -286,13 +321,25 @@ export {
     GENRES_ID_BGCOLOR_MAP,
     MAX_AUDIO_DURATION,
     HOMEPAGE_TABS,
-    LEFT_SIDEBAR_TABS,
-    LEFT_SIDEBAR_TABS_MAP,
+    LIBRARY_TABS,
+    LIBRARY_SORTS,
+    LIBRARY_VIEWS,
     VIEW_ICONS,
     VIEW_COMPONENTS,
     VIEW_SKELETONS,
     NAVIGATION_ITEMS,
     SORT_OPTIONS_MAP,
     SHOW_PAGE_TABS,
-    LANGUAGES
+    LANGUAGES,
+    SEARCH_ITEM_TYPES,
+    FUSION_SEARCH_HISTORY_KEY,
+    TABLE_VIEW_KEY,
+    TABLE_COLUMNS_CONFIG_KEY,
+    LEFT_SIDEBAR_KEY,
+    LIBRARY_KEY,
+    RIGHT_SIDEBAR_KEY,
+    MINI_PLAYER_WINDOW_OPEN_KEY,
+    SYSTEM_VOLUME_KEY,
+    OPENED_FOLDER_KEY,
+    RECENT_PLAYLISTS_KEY
 }

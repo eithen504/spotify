@@ -3,235 +3,178 @@ import { useBreakPoint } from "../hooks/breakPoint"
 import DesktopLayout from "./desktopLayout/DesktopLayout"
 import MobileLayout from "./mobileLayout/MobileLayout"
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore"
-import type { LeftSidebarTab, LibrarySort, LibraryView } from "../types"
-import { LEFT_SIDEBAR_TABS_MAP, SORT_OPTIONS_MAP, VIEW_COMPONENTS } from "../constants"
+import type { TableView } from "../types"
+import { TABLE_COLUMNS_CONFIG_KEY, TABLE_VIEW_KEY, OPENED_FOLDER_KEY, LEFT_SIDEBAR_KEY, LIBRARY_KEY, RIGHT_SIDEBAR_KEY, MINI_PLAYER_WINDOW_OPEN_KEY, SYSTEM_VOLUME_KEY } from "../constants"
 import { useCheckAuth } from "../hooks/auth"
 import { LogoIcon } from "../Svgs"
-
-//   leftPanelSize: number;
-//   rightPanelSize: number;
-//   isLeftSidebarExpanded: boolean;
-//   showNowPlayingView: boolean;
-//   showQueueView: boolean;
-//   isNowPlayingViewExpanded: boolean;
-//   isNowPlayingViewFullScreen: boolean;
-//   isMiniPlayerWindowOpen: boolean;
-//   sort: Sort;
-//   view: View;
-//   systemVolume: number[];
-//   leftSidebarActiveTab: LeftSidebarTab;
-//   folder: FolderInfo;
+import { validateAlbumTableColumns, validateLeftSidebar, validateLibrary, validateOpenedFolder, validatePlaylistTableColumns, validateRightSidebar, validateSystemVolume } from "../validators"
+import { useTableColumnVisibilityStore } from "../store/useTableColumnVisibilityStore"
+import { safeJSONParse } from "../utils"
 
 export default function AppLayout() {
     /* ---------- Local States ---------- */
     const [isLoading, setIsLoading] = useState(true);
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar, setLeftSidebar, setLibrary, setRightSidebar, setIsMiniPlayerWindowOpen, setSystemVolume, setOpenedFolder } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
+    const { setAlbumTableColumns, setPlaylistTableColumns, setTableView } = useTableColumnVisibilityStore();
 
     /* ---------- Custom Hooks ---------- */
     const { isLoading: isFetchingCurrentUser } = useCheckAuth();
     const { breakPoint } = useBreakPoint();
 
     /* ---------- UseEffects ---------- */
-    // useEffect(() => {
-    //     /*
-
-    //     */
-    //     let leftPanelSize = Number(localStorage.getItem("leftPanelSize")) || 22;
-    //     if (leftPanelSize > 38) {
-    //         leftPanelSize = 22;
-    //         localStorage.setItem("leftPanelSize", `${leftPanelSize}`);
-    //     } 
-
-    //     let rightPanelSize = Number(localStorage.getItem("rightPanelSize")) || 20;
-    //     if (rightPanelSize > 25) {
-    //         rightPanelSize = 20;
-    //         localStorage.setItem("rightPanelSize", `${rightPanelSize}`);
-    //     }
-
-    //     const showNowPlayingView = localStorage.getItem("showNowPlayingView") || "false";
-    //     const showQueueView = localStorage.getItem("showQueueView") || "false";
-
-    //     let sort = localStorage.getItem("sort") || "Recently Added";
-    //     if (!SORT_OPTIONS_MAP[sort as Sort]) {
-    //         sort = "Recently Added";
-    //         localStorage.setItem("sort", sort);
-    //     }
-
-    //     let view = localStorage.getItem("view") || "Default List";
-    //     if (!VIEW_COMPONENTS[view as View]) {
-    //         view = "Default List";
-    //         localStorage.setItem("view", view);
-    //     }
-
-    //     let volume = Number(localStorage.getItem("systemVolume")) || 100;
-    //     if (volume > 100 || volume < 0) {
-    //         volume = 100;
-    //         localStorage.setItem("volume", `${volume}`);
-    //     }
-
-    //     let leftSidebarActiveTab = localStorage.getItem("leftSidebarActiveTab") || "Playlists";
-    //     if (!LEFT_SIDEBAR_TABS.find((item) => item == leftSidebarActiveTab)) {
-    //         leftSidebarActiveTab = "Playlists";
-    //         localStorage.setItem("leftSidebarActiveTab", leftSidebarActiveTab);
-    //     }
-
-    //     const activeFolder = JSON.parse(localStorage.getItem("folder") || "{}");
-
-    //     setPreferences({
-
-    //     });
-
-    //     // setPreferences({
-    //     //     leftPanelSize,
-    //     //     rightPanelSize,
-    //     //     showNowPlayingView: showNowPlayingView == "true",
-    //     //     showQueueView: showQueueView == "true",
-    //     //     sort: sort as Sort,
-    //     //     view: view as View,
-    //     //     systemVolume: [volume],
-    //     //     leftSidebarActiveTab: leftSidebarActiveTab as LeftSidebarTab,
-    //     //     folder: folder
-    //     // });
-    // }, [])
-
     useEffect(() => {
-        /*
- preferences: {
-    leftSidebar: {
-      panelSize: 22,
-      isExpanded: false,
-    },
-    library: {
-      activeTab: "Playlists",
-      sort: "Recently Added",
-      view: "Default List",
-    },
-    rightSidebar: {
-      panelSize: 20,
-      showNowPlayingView: false,
-      showQueueView: false,
-      isNowPlayingViewExpanded: false,
-      isNowPlayingViewFullScreen: false,
-    },
-    isMiniPlayerWindowOpen: false,
-    systemVolume: [100],
-    activeFolder: {
-      id: "",
-      name: ""
-    }
-  },
-        */
-        let preferences = JSON.parse(localStorage.getItem("preferences") || "{}");
+        /* Left Sidebar */
+        const rawLeftSidebar = localStorage.getItem(LEFT_SIDEBAR_KEY) || "{}";
+        const fallbackLeftSidebar = {
+            panelSize: 22,
+            isExpanded: false
+        }
+        let leftSidebar = safeJSONParse(rawLeftSidebar, fallbackLeftSidebar);
+        const isValidLeftSidebar = validateLeftSidebar(leftSidebar);
 
-        // Left Sidebar
-        let leftSidebar = preferences?.leftSidebar;
-
-        let leftPanelSize = leftSidebar?.panelSize || 22;
-        if (leftPanelSize > 38) {
-            leftPanelSize = 22;
+        if (!isValidLeftSidebar) {
+            leftSidebar = fallbackLeftSidebar;
         }
 
-        // Library
-        const library = preferences?.library;
-        let libraryActiveTab = library?.activeTab || "Playlists";
-        if (!LEFT_SIDEBAR_TABS_MAP[libraryActiveTab as LeftSidebarTab]) {
-            libraryActiveTab = "Playlists";
+        setLeftSidebar(leftSidebar);
+
+        /* Library */
+        const rawLibrary = localStorage.getItem(LIBRARY_KEY) || "{}";
+        const fallbackLibrary = {
+            activeTab: "Playlists",
+            sort: "Recently Added",
+            view: "Default List",
+        }
+        let library = safeJSONParse(rawLibrary, fallbackLibrary);
+        const isValidLibrary = validateLibrary(library);
+
+        if (!isValidLibrary) {
+            library = fallbackLibrary;
         }
 
-        let librarySort = library?.sort || "Recently Added";
-        if (!SORT_OPTIONS_MAP[librarySort as LibrarySort]) {
-            librarySort = "Recently Added";
+        setLibrary(library);
+
+        /* Right Sidebar */
+        const rawRightSidebar = localStorage.getItem(RIGHT_SIDEBAR_KEY) || "{}";
+        const fallbackRightSidebar = {
+            panelSize: 20,
+            showNowPlayingView: false,
+            showQueueView: false,
+            isNowPlayingViewExpanded: false,
+            isNowPlayingViewFullScreen: false
+        }
+        let rightSidebar = safeJSONParse(rawRightSidebar, fallbackRightSidebar);
+        const isValidRightSidebar = validateRightSidebar(rightSidebar);
+
+        if (!isValidRightSidebar) {
+            rightSidebar = fallbackRightSidebar;
         }
 
-        let libraryView = library?.view || "Default List";
-        if (!VIEW_COMPONENTS[libraryView as LibraryView]) {
-            libraryView = "Default List";
+        setRightSidebar(rightSidebar);
+
+        /* Mini Player Window */
+        let rawIsMiniPlayerWindowOpen = localStorage.getItem(MINI_PLAYER_WINDOW_OPEN_KEY) || "false";
+        let isMiniPlayerWindowOpen = safeJSONParse(rawIsMiniPlayerWindowOpen, false);
+
+        setIsMiniPlayerWindowOpen(isMiniPlayerWindowOpen);
+
+        /* System Volume */
+        let rawSystemVolume = localStorage.getItem(SYSTEM_VOLUME_KEY) || "[100]";
+        const fallbackSystemVolume = [100];
+        let systemVolume = safeJSONParse(rawSystemVolume, fallbackSystemVolume);
+
+        let isValidSystemVolume = validateSystemVolume(systemVolume);
+
+        if (!isValidSystemVolume) {
+            systemVolume = fallbackSystemVolume;
         }
 
-        // Right Sidebar
-        let rightSidebar = preferences?.rightSidebar;
+        setSystemVolume(systemVolume);
 
-        let rightPanelSize = rightSidebar?.panelSize || 20;
-        if (rightPanelSize > 25) {
-            rightPanelSize = 20;
+        /* Opened Folder */
+        const rawOpenedFolder = localStorage.getItem(OPENED_FOLDER_KEY) || "{}";
+        const fallbackOpenedFolder = {
+            id: "",
+            name: ""
+        }
+        let openedFolder = safeJSONParse(rawOpenedFolder, fallbackOpenedFolder);
+        const isValidOpenedFolder = validateOpenedFolder(openedFolder);
+
+        if (!isValidOpenedFolder) {
+            openedFolder = fallbackOpenedFolder;
         }
 
-        let showNowPlayingView = rightSidebar?.showNowPlayingView;
+        setOpenedFolder(openedFolder);
 
-        let showQueueView = rightSidebar?.showQueueView;
+        /* Table Columns */
+        let tableView = localStorage.getItem(TABLE_VIEW_KEY) || "Compact List";
+        tableView = tableView == "Compact List" ? "Compact List" : "Default List";
 
-        // System Volume
-        let systemVolume = preferences?.systemVolume || 100;
-        if (systemVolume > 100 || systemVolume < 0) {
-            systemVolume = 100;
-        }
-
-        // Active Folder
-        let activeFolder = preferences?.activeFolder;
-        let activeFolderId = activeFolder?.id || "";
-        let activeFolderName = activeFolder?.name || "";
-
-        preferences = {
-            leftSidebar: {
-                panelSize: leftPanelSize,
-                isExpanded: false,
+        const rawTableColumns = localStorage.getItem(TABLE_COLUMNS_CONFIG_KEY) || "{}";
+        const fallbackTableColumns = {
+            albumTableColumns: {
+                INDEX: { visible: true },
+                TITLE: { visible: true },
+                ARTIST: { visible: true },
+                DURATION: { visible: true },
             },
-            library: {
-                activeTab: libraryActiveTab,
-                sort: librarySort,
-                view: libraryView
+
+            playlistTableColumns: {
+                INDEX: { visible: true },
+                TITLE: { visible: true },
+                ARTIST: { visible: true },
+                ALBUM: { visible: true },
+                "DATE ADDED": { visible: true },
+                DURATION: { visible: true }
             },
-            rightSidebar: {
-                panelSize: rightPanelSize,
-                showNowPlayingView,
-                showQueueView,
-                isNowPlayingViewExpanded: false,
-                isNowPlayingViewFullScreen: false
-            },
-            isMiniPlayerWindowOpen: false,
-            systemVolume: [systemVolume],
-            activeFolder: {
-                id: activeFolderId,
-                name: activeFolderName
+        }
+        const tableColumns = safeJSONParse(rawTableColumns, fallbackTableColumns);
+
+        let albumTableColumns = tableColumns?.albumTableColumns;
+        const isValidAlbumTableColumns = validateAlbumTableColumns(albumTableColumns);
+
+        if (!isValidAlbumTableColumns) {
+            if (tableView == "Compact List") {
+                albumTableColumns = fallbackTableColumns.albumTableColumns;
+            } else {
+                albumTableColumns = {
+                    ...fallbackTableColumns.albumTableColumns,
+                    ARTIST: { visible: false },
+                }
             }
         }
 
-        setPreferences(preferences);
-        localStorage.setItem("preferences", JSON.stringify(preferences));
+        let playlistTableColumns = tableColumns?.playlistTableColumns;
+        const isValidPlaylistTableColumns = validatePlaylistTableColumns(playlistTableColumns);
 
-        // setPreferences({
-        //     leftPanelSize,
-        //     rightPanelSize,
-        //     showNowPlayingView: showNowPlayingView == "true",
-        //     showQueueView: showQueueView == "true",
-        //     sort: sort as Sort,
-        //     view: view as View,
-        //     systemVolume: [volume],
-        //     leftSidebarActiveTab: leftSidebarActiveTab as LeftSidebarTab,
-        //     folder: folder
-        // });
+        if (!isValidPlaylistTableColumns) {
+            if (tableView == "Compact List") {
+                playlistTableColumns = fallbackTableColumns.playlistTableColumns;
+            } else {
+                playlistTableColumns = {
+                    ...fallbackTableColumns.playlistTableColumns,
+                    ARTIST: { visible: false },
+                    "DATE ADDED": { visible: true },
+                }
+            }
+        }
+
+        setTableView(tableView as TableView);
+        setAlbumTableColumns(albumTableColumns);
+        setPlaylistTableColumns(playlistTableColumns);
     }, [])
-
-    console.log("sho", preferences);
 
     useEffect(() => {
         if (breakPoint == "md") {
             if (leftPanelSize >= 22 && leftPanelSize <= 32) {
-                const updatedLeftSidebar = { ...leftSidebar, panelSize: 32 };
-                const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-                setPreferences({ leftSidebar: updatedLeftSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setLeftSidebar({ panelSize: 32 });
             }
 
             if (leftPanelSize >= 7 && leftPanelSize <= 10) {
-                const updatedLeftSidebar = { ...leftSidebar, panelSize: 10 };
-                const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-                setPreferences({ leftSidebar: updatedLeftSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setLeftSidebar({ panelSize: 32 })
             }
         }
     }, [breakPoint])

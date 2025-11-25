@@ -1,9 +1,8 @@
-import React, { useEffect, useState, type JSX } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PinIcon } from '../../../../../Svgs';
-import { useLocation, useNavigate } from 'react-router-dom';
-import type { Album, Folder, LeftSidebarTab, Playlist } from '../../../../../types';
+import { useLocation } from 'react-router-dom';
+import type { Album, Folder, Playlist } from '../../../../../types';
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
-import { usePlaylistStore } from '../../../../../store/usePlaylistStore';
 import { useGetCurrentUserLibraryItems } from '../../../../../hooks/library';
 import { useAlbumActions } from '../../../../../hooks/album';
 import { usePlaylistActions } from '../../../../../hooks/playlist';
@@ -11,16 +10,68 @@ import { useFolderActions, useGetFolderPlaylists } from '../../../../../hooks/fo
 import { VIEW_SKELETONS } from '../../../../../constants';
 import { NotFoundFolderPlaylists } from '../../../../../components/NotFounds';
 import { useLibrarySearchStore } from '../../../../../store/useLibrarySearchStore';
+import { highlightText } from '../../../../../hooks/text';
 
-const CompactListPlaylists = () => {
-    const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: playlists } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
-    const { navigateToPlaylist } = usePlaylistActions();
+type LibraryItemListProps = {
+    itemTitle: string,
+    itemSubTitle: string,
+    isCurrentItemPage: boolean,
+    isItemPinned?: boolean,
+    navigateToItem: () => void,
+}
 
-    const [searchResults, setSearchResults] = useState<Playlist[]>([]);
+const LibraryItemList: React.FC<LibraryItemListProps> = ({
+    itemTitle,
+    itemSubTitle,
+    isCurrentItemPage,
+    isItemPinned,
+    navigateToItem,
+}) => {
     const { searchQuery } = useLibrarySearchStore();
 
+    return (
+        <div
+            className={`flex items-center space-x-3 ${isCurrentItemPage ? "bg-[#242424]" : "dynamic-bg-hover"} p-2 rounded cursor-pointer group`}
+            style={{
+                '--bgHoverColor': '#1F1F1F',
+            } as React.CSSProperties}
+            onClick={navigateToItem}
+        >
+            <div className="flex-1 min-w-0">
+                <div className="font-medium text-[#ffffff] truncate">
+                    {highlightText(itemTitle, searchQuery)}
+                </div>
+                <div className="text-[#aaaaaa] truncate flex items-center gap-1">
+                    {
+                        isItemPinned && (
+                            <div className="rotate-45 text-[#1ed760]">
+                                <PinIcon width="14" height="14" />
+                            </div>
+                        )
+                    }
+                    <span className="truncate text-sm">{itemSubTitle}</span>
+                </div>
+
+            </div>
+        </div>
+    )
+}
+
+const CompactListPlaylists = () => {
+    /* ---------- Internal Hooks ---------- */
+    const { pathname } = useLocation();
+
+    /* ---------- Local States ---------- */
+    const [searchResults, setSearchResults] = useState<Playlist[]>([]);
+
+    /* ---------- Stores ---------- */
+    const { searchQuery } = useLibrarySearchStore();
+
+    /* ---------- Custom Hooks ---------- */
+    const { data: playlists } = useGetCurrentUserLibraryItems("Playlists");
+    const { navigateToPlaylist } = usePlaylistActions();
+
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const filteredPlaylists = playlists?.filter((p: Playlist) =>
             p.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -33,24 +84,17 @@ const CompactListPlaylists = () => {
         <>
             {
                 searchResults.map((playlist: Playlist) => {
-                    const isCurrentPlaylistPage = pathname == `/playlist/${playlist._id}`;
+                    const navigateUrl = `/playlist/${playlist._id}`;
+                    const isCurrentPlaylistPage = pathname == navigateUrl;
 
                     return (
-                        <div
+                        <LibraryItemList
                             key={playlist._id}
-                            className={`flex items-center space-x-3 ${isCurrentPlaylistPage ? "bg-[#242424]" : "dynamic-bg-hover"} p-2 rounded cursor-pointer group`}
-                            style={{
-                                '--bgHoverColor': '#1F1F1F',
-                            } as React.CSSProperties}
-                            onClick={() => navigateToPlaylist(`/playlist/${playlist._id}`)}
-                        >
-                            <div className="flex-1 min-w-0">
-                                <div className="font-medium text-[#ffffff] truncate">{playlist.title}</div>
-                                <div className="text-[#aaaaaa] truncate">
-                                    <span className="truncate text-sm">{`Total Tracks : ${playlist.tracks.length}`}</span>
-                                </div>
-                            </div>
-                        </div>
+                            itemTitle={playlist.title}
+                            itemSubTitle={`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
+                            isCurrentItemPage={isCurrentPlaylistPage}
+                            navigateToItem={() => navigateToPlaylist(navigateUrl)}
+                        />
                     )
                 })
             }
@@ -59,14 +103,20 @@ const CompactListPlaylists = () => {
 }
 
 const CompactListSavePlaylists = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: playlists } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
-    const { navigateToPlaylist } = usePlaylistActions();
 
+    /* ---------- Local States ---------- */
     const [searchResults, setSearchResults] = useState<Playlist[]>([]);
+
+    /* ---------- Stores ---------- */
     const { searchQuery } = useLibrarySearchStore();
 
+    /* ---------- Custom Hooks ---------- */
+    const { data: playlists } = useGetCurrentUserLibraryItems("Save Playlists");
+    const { navigateToPlaylist } = usePlaylistActions();
+
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const filteredPlaylists = playlists?.filter((p: Playlist) =>
             p.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -79,24 +129,17 @@ const CompactListSavePlaylists = () => {
         <>
             {
                 searchResults.map((playlist: Playlist) => {
-                    const isCurrentPlaylistPage = pathname == `/playlist/${playlist._id}`;
+                    const navigateUrl = `/playlist/${playlist._id}`;
+                    const isCurrentPlaylistPage = pathname == navigateUrl;
 
                     return (
-                        <div
+                        <LibraryItemList
                             key={playlist._id}
-                            className={`flex items-center space-x-3 ${isCurrentPlaylistPage ? "bg-[#242424]" : "dynamic-bg-hover"} p-2 rounded cursor-pointer group`}
-                            style={{
-                                '--bgHoverColor': '#1F1F1F',
-                            } as React.CSSProperties}
-                            onClick={() => navigateToPlaylist(`/playlist/${playlist._id}`)}
-                        >
-                            <div className="flex-1 min-w-0">
-                                <div className="font-medium text-[#ffffff] truncate">{playlist.title}</div>
-                                <div className="text-[#aaaaaa] truncate">
-                                    <span className="truncate text-sm">{`Total Tracks : ${playlist.tracks.length}`}</span>
-                                </div>
-                            </div>
-                        </div>
+                            itemTitle={playlist.title}
+                            itemSubTitle={`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
+                            isCurrentItemPage={isCurrentPlaylistPage}
+                            navigateToItem={() => navigateToPlaylist(navigateUrl)}
+                        />
                     )
                 })
             }
@@ -105,44 +148,43 @@ const CompactListSavePlaylists = () => {
 }
 
 const CompactListSaveAlbums = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation();
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: albums } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
+
+    /* ---------- Local States ---------- */
+    const [searchResults, setSearchResults] = useState<Playlist[]>([]);
+
+    /* ---------- Stores ---------- */
+    const { searchQuery } = useLibrarySearchStore();
     const { navigateToAlbum } = useAlbumActions();
 
-    const [searchResults, setSearchResults] = useState<Album[]>([]);
-    const { searchQuery } = useLibrarySearchStore();
+    /* ---------- Custom Hooks ---------- */
+    const { data: playlists } = useGetCurrentUserLibraryItems("Save Albums");
 
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
-        const filteredAlbums = albums?.filter((p: Album) =>
+        const filteredPlaylists = playlists?.filter((p: Playlist) =>
             p.title.toLowerCase().includes(searchQuery.toLowerCase())
         )
 
-        setSearchResults(filteredAlbums || []);
-    }, [searchQuery, albums])
+        setSearchResults(filteredPlaylists || []);
+    }, [searchQuery, playlists])
 
     return (
         <>
             {
                 searchResults.map((album: Album) => {
-                    const isCurrentAlbumPage = pathname == `/album/${album._id}`;
+                    const navigateUrl = `/album/${album._id}`
+                    const isCurrentAlbumPage = pathname == navigateUrl;
 
                     return (
-                        <div
+                        <LibraryItemList
                             key={album._id}
-                            className={`flex items-center space-x-3 ${isCurrentAlbumPage ? "bg-[#242424]" : "dynamic-bg-hover"} p-2 rounded cursor-pointer group`}
-                            style={{
-                                '--bgHoverColor': '#1F1F1F',
-                            } as React.CSSProperties}
-                            onClick={() => navigateToAlbum(`/album/${album._id}`)}
-                        >
-                            <div className="flex-1 min-w-0">
-                                <div className="font-medium text-[#ffffff] truncate">{album.title}</div>
-                                <div className="text-[#aaaaaa] truncate">
-                                    <span className="truncate text-sm">Album . Spotify</span>
-                                </div>
-                            </div>
-                        </div>
+                            itemTitle={album.title}
+                            itemSubTitle="Album · Spotify"
+                            isCurrentItemPage={isCurrentAlbumPage}
+                            navigateToItem={() => navigateToAlbum(navigateUrl)}
+                        />
                     )
                 })
             }
@@ -151,13 +193,17 @@ const CompactListSaveAlbums = () => {
 }
 
 const CompactListFolders = () => {
-    const { preferences: { leftSidebarActiveTab } } = useUIPreferencesStore();
-    const { data: folders } = useGetCurrentUserLibraryItems(leftSidebarActiveTab);
-    const { navigateToFolder } = useFolderActions();
-
+    /* ---------- Local States ---------- */
     const [searchResults, setSearchResults] = useState<Folder[]>([]);
+
+    /* ---------- Stores ---------- */
     const { searchQuery } = useLibrarySearchStore();
 
+    /* ---------- Custom Hooks ---------- */
+    const { data: folders } = useGetCurrentUserLibraryItems("Folders");
+    const { navigateToFolder } = useFolderActions();
+
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const filteredFolders = folders?.filter((p: Folder) =>
             p.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -170,21 +216,13 @@ const CompactListFolders = () => {
         <>
             {
                 searchResults.map((folder: Folder) => (
-                    <div
+                    <LibraryItemList
                         key={folder._id}
-                        className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded cursor-pointer group"
-                        style={{
-                            '--bgHoverColor': '#1F1F1F',
-                        } as React.CSSProperties}
-                        onClick={() => navigateToFolder({ activeId: folder._id, name: folder.name })}
-                    >
-                        <div className="flex-1 min-w-0">
-                            <div className="font-medium text-[#ffffff] truncate">{folder.name}</div>
-                            <div className="text-[#aaaaaa] truncate">
-                                <span className="truncate text-sm">Folder . Spotify</span>
-                            </div>
-                        </div>
-                    </div>
+                        itemTitle={folder.name}
+                        itemSubTitle={`Folder · ${folder.playlists.length} ${folder.playlists.length === 1 ? "Playlist" : "Playlists"}`}
+                        isCurrentItemPage={false}
+                        navigateToItem={() => navigateToFolder({ id: folder._id, name: folder.name })}
+                    />
                 ))
             }
         </>
@@ -192,14 +230,22 @@ const CompactListFolders = () => {
 }
 
 const FolderPlaylists = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation();
-    const { preferences: { folder: { activeId } } } = useUIPreferencesStore();
-    const { data: playlists, isLoading } = useGetFolderPlaylists(activeId);
+
+    /* ---------- Local States ---------- */
+    const [searchResults, setSearchResults] = useState<Playlist[]>([]);
+
+    /* ---------- Stores ---------- */
+    const { searchQuery } = useLibrarySearchStore();
+    const { openedFolder } = useUIPreferencesStore();
+    const { id: openedFolderId } = openedFolder;
+
+    /* ---------- Custom Hooks ---------- */
+    const { data: playlists, isLoading } = useGetFolderPlaylists(openedFolderId);
     const { navigateToPlaylist } = usePlaylistActions();
 
-    const [searchResults, setSearchResults] = useState<Playlist[]>([]);
-    const { searchQuery } = useLibrarySearchStore();
-
+    /* ---------- UseEffects ---------- */
     useEffect(() => {
         const filteredPlaylists = playlists?.filter((p: Playlist) =>
             p.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -210,30 +256,23 @@ const FolderPlaylists = () => {
 
     if (isLoading) return VIEW_SKELETONS["Compact List"];
 
-    if (playlists?.length == 0) return <NotFoundFolderPlaylists />
+    if (playlists?.length == 0) return <NotFoundFolderPlaylists />;
 
     return (
         <div className="flex-1 px-3 mb-4">
             {
                 searchResults?.map((playlist: Playlist) => {
-                    const isCurrentPlaylistPage = pathname == `/playlist/${playlist._id}`;
+                    const navigateUrl = `/playlist/${playlist._id}`;
+                    const isCurrentPlaylistPage = pathname == navigateUrl;
 
                     return (
-                        <div
+                        <LibraryItemList
                             key={playlist._id}
-                            className={`flex items-center space-x-3 ${isCurrentPlaylistPage ? "bg-[#242424]" : "dynamic-bg-hover"} p-2 rounded cursor-pointer group`}
-                            style={{
-                                '--bgHoverColor': '#1F1F1F',
-                            } as React.CSSProperties}
-                            onClick={() => navigateToPlaylist(`/playlist/${playlist._id}`)}
-                        >
-                            <div className="flex-1 min-w-0">
-                                <div className="font-medium text-[#ffffff] truncate">{playlist.title}</div>
-                                <div className="text-[#aaaaaa] truncate">
-                                    <span className="truncate text-sm">{`Total Tracks : ${playlist.tracks.length}`}</span>
-                                </div>
-                            </div>
-                        </div>
+                            itemTitle={playlist.title}
+                            itemSubTitle={`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
+                            isCurrentItemPage={isCurrentPlaylistPage}
+                            navigateToItem={() => navigateToPlaylist(navigateUrl)}
+                        />
                     )
                 })
             }
@@ -241,7 +280,7 @@ const FolderPlaylists = () => {
     )
 }
 
-const CompactListComponents: Record<LeftSidebarTab, () => JSX.Element> = {
+const CompactListComponents = {
     "Playlists": CompactListPlaylists,
     "Save Playlists": CompactListSavePlaylists,
     "Save Albums": CompactListSaveAlbums,
@@ -249,45 +288,34 @@ const CompactListComponents: Record<LeftSidebarTab, () => JSX.Element> = {
 }
 
 const CompactListItems = () => {
+    /* ---------- Internal Hooks ---------- */
     const { pathname } = useLocation();
-    const navigate = useNavigate();
-    const { setPlaylistData } = usePlaylistStore();
-    const { preferences: { leftSidebarActiveTab, folder: { activeId } } } = useUIPreferencesStore();
-    const isCollectionTracksPage = pathname == "/collection/tracks";
 
-    const navigateToPlaylist = (navigateUrl: string) => {
-        setPlaylistData({
-            playImmediate: false
-        })
-        navigate(navigateUrl)
-    }
+    /* ---------- Stores ---------- */
+    const { library, openedFolder } = useUIPreferencesStore();
+    const { activeTab: libraryActiveTab } = library;
+    const { id: openedFolderId } = openedFolder;
 
-    const Component = CompactListComponents[leftSidebarActiveTab]
+    /* ---------- Custom Hooks ---------- */
+    const { navigateToPlaylist } = usePlaylistActions();
 
-    if (activeId) {
-        return <FolderPlaylists />
-    }
+    /* ---------- Derived Values ---------- */
+    const navigateUrl = "/collection/tracks";
+    const isCollectionTracksPage = pathname == navigateUrl;
+    const Component = CompactListComponents[libraryActiveTab];
+
+    if (openedFolderId) return <FolderPlaylists />;
 
     return (
         <div className="flex-1 px-3 mb-4">
             {/* Liked Tracks */}
-            <div
-                className={`flex items-center space-x-3 ${isCollectionTracksPage ? "bg-[#242424]" : "dynamic-bg-hover"} p-2 rounded cursor-pointer group`}
-                style={{
-                    '--bgHoverColor': '#1F1F1F',
-                } as React.CSSProperties}
-                onClick={() => navigateToPlaylist("/collection/tracks")}
-            >
-                <div className="flex-1 min-w-0">
-                    <div className="font-medium text-md text-[#ffffff] truncate">Liked Tracks</div>
-                    <div className="flex items-center gap-1 text-[#aaaaaa] truncate">
-                        <div className="rotate-45 text-[#1ed760]">
-                            <PinIcon width="14" height="14" />
-                        </div>
-                        <span className="truncate text-sm">Playlist</span>
-                    </div>
-                </div>
-            </div>
+            <LibraryItemList
+                itemTitle="Liked Tracks"
+                itemSubTitle="Playlist"
+                isCurrentItemPage={isCollectionTracksPage}
+                isItemPinned={true}
+                navigateToItem={() => navigateToPlaylist(navigateUrl)}
+            />
 
             <Component />
         </div>

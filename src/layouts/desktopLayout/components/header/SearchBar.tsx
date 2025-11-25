@@ -3,8 +3,10 @@ import { BrowseIcon, BrowserFilledIcon, CrossIcon, MicIcon, SearchIcon } from '.
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import RecentSearchesDropdown from './RecentSearchesDropdown';
 import ListeningDialog from './ListeningDialog';
-import type { AlphabetLetter, SearchItem, SearchItemType } from '../../../../types';
-import { SEARCH_DICTIONARY, SEARCH_ITEM_ID_MAP } from '../../../../data';
+import type { AlphabetLetter, SearchItem } from '../../../../types';
+import { SEARCH_DICTIONARY } from '../../../../data';
+import { FUSION_SEARCH_HISTORY_KEY } from '../../../../constants';
+import { isValidSearchItem } from '../../../../validators';
 
 const SearchBar = () => {
     /* ---------- Internal Hooks ---------- */
@@ -13,8 +15,8 @@ const SearchBar = () => {
 
     /* ---------- Local States ---------- */
     const [searchQuery, setSearchQuery] = useState("");
-    const [recentSearches, setRecentSearches] = useState<SearchItem[]>([]);
-    const [searchSuggestions, setSearchSuggestions] = useState<SearchItem[]>([]);
+    const [recentSearchItems, setRecentSearchItems] = useState<SearchItem[]>([]);
+    const [searchSuggestionItems, setSearchSuggestionItems] = useState<SearchItem[]>([]);
     const [isRecentSearchesDropdownOpen, setIsRecentSearchesDropdownOpen] = useState(false);
     const [isListeningDialogOpen, setIsListeningDialogOpen] = useState(false);
 
@@ -22,75 +24,68 @@ const SearchBar = () => {
     const searchBarRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    /* ---------- Derived Value ---------- */
-    const isSearchPage = pathname == '/search';
+    /* ---------- Derived Values ---------- */
+    const isSearchPage = pathname == "/search";
 
     /* ---------- Methods Or Functions ---------- */
     const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
 
     const handleClearSearchQuery = () => setSearchQuery("");
 
-    const addItemToRecentSearches = (navigateUrl: string, id: string) => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+    const addItemToRecentSearches = (searchItem: SearchItem, navigateUrl: string) => {
+        let filteredRecentSearchItems = recentSearchItems.filter((item) => searchItem._id != item._id);
+        filteredRecentSearchItems = [searchItem, ...filteredRecentSearchItems];
 
-        // Remove existing instance of the id
-        itemsIds = itemsIds.filter((i) => i !== id);
-
-        // Add the new id at the beginning
-        itemsIds.unshift(id);
-
-        // If more than 10 items, remove the last one
-        if (itemsIds.length > 10) {
-            itemsIds.pop();
+        // make sure items length should not be greater than 8
+        if (filteredRecentSearchItems.length > 8) {
+            filteredRecentSearchItems = filteredRecentSearchItems.slice(0, 8);
         }
 
-        // Save back to localStorage
-        localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
-
-        navigate(navigateUrl);
+        setRecentSearchItems(filteredRecentSearchItems);
+        localStorage.setItem(FUSION_SEARCH_HISTORY_KEY, JSON.stringify(filteredRecentSearchItems));
         setIsRecentSearchesDropdownOpen(false);
+        navigate(navigateUrl);
     };
 
     const removeItemFromRecentSearches = (id: string) => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-        const newRecentSearches = recentSearches.filter((item) => item._id != id.split('-')[0]);
-        setRecentSearches(newRecentSearches);
-
-        itemsIds = itemsIds.filter((i) => i != id);
-        localStorage.setItem("recentSearches", JSON.stringify(itemsIds));
+        let filteredRecentSearchItems = recentSearchItems.filter((item) => id != item._id);
+        setRecentSearchItems(filteredRecentSearchItems);
+        localStorage.setItem(FUSION_SEARCH_HISTORY_KEY, JSON.stringify(filteredRecentSearchItems));
     }
 
     const clearRecentSearchHistory = () => {
-        setRecentSearches([]);
-        localStorage.setItem("recentSearches", JSON.stringify([]));
+        setRecentSearchItems([]);
+        localStorage.setItem(FUSION_SEARCH_HISTORY_KEY, JSON.stringify([]));
     }
 
     /* ---------- UseEffects ---------- */
     useEffect(() => {
-        let itemsIds: string[] = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+        let raw = localStorage.getItem(FUSION_SEARCH_HISTORY_KEY);
 
-        const items = itemsIds.map((extandedId) => {
-            const [id, type] = extandedId.split('-');
+        try {
+            const parsed = JSON.parse(raw || "[]");
 
-            if (type == "search") {
-                return {
-                    type: "Search" as SearchItemType,
-                    _id: id,
-                    title: id,
-                }
+            // ensure it's an array
+            if (!Array.isArray(parsed)) {
+                setRecentSearchItems([]);
+                return;
             }
 
-            const item = SEARCH_ITEM_ID_MAP[id];
-            return item;
-        })
+            // filter out invalid items
+            const validItems = parsed.filter(isValidSearchItem);
 
-        setRecentSearches(items);
-    }, [])
+            setRecentSearchItems(validItems);
+
+        } catch (err) {
+            // JSON was invalid
+            console.error("Invalid localStorage data:", err);
+            setRecentSearchItems([]);
+        }
+    }, []);
 
     useEffect(() => {
         if (!searchQuery.trim()) {
-            setSearchSuggestions([]);
+            setSearchSuggestionItems([]);
             return;
         }
 
@@ -102,7 +97,7 @@ const SearchBar = () => {
             item.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
-        setSearchSuggestions(filtered);
+        setSearchSuggestionItems(filtered);
     }, [searchQuery]);
 
     // Close dropdown when clicked outside
@@ -152,9 +147,7 @@ const SearchBar = () => {
                         onFocus={() => setIsRecentSearchesDropdownOpen(true)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                                const navigateUrl = `/search/${searchQuery}`;
-                                const id = `${searchQuery}-search`;
-                                addItemToRecentSearches(navigateUrl, id);
+
                             }
                         }}
                         placeholder="What do you want to play?"
@@ -200,8 +193,8 @@ const SearchBar = () => {
                 {isRecentSearchesDropdownOpen && (
                     <RecentSearchesDropdown
                         searchQuery={searchQuery}
-                        recentSearches={recentSearches}
-                        searchSuggestions={searchSuggestions}
+                        recentSearchItems={recentSearchItems}
+                        searchSuggestionItems={searchSuggestionItems}
                         addItemToRecentSearches={addItemToRecentSearches}
                         removeItemFromRecentSearches={removeItemFromRecentSearches}
                         clearRecentSearchHistory={clearRecentSearchHistory}

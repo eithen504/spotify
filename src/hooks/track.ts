@@ -50,7 +50,7 @@ const useUploadTrack = () => {
             audioUrl: string,
             artist: string,
             duration: number,
-            genre: Genres,
+            genres: Genres,
             albumId: string | null,
             language: Language
         }) => {

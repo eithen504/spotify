@@ -3,9 +3,9 @@ import { useScrollStore } from "../../store/useScrollStore";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { useAddItemsToPlaylist, useGetPlaylistTracks, useUpdatePlaylist, useUploadPlaylist } from "../../hooks/playlist";
-import { getScrollThreshold } from "../../utils";
+import { formatTotalAsHMS, getScrollThreshold } from "../../utils";
 import { useDominantColor } from "../../hooks/color";
-import type { Columns, Controls, Folder, Handlers, MenuOptions, Playlist, Track } from "../../types";
+import type { Controls, Folder, Handlers, MenuOptions, Playlist, Track, TrackMenuState } from "../../types";
 import { NotFoundEntity, NotFoundTracks } from "../../components/NotFounds";
 import EntityHeader from "../../components/EntityHeader";
 import EntityInfoSection from "../../components/EntityInfoSection";
@@ -30,6 +30,9 @@ import { useQueueStore } from "../../store/useQueueStore";
 import { useLikeTrack, useTrackLikeStatus } from "../../hooks/like";
 import { useGetCurrentUserLibraryItems } from "../../hooks/library";
 import { useAddItemToFolder, useUploadFolder } from "../../hooks/folder";
+import { useTableColumnVisibilityStore } from "../../store/useTableColumnVisibilityStore";
+import { PlaylistPageSkeleton } from "../../components/Skeletons";
+import { RECENT_PLAYLISTS_KEY } from "../../constants";
 
 /* ---------- Constants ---------- */
 const adminId = import.meta.env.VITE_ADMIN_ID;
@@ -50,26 +53,23 @@ const PlaylistPage = () => {
     const queryClient = useQueryClient();
 
     /* ---------- Local States ---------- */
-    const [view, setView] = useState<"Compact List" | "Default List">("Default List");
-    const [columns, setColumns] = useState<Columns>({
-        "Artist": true,
-        "Album": true,
-        "Duration": true,
-        "Date added": false,
+    const [trackMenu, setTrackMenu] = useState<TrackMenuState>({
+        isOpen: false,
+        track: null
     });
-    const [currentMenuTrackIndex, setCurrentMenuTrackIndex] = useState(-1);
     const [isEditPlaylistDialogOpen, setIsEditPlaylistDialogOpen] = useState(false);
     const [isPreviewPlaylistModalOpen, setIsPreviewPlaylistModalOpen] = useState(false);
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
+    const [playlistTableColumnOptions, setPlaylistTableColumnOptions] = useState<MenuOptions>([])
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
     const { setAlbumData } = useAlbumStore();
     const { playlistData: { playlistId, activeTrackId, playImmediate }, setPlaylistData } = usePlaylistStore();
     const { queueMap, initializeEntityQueue, addItemsToCustomQueue, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
+    const { tableView, playlistTableColumns, togglePlaylistTableColumn } = useTableColumnVisibilityStore();
     const { scrollFromTop } = useScrollStore();
 
     /* ---------- Custom Hooks ---------- */
@@ -94,16 +94,16 @@ const PlaylistPage = () => {
     const showFullBorder = scrollFromTop >= getScrollThreshold(leftPanelSize);
     const isPlayingCurrentPlaylist = (playlistId == id && activeTrackId == trackDetails._id && trackDetails.isPlaying);
 
-    // const secondsArray = data?.tracks?.map((t: Track) => t.duration);
+    const secondsArray = data?.tracks?.map((t: Track) => t.duration);
     const playlistUsername = adminId == data?.playlist?.userId ? "Spotify" : data?.playlist?.username;
     const playlistLength = `${data?.playlist?.tracks?.length} tracks`;
-    // const playlistDuration = formatTotalAsHMS(secondsArray);
-    const description = `${playlistUsername} . ${playlistLength} `
+    const playlistDuration = formatTotalAsHMS(secondsArray || []);
+    const description = `${playlistUsername} . ${playlistLength} . ${playlistDuration} `
 
-    const currentMenuTrack = (data && data.tracks && currentMenuTrackIndex != -1) ? data.tracks[currentMenuTrackIndex] : undefined;
+    const { track: currentMenuTrack } = trackMenu;
     const hasLiked = getTrackLikeStatus({ hasLiked: currentMenuTrack?.hasLiked || false, trackId: currentMenuTrack?._id || "" });
-    const queueItemid = `Playlist-${id}-${currentMenuTrack?._id}`;
-    const hasTrackInQueue = queueMap[queueItemid];
+    const queueItemId = `Playlist-${id}-${currentMenuTrack?._id}`;
+    const hasTrackInQueue = queueMap[queueItemId];
 
     const playlistMenuOptions: MenuOptions = [
         {
@@ -175,6 +175,8 @@ const PlaylistPage = () => {
             icon: <DeleteIcon width="16" height="16" />,
             label: "Remove This Item From Playlist",
             action: () => {
+                if (!currentMenuTrack) return;
+
                 const filteredTracks = data.tracks.filter((t: Track) => t._id !== currentMenuTrack._id);
 
                 updatePlaylist({ tracks: filteredTracks });
@@ -201,6 +203,8 @@ const PlaylistPage = () => {
                     icon: <PlusIcon width="16" height="16" />,
                     label: "Create Playlist",
                     action: () => {
+                        if (!currentMenuTrack) return;
+
                         uploadPlaylist({
                             title: `New Playlist ${Date.now()}`,
                             coverImageUrl: "",
@@ -214,6 +218,8 @@ const PlaylistPage = () => {
                     ? playlists.map((playlist: Playlist) => ({
                         label: playlist.title,
                         action: () => {
+                            if (!currentMenuTrack) return;
+
                             addItemsToPlaylist({
                                 playlistId: playlist._id,
                                 tracks: [currentMenuTrack]
@@ -303,7 +309,7 @@ const PlaylistPage = () => {
             if (playlistIds[0] != id) {
                 playlistIds = playlistIds.filter((i) => i != id);
                 playlistIds = [id || "", ...playlistIds];
-                localStorage.setItem("recentPlaylists", JSON.stringify(playlistIds));
+                localStorage.setItem(RECENT_PLAYLISTS_KEY, JSON.stringify(playlistIds));
 
                 queryClient.setQueryData(["getRecentPlaylists"], (prev: Playlist[]) => {
                     if (!prev) return prev;
@@ -387,22 +393,50 @@ const PlaylistPage = () => {
 
     /* ---------- UseEffects ---------- */
     useEffect(() => {
-        if (view == "Default List") {
-            setColumns({
-                "Artist": false,
-                "Album": true,
-                "Duration": true,
-                "Date added": true,
-            })
+        if (tableView == "Compact List") {
+            setPlaylistTableColumnOptions([
+                {
+                    label: "Artist",
+                    action: () => {
+                        togglePlaylistTableColumn("ARTIST");
+                    }
+                },
+                {
+                    label: "Album",
+                    action: () => {
+                        togglePlaylistTableColumn("ALBUM");
+                    }
+                },
+                {
+                    label: "Duration",
+                    action: () => {
+                        togglePlaylistTableColumn("DURATION");
+                    }
+                }
+            ])
         } else {
-            setColumns({
-                "Artist": true,
-                "Album": true,
-                "Duration": true,
-                "Date added": false,
-            })
+            setPlaylistTableColumnOptions([
+                {
+                    label: "Album",
+                    action: () => {
+                        togglePlaylistTableColumn("ALBUM");
+                    }
+                },
+                {
+                    label: "Date Added",
+                    action: () => {
+                        togglePlaylistTableColumn("DATE ADDED");
+                    }
+                },
+                {
+                    label: "Duration",
+                    action: () => {
+                        togglePlaylistTableColumn("DURATION");
+                    }
+                }
+            ])
         }
-    }, [view])
+    }, [tableView])
 
     useEffect(() => {
         if (isLoading || !data || !data?.tracks || data?.tracks?.length == 0) return;
@@ -412,9 +446,9 @@ const PlaylistPage = () => {
         }
     }, [playImmediate, isLoading, id])
 
-    if (isLoading) return null;
+    if (isLoading) return <PlaylistPageSkeleton />;
 
-    if (!isLoading && !data) return <NotFoundEntity title="Couldn't Find That Playlist" />;
+    if (!data) return <NotFoundEntity title="Couldn't Find That Playlist" />;
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -458,8 +492,6 @@ const PlaylistPage = () => {
                         <EntityControls
                             controls={controls}
                             handlers={handlers}
-                            view={view}
-                            setView={setView}
                             entity={{
                                 title: data.playlist.title,
                                 imgUrl,
@@ -473,9 +505,8 @@ const PlaylistPage = () => {
                         <div className="relative max-w-[90rem] mx-auto">
                             {/* Playlist Table Header */}
                             <EntityTableHeader
-                                view={view}
-                                columns={columns}
-                                setColumns={setColumns}
+                                tableColumns={playlistTableColumns}
+                                options={playlistTableColumnOptions}
                             />
 
                             {/* Seperator Line */}
@@ -486,12 +517,12 @@ const PlaylistPage = () => {
                             {/* Playlist Tracks */}
                             <EntityTracks
                                 tracks={data.tracks}
-                                columns={columns}
-                                view={view}
+                                tableColumns={playlistTableColumns}
                                 isPlayingCurrentEntity={isPlayingCurrentPlaylist}
-                                currentMenuTrackIndex={currentMenuTrackIndex}
-                                setCurrentMenuTrackIndex={setCurrentMenuTrackIndex}
                                 trackMenuOptions={trackMenuOptions}
+                                entityDrawerHeight="429px"
+                                trackMenu={trackMenu}
+                                setTrackMenu={setTrackMenu}
                                 handlePlayPauseTrack={handlePlayPauseTrack}
                             />
                         </div>

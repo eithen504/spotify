@@ -61,7 +61,7 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
     /* ---------- Custom Hooks ---------- */
     const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
     const { getTrackLikeStatus } = useTrackLikeStatus();
-    const {breakPoint} = useBreakPoint();
+    const { breakPoint } = useBreakPoint();
     const { mutateAsync: likeTrack } = useLikeTrack();
     const { share } = useShare();
 
@@ -223,11 +223,9 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if(isTrackDrawerOpen) return;
+            if (isTrackDrawerOpen) return;
 
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                console.log("why call");
-                
                 onClose();
             }
         }
@@ -387,10 +385,10 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
                             <button
                                 className="text-white/70 dynamic-text-hover cursor-pointer"
                                 onClick={() => {
-                                    if(breakPoint == "md"){
-                                        setIsTrackMenuOpen(true);
-                                    } else {
+                                    if (breakPoint == "sm") {
                                         setIsTrackDrawerOpen(true);
+                                    } else {
+                                        setIsTrackMenuOpen(true);
                                     }
                                 }}
                             >

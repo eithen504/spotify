@@ -4,8 +4,7 @@ import { useUIPreferencesStore } from "../../../../../store/useUIPreferenceStore
 
 const QueueSection = () => {
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { rightSidebar } = preferences;
+    const { setRightSidebar } = useUIPreferencesStore();
     const { trackDetails } = useTrackDetailsStore();
     const { customQueue, activeEntityQueueListNode } = useQueueStore();
 
@@ -14,10 +13,7 @@ const QueueSection = () => {
 
     /* ---------- Methods Or Functions ---------- */
     const handleOpenQueueView = () => {
-        const updatedRightSidebar = { ...rightSidebar, showQueueView: true, showNowPlayingView: false };
-        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-        setPreferences({ rightSidebar: updatedRightSidebar });
-        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+        setRightSidebar({ showQueueView: true, showNowPlayingView: false });
     }
 
     return (
@@ -33,7 +29,7 @@ const QueueSection = () => {
             </div>
 
             <div className="px-2">
-                <div className="flex items-center space-x-3 dynamic-bg-hover p-2 rounded-[4px] cursor-pointer"
+                <div className={`${trackDetails._id ? "dynamic-bg-hover cursor-pointer" : ""} flex items-center space-x-3 p-2 rounded-[4px]`}
                     style={{
                         '--bgHoverColor': '#3F3F3F',
                     } as React.CSSProperties}

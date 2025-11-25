@@ -7,11 +7,12 @@ import UserPlaylistsSection from './UserPlaylistsSection';
 import AboutSection from './AboutSection';
 import TabsSection from './TabsSection';
 import { useState } from 'react';
-import type { Visibility } from '../../types';
+import type { ShowPageTab } from '../../types';
 
 const ShowPage = () => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
-    const [activeTab, setActiveTab] = useState<Visibility>("All");
+    const { leftSidebar } = useUIPreferencesStore();
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const [activeTab, setActiveTab] = useState<ShowPageTab>("All");
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">

@@ -9,8 +9,7 @@ interface CreateOptionsMenuProps {
 }
 
 const CreateOptionsMenu: React.FC<CreateOptionsMenuProps> = ({ options, createMenuRef, onClose }) => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { isExpanded: isLeftSidebarExpanded } = leftSidebar;
 
     return (

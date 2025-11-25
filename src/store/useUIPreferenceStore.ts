@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { LeftSidebarTab, LibrarySort, LibraryView } from "../types";
+import type { LibraryTab, LibrarySort, LibraryView } from "../types";
+import { LEFT_SIDEBAR_KEY, LIBRARY_KEY, MINI_PLAYER_WINDOW_OPEN_KEY, OPENED_FOLDER_KEY, RIGHT_SIDEBAR_KEY, SYSTEM_VOLUME_KEY } from "../constants";
 
 type LeftSidebarState = {
   panelSize: number;
@@ -7,7 +8,7 @@ type LeftSidebarState = {
 }
 
 type LibraryState = {
-  activeTab: LeftSidebarTab;
+  activeTab: LibraryTab;
   sort: LibrarySort;
   view: LibraryView;
 }
@@ -20,55 +21,125 @@ type RightSidebarState = {
   isNowPlayingViewFullScreen: boolean;
 }
 
-type Folder = {
+type FolderState = {
   id: string;
   name: string;
 }
 
-type Preferences = {
+type UIPreferencesStore = {
   leftSidebar: LeftSidebarState;
   library: LibraryState;
   rightSidebar: RightSidebarState;
   isMiniPlayerWindowOpen: boolean;
   systemVolume: number[];
-  activeFolder: Folder;
-}
-
-type UIPreferencesStore = {
-  preferences: Preferences;
-  setPreferences: (newPreferences: Partial<Preferences>) => void;
+  openedFolder: FolderState;
+  setLeftSidebar: (leftSidebar: Partial<LeftSidebarState>) => void;
+  setLibrary: (library: Partial<LibraryState>) => void;
+  setRightSidebar: (rightSidebar: Partial<RightSidebarState>) => void;
+  setIsMiniPlayerWindowOpen: (isMiniPlayerWindowOpen: boolean) => void;
+  setSystemVolume: (volume: number[]) => void;
+  setOpenedFolder: (folder: Partial<FolderState>) => void;
 }
 
 export const useUIPreferencesStore = create<UIPreferencesStore>((set) => ({
-  preferences: {
-    leftSidebar: {
-      panelSize: 22,
-      isExpanded: false,
-    },
-    library: {
-      activeTab: "Playlists",
-      sort: "Recently Added",
-      view: "Default List",
-    },
-    rightSidebar: {
-      panelSize: 20,
-      showNowPlayingView: false,
-      showQueueView: false,
-      isNowPlayingViewExpanded: false,
-      isNowPlayingViewFullScreen: false,
-    },
-    isMiniPlayerWindowOpen: false,
-    systemVolume: [100],
-    activeFolder: {
-      id: "",
-      name: ""
-    }
+  leftSidebar: {
+    panelSize: 22,
+    isExpanded: false,
   },
-  setPreferences: (newPreferences) =>
-    set((state) => ({
-      preferences: {
-        ...state.preferences,
-        ...newPreferences,
-      },
-    })),
+  library: {
+    activeTab: "Playlists",
+    sort: "Recently Added",
+    view: "Default List",
+  },
+  rightSidebar: {
+    panelSize: 20,
+    showNowPlayingView: false,
+    showQueueView: false,
+    isNowPlayingViewExpanded: false,
+    isNowPlayingViewFullScreen: false
+  },
+  isMiniPlayerWindowOpen: false,
+  systemVolume: [100],
+  openedFolder: {
+    id: "",
+    name: ""
+  },
+
+  setLeftSidebar: (leftSidebar) => {
+    set((state) => {
+      const updatedLeftSidebar = {
+        ...state.leftSidebar,
+        ...leftSidebar
+      }
+      localStorage.setItem(LEFT_SIDEBAR_KEY, JSON.stringify(updatedLeftSidebar));
+
+      return {
+        leftSidebar: updatedLeftSidebar
+      }
+    })
+  },
+
+  setLibrary: (library) => {
+    set((state) => {
+      const updatedLibrary = {
+        ...state.library,
+        ...library
+      }
+
+      localStorage.setItem(LIBRARY_KEY, JSON.stringify(updatedLibrary));
+
+      return {
+        library: updatedLibrary
+      }
+    })
+  },
+
+  setRightSidebar: (rightSidebar) => {
+    set((state) => {
+      const updatedRightSidebar = {
+        ...state.rightSidebar,
+        ...rightSidebar
+      }
+
+      localStorage.setItem(RIGHT_SIDEBAR_KEY, JSON.stringify(updatedRightSidebar));
+
+      return {
+        rightSidebar: updatedRightSidebar
+      }
+    })
+  },
+
+  setIsMiniPlayerWindowOpen: (isMiniPlayerWindowOpen) => {
+    set(() => {
+      localStorage.setItem(MINI_PLAYER_WINDOW_OPEN_KEY, JSON.stringify(isMiniPlayerWindowOpen));
+
+      return {
+        isMiniPlayerWindowOpen
+      }
+    })
+  },
+
+  setSystemVolume: (volume) => {
+    set(() => {
+      localStorage.setItem(SYSTEM_VOLUME_KEY, JSON.stringify(volume));
+
+      return {
+        systemVolume: volume
+      }
+    })
+  },
+
+  setOpenedFolder: (folder) => {
+    set((state) => {
+      const updatedOpenedFolder = {
+        ...state.openedFolder,
+        ...folder
+      }
+      localStorage.setItem(OPENED_FOLDER_KEY, JSON.stringify(updatedOpenedFolder));
+
+      return {
+        openedFolder: updatedOpenedFolder
+      }
+    })
+  }
 }));

@@ -15,10 +15,9 @@ const FolderOptionsMenu: React.FC<FolderOptionsMenuProps> = ({ options, folderMe
     const [searchResult, setSearchResult] = useState<MenuOptions>([]);
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, activeFolder } = preferences;
+    const { leftSidebar, openedFolder } = useUIPreferencesStore();
     const { isExpanded: isLeftSidebarExpanded } = leftSidebar;
-    const { name: activeFolderName } = activeFolder;
+    const { name: openedFolderName } = openedFolder;
 
     /* ---------- UseEffects ---------- */
     useEffect(() => {
@@ -118,7 +117,7 @@ const FolderOptionsMenu: React.FC<FolderOptionsMenuProps> = ({ options, folderMe
                                                             style={{
                                                                 '--textHoverColor': '#EA7836',
                                                             } as React.CSSProperties}
-                                                            title={`Remove ${subLabel} from ${activeFolderName}`}
+                                                            title={`Remove ${subLabel} from ${openedFolderName}`}
                                                             onClick={subAction}
                                                         >
                                                             <DeleteIcon width="16" height="16" />

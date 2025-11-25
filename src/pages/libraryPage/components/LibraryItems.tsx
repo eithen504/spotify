@@ -3,8 +3,7 @@ import { useGetCurrentUserLibraryItems } from "../../../hooks/library";
 import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
 
 const LibraryItems = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { library } = preferences;
+    const { library } = useUIPreferencesStore();
     const { activeTab: libraryActiveTab, view: libraryView } = library;
     
     const { isLoading } = useGetCurrentUserLibraryItems(libraryActiveTab);

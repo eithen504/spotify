@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AddIcon, CrossIcon, ExpandIcon, MinimizeIcon, NextIcon, PlayIcon, PrevIcon, RepeatIcon, ShareIcon, ShuffleIcon, HighVolumeIcon, PauseIcon, SavedIcon } from "../../../../Svgs";
+import { AddIcon, CrossIcon, ExpandIcon, MinimizeIcon, NextIcon, PlayIcon, PrevIcon, RepeatIcon, ShareIcon, ShuffleIcon, PauseIcon, SavedIcon } from "../../../../Svgs";
 import { Slider } from "../../../../components/ui/slider";
 import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore";
 import { useDominantColor } from "../../../../hooks/color";
-import { formatDuration } from "../../../../utils";
+import { formatDuration, getVolumeIcon } from "../../../../utils";
 import { useLikeTrack, useTrackLikeStatus } from "../../../../hooks/like";
+import { useShare } from "../../../../hooks/share";
+import { useRepeatTrackStore } from "../../../../store/useRepeatTrackStore";
+import { useQueueStore } from "../../../../store/useQueueStore";
+import { useUIPreferencesStore } from "../../../../store/useUIPreferenceStore";
 
 type Position = {
     x: number;
@@ -49,11 +53,26 @@ interface MiniPlayerWindowProps {
     onClose: () => void;
     progress: number[];
     currentTime: number;
+    handlePlayPauseTrack: () => void;
+    handlePlayNextTrack: () => void;
+    handlePlayPrevTrack: () => void;
+    handleRepeatTrack: () => void;
     handleProgressChange: (value: number[]) => void;
+    handleVolumeChange: (value: number[]) => void;
 }
 
-const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose, progress, currentTime, handleProgressChange }) => {
-    const { trackDetails, setTrackDetails } = useTrackDetailsStore();
+const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({
+    onClose,
+    progress,
+    currentTime,
+    handlePlayPauseTrack,
+    handlePlayNextTrack,
+    handlePlayPrevTrack,
+    handleRepeatTrack,
+    handleProgressChange,
+    handleVolumeChange
+}) => {
+    const { trackDetails } = useTrackDetailsStore();
     const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
     const { getTrackLikeStatus } = useTrackLikeStatus()
     const hasLiked = getTrackLikeStatus({ hasLiked: trackDetails.hasLiked, trackId: trackDetails._id })
@@ -92,6 +111,20 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose, progress, 
         width: initialWidth,
         height: initialHeight
     });
+
+    const { share } = useShare();
+    const { repeatTracks } = useRepeatTrackStore();
+    const { systemVolume } = useUIPreferencesStore();
+    const { activeEntityQueueListNode, customQueue } = useQueueStore();
+
+    const hasPrev = activeEntityQueueListNode?.prev?.value;
+    const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
+
+    const hasTrackInRepeat = repeatTracks[trackDetails._id];
+
+    const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
+
+    const suggestedVolumeIcon = getVolumeIcon(systemVolume[0]);
 
     const windowRef = useRef<HTMLDivElement>(null);
 
@@ -358,40 +391,71 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose, progress, 
 
                             {/* Controls that appear on hover */}
                             <div
-                                className="absolute inset-0 flex items-center justify-center gap-1 hide-scrollbar group-hover-opacity transition-opacity duration-300"
+                                className="absolute inset-0 text-[#ffffff] flex items-center justify-center gap-1 hide-scrollbar group-hover-opacity transition-opacity duration-300"
                                 style={{
                                     '--hoverOpacity': 1,
                                 } as React.CSSProperties}
                             >
-                                <button className="cursor-pointer rounded-full p-2 text-white">
-                                    <HighVolumeIcon width="18" height="18" />
-                                </button>
 
-                                <button className="cursor-pointer rounded-full p-2 text-white">
+                                <div className="relative flex flex-col items-center">
+                                    {isVolumeSliderOpen && (
+                                        <div className="absolute bottom-full mb-5 ml-[142px] w-40 rounded-full">
+                                            <Slider
+                                                defaultValue={[0]}
+                                                value={systemVolume}
+                                                onValueChange={handleVolumeChange}
+                                                className="cursor-grab w-full"
+                                            />
+                                        </div>
+                                    )}
+
+                                    <button
+                                        className="cursor-pointer rounded-full p-2"
+                                        onClick={() => setIsVolumeSliderOpen(!isVolumeSliderOpen)}
+                                    >
+                                        {suggestedVolumeIcon({ width: "18", height: "18" })}
+                                    </button>
+                                </div>
+
+
+                                <button className="cursor-pointer rounded-full p-2">
                                     <ShuffleIcon width="18" height="18" />
                                 </button>
 
-                                <button className="cursor-pointer rounded-full p-2 text-white">
+                                <button
+                                    className={`rounded-full p-2 ${hasPrev ? "dynamic-text-hover cursor-pointer opacity-100" : "cursor-not-allowed opacity-50"}`}
+                                    onClick={handlePlayPrevTrack}
+                                >
                                     <PrevIcon width="18" height="18" />
                                 </button>
 
-                                <button className="cursor-pointer bg-white rounded-full p-4 text-black"
-                                    onClick={() => setTrackDetails({ isPlaying: !trackDetails.isPlaying })}
+                                <button
+                                    className="text-[#000000] bg-[#ffffff] cursor-pointer rounded-full p-4"
+                                    onClick={handlePlayPauseTrack}
                                 >
                                     {
                                         trackDetails.isPlaying ? <PauseIcon width="20" height="20" /> : <PlayIcon width="20" height="20" />
                                     }
                                 </button>
 
-                                <button className="cursor-pointer rounded-full p-2 text-white">
+                                <button
+                                    className={`rounded-full p-2 ${hasNext ? "dynamic-text-hover cursor-pointer opacity-100" : "cursor-not-allowed opacity-50"}`}
+                                    onClick={handlePlayNextTrack}
+                                >
                                     <NextIcon width="18" height="18" />
                                 </button>
 
-                                <button className="cursor-pointer rounded-full p-2 text-white">
+                                <button
+                                    className={`cursor-pointer rounded-full p-2 ${hasTrackInRepeat ? "text-[#3BE477]" : "text-[#ffffff]"}`}
+                                    onClick={handleRepeatTrack}
+                                >
                                     <RepeatIcon width="18" height="18" />
                                 </button>
 
-                                <button className="cursor-pointer rounded-full p-2 -mt-1 text-white">
+                                <button
+                                    className="cursor-pointer rounded-full p-2 -mt-1"
+                                    onClick={() => share(`/track/${trackDetails._id}`)}
+                                >
                                     <ShareIcon width="18" height="18" />
                                 </button>
                             </div>
@@ -407,7 +471,7 @@ const MiniPlayerWindow: React.FC<MiniPlayerWindowProps> = ({ onClose, progress, 
                     >
                         <div className="flex justify-between text-white text-xs mb-1">
                             <span>{formatDuration(currentTime)}</span>
-                            <span>{trackDetails.duration}</span>
+                            <span>{formatDuration(trackDetails.duration)}</span>
                         </div>
                         <div className="h-1 rounded-full hide-scrollbar">
                             <Slider

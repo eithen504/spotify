@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { formatTotalAsHMS, getScrollThreshold } from "../../utils";
 import { useDominantColor } from "../../hooks/color";
-import type { Columns, Controls, Handlers, MenuOptions, Playlist, Track } from "../../types";
+import type { Controls, Handlers, MenuOptions, Playlist, Track, TrackMenuState } from "../../types";
 import { NotFoundEntity, NotFoundTracks } from "../../components/NotFounds";
 import EntityHeader from "../../components/EntityHeader";
 import EntityInfoSection from "../../components/EntityInfoSection";
@@ -31,6 +31,8 @@ import { useAddItemsToPlaylist, useUploadPlaylist } from "../../hooks/playlist";
 import SearchForEntity from "../../components/SearchForEntity";
 import { AlbumPageSkeleton } from "../../components/Skeletons";
 import EntityImageDialog from "../../components/EntityImageDialog";
+import TrackCreditsDialog from "../../components/TrackCreditsDialog";
+import { useTableColumnVisibilityStore } from "../../store/useTableColumnVisibilityStore";
 
 /* ---------- Constants ---------- */
 const adminId = import.meta.env.VITE_ADMIN_ID
@@ -49,27 +51,25 @@ const AlbumPage = () => {
     const { id } = useParams();
 
     /* ---------- Local States ---------- */
-    const [view, setView] = useState<"Compact List" | "Default List">("Default List");
-    const [columns, setColumns] = useState<Columns>({
-        "Artist": true,
-        "Album": true,
-        "Duration": true,
-        "Date added": false,
+    const [trackMenu, setTrackMenu] = useState<TrackMenuState>({
+        isOpen: false,
+        track: null
     });
-    const [currentMenuTrackIndex, setCurrentMenuTrackIndex] = useState(-1);
     const [isEditAlbumDialogOpen, setIsEditAlbumDialogOpen] = useState(false);
     const [isAlbumImageDialogOpen, setIsAlbumImageDialogOpen] = useState(false);
     const [isPreviewAlbumModalOpen, setIsPreviewAlbumModalOpen] = useState(false);
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
+    const [isTrackCreditsDialogOpen, setIsTrackCreditsDialogOpen] = useState(false);
+    const [albumTableColumnOptions, setAlbumTableColumnOptions] = useState<MenuOptions>([])
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
     const { albumData: { albumId, activeTrackId, playImmediate }, setAlbumData } = useAlbumStore();
     const { setPlaylistData } = usePlaylistStore();
     const { queueMap, initializeEntityQueue, addItemsToCustomQueue, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
+    const { tableView, albumTableColumns, toggleAlbumTableColumn } = useTableColumnVisibilityStore();
     const { scrollFromTop } = useScrollStore();
 
     /* ---------- Custom Hooks ---------- */
@@ -96,10 +96,10 @@ const AlbumPage = () => {
     const albumDuration = formatTotalAsHMS(secondsArray || [])
     const description = `Spotify . ${albumLength} . ${albumDuration}`;
 
-    const currentMenuTrack = (data && data.tracks && currentMenuTrackIndex != -1) ? data.tracks[currentMenuTrackIndex] : undefined;
+    const { track: currentMenuTrack } = trackMenu;
     const hasLiked = getTrackLikeStatus({ hasLiked: currentMenuTrack?.hasLiked || false, trackId: currentMenuTrack?._id || "" });
-    const queueItemid = `Album-${id}-${currentMenuTrack?._id}`;
-    const hasTrackInQueue = queueMap[queueItemid];
+    const queueItemId = `Album-${id}-${currentMenuTrack?._id}`;
+    const hasTrackInQueue = queueMap[queueItemId];
 
     const albumMenuOptions: MenuOptions = [
         {
@@ -135,11 +135,12 @@ const AlbumPage = () => {
                     icon: <PlusIcon width="16" height="16" />,
                     label: "Create Playlist",
                     action: () => {
+                        const tracks = data.tracks.map((t: Track) => t._id);
                         uploadPlaylist({
                             title: `New Playlist ${Date.now()}`,
                             coverImageUrl: "",
                             genres: [],
-                            tracks: data.tracks,
+                            tracks,
                             visibility: "Public"
                         });
                     }
@@ -177,7 +178,37 @@ const AlbumPage = () => {
             icon: <PlusIcon width="16" height="16" />,
             label: "Add To Playlist",
             action: () => { },
-            rightSideIcon: <RightArrowIndicatorIcon width="12" height="12" />
+            rightSideIcon: <RightArrowIndicatorIcon width="12" height="12" />,
+            subMenu: [
+                {
+                    icon: <PlusIcon width="16" height="16" />,
+                    label: "Create Playlist",
+                    action: () => {
+                        if (!currentMenuTrack) return;
+
+                        uploadPlaylist({
+                            title: `New Playlist ${Date.now()}`,
+                            coverImageUrl: "",
+                            genres: [],
+                            tracks: [currentMenuTrack._id],
+                            visibility: "Public"
+                        });
+                    }
+                },
+                ...(Array.isArray(playlists)
+                    ? playlists.map((playlist: Playlist) => ({
+                        label: playlist.title,
+                        action: () => {
+                            if (!currentMenuTrack) return;
+
+                            addItemsToPlaylist({
+                                playlistId: playlist._id,
+                                tracks: [currentMenuTrack],
+                            })
+                        }
+                    }))
+                    : [])
+            ]
         },
         {
             icon: hasLiked ? <SavedIcon width="16" height="16" /> : <AddIcon width="16" height="16" />,
@@ -212,7 +243,9 @@ const AlbumPage = () => {
         {
             icon: <CreditIcon width="16" height="16" />,
             label: "View Credits",
-            action: () => { },
+            action: () => {
+                setIsTrackCreditsDialogOpen(true);
+            },
         },
         {
             icon: <ShareIcon width="16" height="16" />,
@@ -313,22 +346,32 @@ const AlbumPage = () => {
 
     /* ---------- UseEffects ---------- */
     useEffect(() => {
-        if (view == "Default List") {
-            setColumns({
-                "Artist": false,
-                "Album": false,
-                "Duration": true,
-                "Date added": false,
-            })
+        if (tableView == "Compact List") {
+            setAlbumTableColumnOptions([
+                {
+                    label: "Artist",
+                    action: () => {
+                        toggleAlbumTableColumn("ARTIST");
+                    }
+                },
+                {
+                    label: "Duration",
+                    action: () => {
+                        toggleAlbumTableColumn("DURATION");
+                    }
+                }
+            ])
         } else {
-            setColumns({
-                "Artist": true,
-                "Album": false,
-                "Duration": true,
-                "Date added": false,
-            })
+            setAlbumTableColumnOptions([
+                {
+                    label: "Duration",
+                    action: () => {
+                        toggleAlbumTableColumn("DURATION");
+                    }
+                }
+            ])
         }
-    }, [view])
+    }, [tableView])
 
     useEffect(() => {
         if (isLoading || !data || !data?.tracks || data?.tracks?.length == 0) return;
@@ -384,8 +427,6 @@ const AlbumPage = () => {
                         <EntityControls
                             controls={controls}
                             handlers={handlers}
-                            view={view}
-                            setView={setView}
                             entity={{
                                 title: data.album.title,
                                 imgUrl,
@@ -399,9 +440,8 @@ const AlbumPage = () => {
                         <div className="relative max-w-[90rem] mx-auto">
                             {/* album Table Header */}
                             <EntityTableHeader
-                                view={view}
-                                columns={columns}
-                                setColumns={setColumns}
+                                tableColumns={albumTableColumns}
+                                options={albumTableColumnOptions}
                             />
 
                             {/* Seperator Line */}
@@ -412,14 +452,13 @@ const AlbumPage = () => {
                             {/* album Tracks */}
                             <EntityTracks
                                 tracks={data.tracks}
-                                columns={columns}
-                                view={view}
+                                tableColumns={albumTableColumns}
                                 isPlayingCurrentEntity={isPlayingCurrentAlbum}
-                                currentMenuTrackIndex={currentMenuTrackIndex}
-                                setCurrentMenuTrackIndex={setCurrentMenuTrackIndex}
                                 trackMenuOptions={trackMenuOptions}
-                                handlePlayPauseTrack={handlePlayPauseTrack}
                                 entityDrawerHeight="429px"
+                                trackMenu={trackMenu}
+                                setTrackMenu={setTrackMenu}
+                                handlePlayPauseTrack={handlePlayPauseTrack}
                             />
                         </div>
                     </>
@@ -453,7 +492,7 @@ const AlbumPage = () => {
             }
 
             {
-                isAlbumImageDialogOpen && 
+                isAlbumImageDialogOpen &&
                 <EntityImageDialog
                     imageUrl={imgUrl}
                     onClose={() => setIsAlbumImageDialogOpen(false)}
@@ -461,7 +500,21 @@ const AlbumPage = () => {
             }
 
             {
-                isPreviewAlbumModalOpen && <PreviewEntityModal tracks={data.tracks} onClose={() => setIsPreviewAlbumModalOpen(false)} />
+                isPreviewAlbumModalOpen && (
+                    <PreviewEntityModal
+                        tracks={data.tracks}
+                        onClose={() => setIsPreviewAlbumModalOpen(false)}
+                    />
+                )
+            }
+
+            {
+                isTrackCreditsDialogOpen && (
+                    <TrackCreditsDialog
+                        track={currentMenuTrack}
+                        onClose={() => setIsTrackCreditsDialogOpen(false)}
+                    />
+                )
             }
 
         </div>

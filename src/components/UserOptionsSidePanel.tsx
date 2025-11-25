@@ -15,13 +15,13 @@ const UserOptionsSidePanel: React.FC<UserOptionsSidePanelProps> = ({ isOpen, opt
         <>
             {/* Overlay */}
             <div
-                className={`fixed inset-0 z-[799] bg-black/60 transition-opacity duration-300 
+                className={`fixed inset-0 z-[799] bg-black/60 transition-opacity duration-400 
                     ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 onClick={onClose}
             />
 
             <div
-                className={`fixed top-0 left-0 h-full w-[75%] bg-[#121212] border-r border-[#282828] z-[800] transform transition-transform duration-300 ease-in-out 
+                className={`fixed top-0 left-0 h-full w-[75%] bg-[#121212] border-r border-[#282828] z-[800] transform transition-transform duration-400 ease-in-out 
                     ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="flex flex-col h-full p-6">

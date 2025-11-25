@@ -1,9 +1,9 @@
 import { useBreakPoint } from "../hooks/breakPoint";
+import { useTableColumnVisibilityStore } from "../store/useTableColumnVisibilityStore";
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 
 const HomePageSkeleton = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
@@ -85,9 +85,9 @@ const HomePageSkeleton = () => {
 }
 
 const AlbumPageSkeleton = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
+    const { tableView } = useTableColumnVisibilityStore();
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -123,7 +123,7 @@ const AlbumPageSkeleton = () => {
                 {/* Preview */}
                 <div
                     className={`${leftPanelSize <= 28 ? "w-[38px] h-[48px]" : "w-[36px] h-[46px]"
-                        } flex-shrink-none relative rounded-md cursor-pointer group bg-[#272727] animate-pulse `}
+                        } flex-shrink-none relative rounded-md group bg-[#272727] animate-pulse `}
                 />
 
                 {/* Save */}
@@ -162,24 +162,51 @@ const AlbumPageSkeleton = () => {
                         {/* Index */}
                         <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
 
-                        {/* Cover and Titles */}
-                        <div className="flex-1 min-w-0 flex items-center gap-3 ml-0 md:ml-2">
+                        {/* Title with Image */}
+                        <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
+                            {/* Track Title And Artist */}
                             <div className="min-w-0 space-y-1">
-                                {/* Title skeleton */}
+                                {/* Track Title */}
                                 <div className="h-4 w-40 bg-[#272727] rounded-md" />
-                                {/* Artist skeleton */}
-                                <div className="h-3 w-24 bg-[#272727] rounded-md" />
+
+                                {
+                                    tableView != "Compact List" && (
+                                        <>
+                                            {/* Track Artist */}
+                                            <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                        </>
+                                    )
+                                }
                             </div>
                         </div>
 
-                        {/* Action buttons + duration (desktop) */}
+                        {
+                            tableView == "Compact List" && (
+                                <>
+                                    {/* Artist */}
+                                    <div
+                                        className={`flex-1 truncate ml-35 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"
+                                            }`}
+                                    >
+                                        <div className="h-3 w-20 bg-[#272727] rounded-md" />
+                                    </div>
+                                </>
+                            )
+                        }
+
+                        {/* Like, Duration And More */}
                         <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
+                            {/* Like */}
                             <div className="w-4 h-4 bg-[#272727] rounded-full" />
+
+                            {/* Duration */}
                             <div className="h-3 w-10 bg-[#272727] rounded-md" />
+
+                            {/* More */}
                             <div className="w-5 h-5 bg-[#272727] rounded-full" />
                         </div>
 
-                        {/* More button (mobile) */}
+                        {/* More Icon For Small Screen */}
                         <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
                             <div className="w-5 h-5 bg-[#272727] rounded-full" />
                         </div>
@@ -191,8 +218,7 @@ const AlbumPageSkeleton = () => {
 }
 
 const TrackPageSkeleton = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
@@ -298,9 +324,9 @@ const TrackPageSkeleton = () => {
 }
 
 const PlaylistPageSkeleton = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
+    const { tableView } = useTableColumnVisibilityStore();
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -336,7 +362,7 @@ const PlaylistPageSkeleton = () => {
                 {/* Preview */}
                 <div
                     className={`${leftPanelSize <= 28 ? "w-[38px] h-[48px]" : "w-[36px] h-[46px]"
-                        } flex-shrink-none relative rounded-md cursor-pointer group bg-[#272727] animate-pulse `}
+                        } flex-shrink-none relative rounded-md group bg-[#272727] animate-pulse `}
                 />
 
                 {/* Save */}
@@ -375,20 +401,34 @@ const PlaylistPageSkeleton = () => {
                         {/* Index */}
                         <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
 
-                        {/* Cover and Titles */}
+                        {/* Title with Image */}
                         <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
-                            {/* Skeleton image */}
-                            <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                            {
+                                tableView != "Compact List" && (
+                                    <>
+                                        {/* Track Image */}
+                                        <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                                    </>
+                                )
+                            }
 
+                            {/* Track Title And Artist */}
                             <div className="min-w-0 space-y-1">
-                                {/* Title skeleton */}
+                                {/* Track Title */}
                                 <div className="h-4 w-40 bg-[#272727] rounded-md" />
-                                {/* Artist skeleton */}
-                                <div className="h-3 w-24 bg-[#272727] rounded-md" />
+
+                                {
+                                    tableView != "Compact List" && (
+                                        <>
+                                            {/* Track Artist */}
+                                            <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                        </>
+                                    )
+                                }
                             </div>
                         </div>
 
-                        {/* Album (Compact/Default View) */}
+                        {/* Album */}
                         <div
                             className={`flex-1 truncate ml-35 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
@@ -396,7 +436,7 @@ const PlaylistPageSkeleton = () => {
                             <div className="h-3 w-20 bg-[#272727] rounded-md" />
                         </div>
 
-                        {/* Date added (Default View only) */}
+                        {/* Date Added */}
                         <div
                             className={`w-32 ml-5 ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
@@ -404,14 +444,19 @@ const PlaylistPageSkeleton = () => {
                             <div className="h-3 w-20 bg-[#272727] rounded-md" />
                         </div>
 
-                        {/* Action buttons + duration (desktop) */}
+                        {/* Like, Duration And More */}
                         <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
+                            {/* Like */}
                             <div className="w-4 h-4 bg-[#272727] rounded-full" />
+
+                            {/* Duration */}
                             <div className="h-3 w-10 bg-[#272727] rounded-md" />
+
+                            {/* More */}
                             <div className="w-5 h-5 bg-[#272727] rounded-full" />
                         </div>
 
-                        {/* More button (mobile) */}
+                        {/* More Icon For Small Screen */}
                         <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
                             <div className="w-5 h-5 bg-[#272727] rounded-full" />
                         </div>
@@ -423,9 +468,9 @@ const PlaylistPageSkeleton = () => {
 }
 
 const CollectionTracksPageSkeleton = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
+    const {tableView} = useTableColumnVisibilityStore();
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -479,20 +524,34 @@ const CollectionTracksPageSkeleton = () => {
                         {/* Index */}
                         <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
 
-                        {/* Cover and Titles */}
+                        {/* Title with Image */}
                         <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
-                            {/* Skeleton image */}
-                            <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                            {
+                                tableView != "Compact List" && (
+                                    <>
+                                        {/* Track Image */}
+                                        <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                                    </>
+                                )
+                            }
 
+                            {/* Track Title And Artist */}
                             <div className="min-w-0 space-y-1">
-                                {/* Title skeleton */}
+                                {/* Track Title */}
                                 <div className="h-4 w-40 bg-[#272727] rounded-md" />
-                                {/* Artist skeleton */}
-                                <div className="h-3 w-24 bg-[#272727] rounded-md" />
+
+                                {
+                                    tableView != "Compact List" && (
+                                        <>
+                                            {/* Track Artist */}
+                                            <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                        </>
+                                    )
+                                }
                             </div>
                         </div>
 
-                        {/* Album (Compact/Default View) */}
+                        {/* Album */}
                         <div
                             className={`flex-1 truncate ml-35 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
@@ -500,7 +559,7 @@ const CollectionTracksPageSkeleton = () => {
                             <div className="h-3 w-20 bg-[#272727] rounded-md" />
                         </div>
 
-                        {/* Date added (Default View only) */}
+                        {/* Date Added */}
                         <div
                             className={`w-32 ml-5 ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
@@ -508,14 +567,19 @@ const CollectionTracksPageSkeleton = () => {
                             <div className="h-3 w-20 bg-[#272727] rounded-md" />
                         </div>
 
-                        {/* Action buttons + duration (desktop) */}
+                        {/* Like, Duration And More */}
                         <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
+                            {/* Like */}
                             <div className="w-4 h-4 bg-[#272727] rounded-full" />
+
+                            {/* Duration */}
                             <div className="h-3 w-10 bg-[#272727] rounded-md" />
+
+                            {/* More */}
                             <div className="w-5 h-5 bg-[#272727] rounded-full" />
                         </div>
 
-                        {/* More button (mobile) */}
+                        {/* More Icon For Small Screen */}
                         <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
                             <div className="w-5 h-5 bg-[#272727] rounded-full" />
                         </div>
@@ -526,7 +590,7 @@ const CollectionTracksPageSkeleton = () => {
     )
 }
 
-const CompactListItemsSkeleton = () => {
+function CompactListItemsSkeleton() {
     return (
         <div className="flex-1 px-3 mb-4">
             {Array.from({ length: 10 }).map(() => (
@@ -543,7 +607,7 @@ const CompactListItemsSkeleton = () => {
     )
 }
 
-const DefaultListItemsSkeleton = () => {
+function DefaultListItemsSkeleton() {
     return (
         <div className="flex-1 px-3 mb-4">
             {Array.from({ length: 10 }).map((_, i) => (
@@ -565,10 +629,9 @@ const DefaultListItemsSkeleton = () => {
     )
 }
 
-const CompactGridItemsSkeleton = () => {
+function CompactGridItemsSkeleton() {
     const { breakPoint } = useBreakPoint();
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize, isExpanded: isLeftSidebarExpanded } = leftSidebar;
 
     return (
@@ -582,8 +645,8 @@ const CompactGridItemsSkeleton = () => {
                         : "custom-grid-layout"
                 } px-3 mb-4`}
         >
-            {Array.from({ length: 10 }).map(() => (
-                <div className="p-3 rounded-[4px] flex flex-col overflow-hidden">
+            {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="p-3 rounded-[4px] flex flex-col overflow-hidden">
                     {/* Skeleton Image */}
                     <div className="relative w-full aspect-square rounded-[4px] bg-[#353535] animate-pulse" />
                 </div>
@@ -592,10 +655,9 @@ const CompactGridItemsSkeleton = () => {
     )
 }
 
-const DefaultGridItemsSkeleton = () => {
+function DefaultGridItemsSkeleton() {
     const { breakPoint } = useBreakPoint();
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize, isExpanded: isLeftSidebarExpanded } = leftSidebar;
 
     return (
@@ -609,8 +671,8 @@ const DefaultGridItemsSkeleton = () => {
                         : "custom-grid-layout"
                 } px-3 mb-4`}
         >
-            {Array.from({ length: 10 }).map(() => (
-                <div className="p-3 rounded-[4px] flex flex-col overflow-hidden">
+            {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="p-3 rounded-[4px] flex flex-col overflow-hidden">
                     {/* Skeleton Image */}
                     <div className="relative w-full aspect-square rounded-[4px] bg-[#353535] animate-pulse" />
 
@@ -625,7 +687,7 @@ const DefaultGridItemsSkeleton = () => {
     )
 }
 
-const SmallScreenLibraryPanelSkelton = () => {
+function SmallScreenLibraryPanelSkelton() {
     return (
         <div className="mb-4">
             <div className="flex flex-col space-y-2">
@@ -641,7 +703,6 @@ const SmallScreenLibraryPanelSkelton = () => {
         </div>
     )
 }
-
 
 export {
     HomePageSkeleton,

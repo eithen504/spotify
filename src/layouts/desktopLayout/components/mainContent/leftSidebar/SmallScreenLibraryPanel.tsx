@@ -1,6 +1,6 @@
-import React, { type JSX } from 'react'
+import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import type { Album, Folder, LeftSidebarTab, Playlist } from '../../../../../types'
+import type { Album, Folder, Playlist } from '../../../../../types'
 import { useGetCurrentUserLibraryItems } from '../../../../../hooks/library'
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore'
 import { useFolderActions, useGetFolderPlaylists } from '../../../../../hooks/folder'
@@ -94,7 +94,7 @@ const SmallScreenSaveAlbums = () => {
 
     return (
         albums.map((album: Album) => {
-            const isCurrentAlbumPage = pathname == `/album/${albums._id}`;
+            const isCurrentAlbumPage = pathname == `/album/${album._id}`;
 
             return (
                 <div
@@ -156,11 +156,10 @@ const SmallScreenFolders = () => {
 const FolderPlaylists = () => {
     const { pathname } = useLocation();
 
-    const { preferences } = useUIPreferencesStore();
-    const { activeFolder } = preferences;
-    const { id: activeFolderId } = activeFolder;
+    const { openedFolder } = useUIPreferencesStore();
+    const { id: openedFolderId } = openedFolder;
 
-    const { data: playlists, isLoading } = useGetFolderPlaylists(activeFolderId);
+    const { data: playlists, isLoading } = useGetFolderPlaylists(openedFolderId);
     const { navigateToPlaylist } = usePlaylistActions();
 
     if (isLoading) return <SmallScreenLibraryPanelSkelton />;
@@ -203,7 +202,7 @@ const FolderPlaylists = () => {
     )
 }
 
-const SmallScreenLibraryPanelComponents: Record<LeftSidebarTab, () => JSX.Element> = {
+const SmallScreenLibraryPanelComponents = {
     "Playlists": SmallScreenPlaylists,
     "Save Playlists": SmallScreenSavePlaylists,
     "Save Albums": SmallScreenSaveAlbums,
@@ -216,10 +215,9 @@ const SmallScreenLibraryPanel = () => {
     const { pathname } = useLocation();
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { library, activeFolder } = preferences;
+    const { library, openedFolder } = useUIPreferencesStore();
     const { activeTab: libraryActiveTab } = library;
-    const { id: activeFolderId } = activeFolder;
+    const { id: openedFolderId } = openedFolder;
 
     /* ---------- Custom Hooks ---------- */
     const { navigateToPlaylist } = usePlaylistActions();
@@ -228,7 +226,7 @@ const SmallScreenLibraryPanel = () => {
     const Component = SmallScreenLibraryPanelComponents[libraryActiveTab];
     const isCollectionTracksPage = pathname == "/collection/tracks";
 
-    if (activeFolderId) return <FolderPlaylists />;
+    if (openedFolderId) return <FolderPlaylists />;
 
     return (
         <div className="mb-4">

@@ -18,23 +18,16 @@ const Header: React.FC<HeaderProps> = ({ isScrolled, trackMenuOptions }) => {
     const trackMenuRef = useRef<HTMLDivElement>(null);
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { rightSidebar } = preferences;
+    const { setRightSidebar } = useUIPreferencesStore();
     const { trackDetails } = useTrackDetailsStore();
 
     /* ---------- Methods Or Functions ---------- */
     const handleHidedNowPlayingView = () => {
-        const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: false };
-        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-        setPreferences({ rightSidebar: updatedRightSidebar });
-        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+        setRightSidebar({ showNowPlayingView: false });
     }
 
     const handleExpandNowPlayingView = () => {
-        const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: true };
-        const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-        setPreferences({ rightSidebar: updatedRightSidebar });
-        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+        setRightSidebar({ isNowPlayingViewExpanded: true });
     }
 
     return (

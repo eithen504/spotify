@@ -8,7 +8,6 @@ import { usePlaylistActions } from '../../../hooks/playlist';
 import { useCheckAuth } from '../../../hooks/auth';
 import AuthRequiredModal from '../../../components/AuthRequiredModal';
 
-
 interface PlaylistSectionItemsProps {
     playlists: Playlist[]
 }

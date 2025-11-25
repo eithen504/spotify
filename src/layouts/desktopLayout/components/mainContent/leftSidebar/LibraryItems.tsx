@@ -5,8 +5,7 @@ import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore
 import SmallScreenLibraryPanel from './SmallScreenLibraryPanel';
 
 const LibraryItems = () => {
-    const { preferences } = useUIPreferencesStore();
-    const { library, leftSidebar } = preferences;
+    const { leftSidebar, library } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { activeTab: libraryActiveTab, view: libraryView } = library;
 

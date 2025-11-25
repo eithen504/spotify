@@ -4,135 +4,11 @@ import { GENRES_ID_BGCOLOR_MAP, GENRES_ID_TITLE_MAP } from "../../constants";
 import Footer from "../../components/Footer";
 import { useUIPreferencesStore } from "../../store/useUIPreferenceStore";
 import { useBreakPoint } from "../../hooks/breakPoint";
-import { BackArrowIcon, LeftArrowIcon, PauseIcon, PlayIcon } from "../../Svgs";
+import { BackArrowIcon, PauseIcon, PlayIcon } from "../../Svgs";
 import { useGetGenrePlaylists, usePlaylistActions } from "../../hooks/playlist";
 import type { Playlist } from "../../types";
 import { usePlaylistStore } from "../../store/usePlaylistStore";
 import { useTrackDetailsStore } from "../../store/useTrackDetailsStore";
-
-const dummyPlaylists = [
-    {
-        id: 1,
-        title: "Hot Hits Punjabi",
-        description: "Catch the hottest Punjabi hits",
-        image: "https://i.imgur.com/Ns6j6LV.png",
-    },
-    {
-        id: 2,
-        title: "Trending Now Punjabi",
-        description: "Latest Punjabi bangers",
-        image: "https://i.imgur.com/O8Kr1Nr.png",
-    },
-    {
-        id: 3,
-        title: "Punjabi 101",
-        description: "Ultimate Punjabi collection",
-        image: "https://i.imgur.com/9nbQ0uo.png",
-    },
-    {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    },
-    {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    }, {
-        id: 4,
-        title: "Punjabi Pump",
-        description: "Pump up your day",
-        image: "https://i.imgur.com/OdBYhgG.png",
-    },
-    {
-        id: 5,
-        title: "Mega Punjabi Hits",
-        description: "Mega mix of Punjabi hits",
-        image: "https://i.imgur.com/2p7KOoZ.png",
-    },
-];
 
 const GenrePage = () => {
     const navigate = useNavigate();
@@ -140,8 +16,7 @@ const GenrePage = () => {
     const bgColor = GENRES_ID_BGCOLOR_MAP[id || ""];
     const title = GENRES_ID_TITLE_MAP[id || ""];
 
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, rightSidebar } = preferences;
+    const { leftSidebar, rightSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { showNowPlayingView, showQueueView } = rightSidebar;
 

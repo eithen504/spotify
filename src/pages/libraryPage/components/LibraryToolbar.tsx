@@ -3,7 +3,7 @@ import { VIEW_ICONS } from "../../../constants";
 import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
 import { ArrowUpDownIcon } from "../../../Svgs";
 import SortOptionsDrawer from "./SortOptionsDrawer";
-import type { LibrarySort, LibraryView } from "../../../types";
+import type { LibraryView } from "../../../types";
 
 
 const LibraryToolbar = () => {
@@ -11,8 +11,7 @@ const LibraryToolbar = () => {
     const [isSortDrawerOpen, setIsSortDrawerOpen] = useState(false);
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { library } = preferences;
+    const { library, setLibrary } = useUIPreferencesStore();
     const { sort: librarySort, view: libraryView } = library;
 
     /* ---------- Derived Values ---------- */
@@ -20,28 +19,19 @@ const LibraryToolbar = () => {
         {
             label: "Recently Added",
             action: () => {
-                const updatedLibrary = { ...library, sort: "Recently Added" as LibrarySort };
-                const updatedPreferences = { ...preferences, library: updatedLibrary };
-                setPreferences(updatedPreferences);
-                localStorage.setItem("preferences", `${updatedPreferences}`);
+                setLibrary({ sort: "Recently Added" });
             }
         },
         {
             label: "Alphabetical A To Z",
             action: () => {
-                const updatedLibrary = { ...library, sort: "Alphabetical A To Z" as LibrarySort };
-                const updatedPreferences = { ...preferences, library: updatedLibrary };
-                setPreferences(updatedPreferences);
-                localStorage.setItem("preferences", `${updatedPreferences}`);
+                setLibrary({ sort: "Alphabetical A To Z" });
             }
         },
         {
             label: "Alphabetical Z To A",
             action: () => {
-                const updatedLibrary = { ...library, sort: "Alphabetical Z To A" as LibrarySort };
-                const updatedPreferences = { ...preferences, library: updatedLibrary };
-                setPreferences(updatedPreferences);
-                localStorage.setItem("preferences", `${updatedPreferences}`);
+                setLibrary({ sort: "Alphabetical Z To A" });
             }
         },
     ]
@@ -49,10 +39,7 @@ const LibraryToolbar = () => {
     /* ---------- Methods Or Functions ---------- */
     const handleToggleView = () => {
         const newLibraryView = libraryView == "Default Grid" ? "Default List" : "Default Grid";
-        const updatedLibrary = { ...library, view: newLibraryView as LibraryView }
-        const updatedPreferences = { ...preferences, library: updatedLibrary };
-        setPreferences(updatedPreferences);
-        localStorage.setItem("preferences", `${updatedPreferences}`);
+        setLibrary({ view: newLibraryView });
     }
 
     return (

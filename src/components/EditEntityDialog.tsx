@@ -37,8 +37,7 @@ const EditEntityDialog: React.FC<EditEntityDialogProps> = ({
     const imageInputRef = useRef<HTMLInputElement | null>(null);
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
 
     /* ---------- Custom Hooks ---------- */

@@ -10,27 +10,27 @@ import { useTrackDetailsStore } from '../../../../store/useTrackDetailsStore';
 import { useDominantColor } from '../../../../hooks/color';
 
 interface NowPlayingProps {
-    isOpen: boolean;
     onClose: () => void;
     progress: number[];
     currentTime: number;
     handlePlayPauseTrack: () => void;
-    handleProgressChange: (value: number[]) => void;
-    handleVolumeChange: (value: number[]) => void;
     handlePlayNextTrack: () => void;
     handlePlayPrevTrack: () => void;
+    handleRepeatTrack: () => void;
+    handleProgressChange: (value: number[]) => void;
+    handleVolumeChange: (value: number[]) => void;
 }
 
 const NowPlaying: React.FC<NowPlayingProps> = ({
-    isOpen,
     onClose,
     progress,
     currentTime,
     handlePlayPauseTrack,
-    handleProgressChange,
-    handleVolumeChange,
     handlePlayNextTrack,
-    handlePlayPrevTrack
+    handlePlayPrevTrack,
+    handleRepeatTrack,
+    handleProgressChange,
+    handleVolumeChange 
 }) => {
     /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
@@ -39,7 +39,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
     const { dominantColor } = useDominantColor(trackDetails.coverImageUrl || "");
 
     return (
-        <Drawer open={isOpen} onClose={onClose}>
+        <Drawer open={true} onClose={onClose}>
             <DrawerContent className="z-500"
                 style={{ background: dominantColor || '#3C3C3C' }}
             >
@@ -65,6 +65,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
                         handlePlayPauseTrack={handlePlayPauseTrack}
                         handlePlayNextTrack={handlePlayNextTrack}
                         handlePlayPrevTrack={handlePlayPrevTrack}
+                        handleRepeatTrack={handleRepeatTrack}
                     />
 
                     {/* Bottom Actions */}

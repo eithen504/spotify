@@ -9,15 +9,27 @@ import { getVolumeIcon } from "../../../../utils"
 interface RightSideControlsProps {
     progress: number[];
     currentTime: number;
+    handlePlayPauseTrack: () => void;
+    handlePlayNextTrack: () => void;
+    handlePlayPrevTrack: () => void;
+    handleRepeatTrack: () => void;
     handleProgressChange: (value: number[]) => void;
     handleVolumeChange: (value: number[]) => void;
 }
 
-const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, currentTime, handleProgressChange, handleVolumeChange }) => {
+const RightSideControls: React.FC<RightSideControlsProps> = ({
+    progress,
+    currentTime,
+    handlePlayPauseTrack,
+    handlePlayNextTrack,
+    handlePlayPrevTrack,
+    handleRepeatTrack,
+    handleProgressChange,
+    handleVolumeChange,
+}) => {
     /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { rightSidebar, isMiniPlayerWindowOpen, systemVolume } = preferences;
+    const { rightSidebar, isMiniPlayerWindowOpen, systemVolume, setRightSidebar, setIsMiniPlayerWindowOpen } = useUIPreferencesStore();
     const { showNowPlayingView, showQueueView, isNowPlayingViewFullScreen } = rightSidebar;
 
     /* ---------- Derived Values ---------- */
@@ -26,29 +38,17 @@ const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, current
     /* ---------- Methods Or Functions ---------- */
     const handleToggleNowPlayingView = () => {
         if (showNowPlayingView) {
-            const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: false };
-            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-            setPreferences({ rightSidebar: updatedRightSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setRightSidebar({ showNowPlayingView: false });
         } else {
-            const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: true, showQueueView: false };
-            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-            setPreferences({ rightSidebar: updatedRightSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setRightSidebar({ showNowPlayingView: true, showQueueView: false });
         }
     }
 
     const handleToggleQueueView = () => {
         if (showQueueView) {
-            const updatedRightSidebar = { ...rightSidebar, showQueueView: false };
-            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-            setPreferences({ rightSidebar: updatedRightSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setRightSidebar({ showQueueView: false });
         } else {
-            const updatedRightSidebar = { ...rightSidebar, showQueueView: true, showNowPlayingView: false };
-            setPreferences({ rightSidebar: updatedRightSidebar });
-            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setRightSidebar({ showQueueView: true, showNowPlayingView: false });
         }
     }
 
@@ -59,16 +59,10 @@ const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, current
             elem.requestFullscreen().catch((err) => {
                 console.error(`Error enabling full-screen mode: ${err.message}`);
             });
-            const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: true, isNowPlayingViewFullScreen: true };
-            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-            setPreferences({ rightSidebar: updatedRightSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setRightSidebar({ isNowPlayingViewExpanded: true, isNowPlayingViewFullScreen: true });
         } else {
             document.exitFullscreen();
-            const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: false, isNowPlayingViewFullScreen: false };
-            const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-            setPreferences({ rightSidebar: updatedRightSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setRightSidebar({ isNowPlayingViewExpanded: false, isNowPlayingViewFullScreen: false });
         }
     };
 
@@ -113,7 +107,7 @@ const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, current
                 <button
                     className={`${trackDetails._id ? (isMiniPlayerWindowOpen ? "text-[#3BE477]" : "dynamic-text-hover") + " cursor-pointer" : "cursor-not-allowed"}`}
                     title={`${trackDetails._id ? (isMiniPlayerWindowOpen ? "Close MiniPlayer" : "Open MiniPlayer") : ""}`}
-                    onClick={() => setPreferences({ isMiniPlayerWindowOpen: !isMiniPlayerWindowOpen })}
+                    onClick={() => setIsMiniPlayerWindowOpen(!isMiniPlayerWindowOpen)}
                     disabled={!trackDetails._id}
                 >
                     <MiniPlayerIcon width="16" height="16" />
@@ -140,8 +134,13 @@ const RightSideControls: React.FC<RightSideControlsProps> = ({ progress, current
                 <MiniPlayerWindow
                     progress={progress}
                     currentTime={currentTime}
-                    onClose={() => setPreferences({ isMiniPlayerWindowOpen: false })}
+                    onClose={() => setIsMiniPlayerWindowOpen(false)}
+                    handlePlayPauseTrack={handlePlayPauseTrack}
+                    handlePlayNextTrack={handlePlayNextTrack}
+                    handlePlayPrevTrack={handlePlayPrevTrack}
+                    handleRepeatTrack={handleRepeatTrack}
                     handleProgressChange={handleProgressChange}
+                    handleVolumeChange={handleVolumeChange}
                 />
             }
         </>

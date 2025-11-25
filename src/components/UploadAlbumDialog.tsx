@@ -28,7 +28,7 @@ const UploadAlbumDialog: React.FC<UploadAlbumDialogProps> = ({ isOpen, onClose }
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="hide-scrollbar bg-[#282828] shadow-[0_0_20px_rgba(0,0,0,1)] border-none max-h-[80vh] overflow-auto z-400">
+            <DialogContent className="hide-scrollbar bg-[#282828] shadow-[0_0_20px_rgba(0,0,0,1)] border-none max-h-[80vh] overflow-auto z-400 p-6">
                 <DialogHeader>
                     <div className="flex justify-between">
                         <div className="space-y-1">

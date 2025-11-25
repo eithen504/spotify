@@ -13,8 +13,7 @@ interface RecentItemsProps {
 }
 
 const RecentItems: React.FC<RecentItemsProps> = ({ playlists, setPlaylistCoverImageUrl }) => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
 
     const { trackDetails } = useTrackDetailsStore();
@@ -32,6 +31,7 @@ const RecentItems: React.FC<RecentItemsProps> = ({ playlists, setPlaylistCoverIm
                     const playlistUrl = `/playlist/${playlist._id}`;
                     const navigateUrl = collectionId == playlist._id ? collectionUrl : playlistUrl;
                     const isPlayingCurrentPlaylist = (playlistId == playlist._id && activeTrackId == trackDetails._id && trackDetails.isPlaying)
+                    
                     return (
                         <div
                             key={playlist._id}

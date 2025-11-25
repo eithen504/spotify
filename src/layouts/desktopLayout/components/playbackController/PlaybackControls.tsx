@@ -12,6 +12,7 @@ interface PlaybackControlsProps {
     handlePlayPauseTrack: () => void;
     handlePlayNextTrack: () => void;
     handlePlayPrevTrack: () => void;
+    handleRepeatTrack: () => void;
     handleProgressChange: (value: number[]) => void;
 }
 
@@ -21,26 +22,18 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
     handlePlayPauseTrack,
     handlePlayNextTrack,
     handlePlayPrevTrack,
-    handleProgressChange
+    handleRepeatTrack,
+    handleProgressChange,
 }) => {
     /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
     const { customQueue, activeEntityQueueListNode } = useQueueStore();
-    const { repeatTracks, addToRepeatTracks, removeFromRepeatTrack } = useRepeatTrackStore();
+    const { repeatTracks } = useRepeatTrackStore();
 
     /* ---------- Derived Values ---------- */
     const hasPrev = activeEntityQueueListNode?.prev?.value;
     const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
-
-    /* ---------- Methods Or Functions ---------- */
-    const handleRepeatTrack = () => {
-        if (hasTrackInRepeat) {
-            removeFromRepeatTrack(trackDetails._id);
-        } else {
-            addToRepeatTracks(trackDetails._id);
-        }
-    }
 
     return (
         <div className="flex flex-col items-center w-1/2">

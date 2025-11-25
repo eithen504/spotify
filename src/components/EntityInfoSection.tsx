@@ -31,8 +31,7 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
     dominateColor,
     onEditEntity
 }) => {
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
@@ -48,7 +47,7 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
                                     : leftPanelSize >= 32 && leftPanelSize <= 38
                                         ? "md:w-35 md:h-35"
                                         : "md:w-40 md:h-40"
-                                    } ${isOwnEntity ? "cursor-pointer" : ""} shadow-[0_0_20px_rgba(0,0,0,0.4)] rounded-[4px] bg-[#282828] text-[#7F7F7F]`}
+                                    } cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.4)] rounded-[4px] bg-[#282828] text-[#7F7F7F]`}
                             >
                                 <img
                                     src={imgUrl}

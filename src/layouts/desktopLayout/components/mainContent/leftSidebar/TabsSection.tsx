@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LeftArrowIcon, RightArrowIcon } from '../../../../../Svgs'
 import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore';
-import { LEFT_SIDEBAR_TABS } from '../../../../../constants';
-import type { LeftSidebarTab } from '../../../../../types';
+import type { LibraryTab } from '../../../../../types';
+import { LIBRARY_TABS } from '../../../../../constants';
 
 const TabsSection = () => {
     const scrollRef = useRef(null);
     const [canScroll, setCanScroll] = useState({ left: false, right: false });
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { leftSidebar, library } = preferences;
+    const { leftSidebar, library, setLibrary } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { activeTab: libraryActiveTab } = library;
 
@@ -40,11 +39,8 @@ const TabsSection = () => {
         }
     };
 
-    const handleActiveTabChange = (tab: LeftSidebarTab) => {
-        const updatedLibrary = { ...library, activeTab: tab };
-        const updatedPreferences = { ...preferences, updatedLibrary };
-        setPreferences({ library: updatedLibrary });
-        localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+    const handleActiveTabChange = (tab: LibraryTab) => {
+        setLibrary({ activeTab: tab })
     }
 
     useEffect(() => {
@@ -84,7 +80,7 @@ const TabsSection = () => {
                             onScroll={checkScrollability}
                         >
                             {
-                                LEFT_SIDEBAR_TABS.map((tab) => (
+                                LIBRARY_TABS.map((tab) => (
                                     <button
                                         key={tab}
                                         className={`${libraryActiveTab == tab ? "text-[#000000] bg-[#ffffff]" : "bg-[#2a2a2a] dynamic-bg-hover"} cursor-pointer px-3 py-[6px] rounded-full text-sm font-medium`}

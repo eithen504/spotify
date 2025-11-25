@@ -8,8 +8,7 @@ import { AddIcon, DownArrowIcon, SavedIcon, UpArrowIcon } from "../../../../Svgs
 
 const TrackInfo = () => {
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { rightSidebar } = preferences;
+    const { rightSidebar, setRightSidebar } = useUIPreferencesStore();
     const { showNowPlayingView, isNowPlayingViewExpanded } = rightSidebar;
     const { trackDetails } = useTrackDetailsStore();
 
@@ -23,36 +22,21 @@ const TrackInfo = () => {
     const handleToggleShowNowPlayingView = () => {
         if (breakPoint == "lg") {
             if (isNowPlayingViewExpanded) {
-                const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: false };
-                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-                setPreferences({ rightSidebar: updatedRightSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setRightSidebar({ isNowPlayingViewExpanded: false });
                 return;
             }
             if (showNowPlayingView) {
-                const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: false };
-                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-                setPreferences({ rightSidebar: updatedRightSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setRightSidebar({ showNowPlayingView: false });
             } else {
-                const updatedRightSidebar = { ...rightSidebar, showNowPlayingView: true, showQueueView: false };
-                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-                setPreferences({ rightSidebar: updatedRightSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setRightSidebar({ showNowPlayingView: true, showQueueView: false });
             }
         }
 
         if (breakPoint == "md") {
             if (isNowPlayingViewExpanded) {
-                const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: false };
-                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-                setPreferences({ rightSidebar: updatedRightSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setRightSidebar({ isNowPlayingViewExpanded: false });
             } else {
-                const updatedRightSidebar = { ...rightSidebar, isNowPlayingViewExpanded: true };
-                const updatedPreferences = { ...preferences, rightSidebar: updatedRightSidebar };
-                setPreferences({ rightSidebar: updatedRightSidebar });
-                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                setRightSidebar({ isNowPlayingViewExpanded: true });
             }
         }
     }

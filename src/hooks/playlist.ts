@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTrackDetailsStore } from "../store/useTrackDetailsStore";
 import { usePlaylistStore } from "../store/usePlaylistStore";
 import { useCheckAuth } from "./auth";
+import { RECENT_PLAYLISTS_KEY } from "../constants";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -50,7 +51,7 @@ const useGetFeedPlaylists = () => {
 
 const useGetRecentPlaylists = () => {
     const { data: currentUser } = useCheckAuth();
-    let playlistIds: string[] = JSON.parse(localStorage.getItem("recentPlaylists") || "[]")
+    let playlistIds: string[] = JSON.parse(localStorage.getItem(RECENT_PLAYLISTS_KEY) || "[]")
     if (!currentUser) {
         playlistIds = [];
     }

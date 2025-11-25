@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import type { LeftSidebarTab } from "../types";
+import type { LibraryTab } from "../types";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const useGetCurrentUserLibraryItems = (activeTab: LeftSidebarTab) => {
+const useGetCurrentUserLibraryItems = (activeTab: LibraryTab) => {
     if (activeTab == "Playlists") {
         return useQuery({
             queryKey: ["getCurrentUserPlaylists"],

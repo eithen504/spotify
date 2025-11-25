@@ -8,27 +8,24 @@ interface TrackControlsProps {
     handlePlayPauseTrack: () => void;
     handlePlayNextTrack: () => void;
     handlePlayPrevTrack: () => void;
+    handleRepeatTrack: () => void;
 }
 
-const TrackControls: React.FC<TrackControlsProps> = ({ handlePlayPauseTrack, handlePlayNextTrack, handlePlayPrevTrack }) => {
+const TrackControls: React.FC<TrackControlsProps> = ({
+    handlePlayPauseTrack,
+    handlePlayNextTrack,
+    handlePlayPrevTrack,
+    handleRepeatTrack
+}) => {
     /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
     const { customQueue, activeEntityQueueListNode } = useQueueStore();
-    const { repeatTracks, addToRepeatTracks, removeFromRepeatTrack } = useRepeatTrackStore();
+    const { repeatTracks } = useRepeatTrackStore();
 
     /* ---------- Derived Values ---------- */
     const hasPrev = activeEntityQueueListNode?.prev?.value;
     const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
-
-    /* ---------- Methods Or Functions ---------- */
-    const handleRepeatTrack = () => {
-        if (hasTrackInRepeat) {
-            removeFromRepeatTrack(trackDetails._id);
-        } else {
-            addToRepeatTracks(trackDetails._id);
-        }
-    }
 
     return (
         <div className="px-6 py-3 flex-shrink-0">

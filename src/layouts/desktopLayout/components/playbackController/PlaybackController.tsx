@@ -8,6 +8,7 @@ import { useQueueStore } from "../../../../store/useQueueStore"
 import { usePlaylistStore } from "../../../../store/usePlaylistStore"
 import { useRepeatTrackStore } from "../../../../store/useRepeatTrackStore"
 import { useAlbumStore } from "../../../../store/useAlbumStore"
+import { toast } from "sonner"
 
 const PlaybackController = () => {
     /* ---------- Local States ---------- */
@@ -18,13 +19,12 @@ const PlaybackController = () => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { systemVolume } = preferences;
+    const { systemVolume, setSystemVolume } = useUIPreferencesStore();
     const { trackDetails, setTrackDetails } = useTrackDetailsStore();
     const { albumData: { albumId }, setAlbumData } = useAlbumStore();
     const { playlistData: { playlistId }, setPlaylistData } = usePlaylistStore();
     const { customQueue, activeEntityQueueListNode, entityId: queueEntityId, insertAfterActiveEntityListNode, removeItemFromQueue, setActiveEntityQueueListNode } = useQueueStore();
-    const { repeatTracks } = useRepeatTrackStore();
+    const { repeatTracks, addToRepeatTracks, removeFromRepeatTrack } = useRepeatTrackStore();
 
     /* ---------- Derived Values ---------- */
     const hasTrackInRepeat = repeatTracks[trackDetails._id];
@@ -33,26 +33,6 @@ const PlaybackController = () => {
     const handlePlayPauseTrack = () => {
         setTrackDetails({ isPlaying: !trackDetails.isPlaying })
     }
-
-    const handleProgressChange = (value: number[]) => {
-        const audio = audioRef.current
-        if (audio) {
-            // Convert percentage to seconds
-            const newTimeInSeconds = (value[0] / 100) * audio.duration;
-            audio.currentTime = newTimeInSeconds;
-        }
-    }
-
-    const handleVolumeChange = (value: number[]) => {
-        const audio = audioRef.current 
-
-        if (audio) {
-            const newPreferences = { ...preferences, systemVolume: value };
-            setPreferences(newPreferences)
-            localStorage.setItem("preferences", JSON.stringify(newPreferences));
-            audio.volume = value[0] / 100;
-        }
-    };
 
     const handlePlayNextTrack = () => {
         const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
@@ -177,6 +157,33 @@ const PlaybackController = () => {
         }
     }
 
+    const handleRepeatTrack = () => {
+        if (hasTrackInRepeat) {
+            removeFromRepeatTrack(trackDetails._id);
+            toast.success("Track Is Remove From Repeat");
+        } else {
+            addToRepeatTracks(trackDetails._id);
+            toast.success("Track Is Set To Repeat");
+        }
+    }
+
+    const handleProgressChange = (value: number[]) => {
+        const audio = audioRef.current
+        if (audio) {
+            const newTimeInSeconds = (value[0] / 100) * audio.duration;
+            audio.currentTime = newTimeInSeconds;
+        }
+    }
+
+    const handleVolumeChange = (value: number[]) => {
+        const audio = audioRef.current
+
+        if (audio) {
+            setSystemVolume(value);
+            audio.volume = value[0] / 100;
+        }
+    };
+
     /* ---------- UseEffects ---------- */
     useEffect(() => {
         const audio = audioRef.current;
@@ -250,6 +257,7 @@ const PlaybackController = () => {
                     handlePlayPauseTrack={handlePlayPauseTrack}
                     handlePlayNextTrack={handlePlayNextTrack}
                     handlePlayPrevTrack={handlePlayPrevTrack}
+                    handleRepeatTrack={handleRepeatTrack}
                     handleProgressChange={handleProgressChange}
                 />
 
@@ -257,8 +265,12 @@ const PlaybackController = () => {
                 <RightSideControls
                     progress={progress}
                     currentTime={currentTime}
-                    handleVolumeChange={handleVolumeChange}
+                    handlePlayPauseTrack={handlePlayPauseTrack}
+                    handlePlayNextTrack={handlePlayNextTrack}
+                    handlePlayPrevTrack={handlePlayPrevTrack}
+                    handleRepeatTrack={handleRepeatTrack}
                     handleProgressChange={handleProgressChange}
+                    handleVolumeChange={handleVolumeChange}
                 />
             </div>
 

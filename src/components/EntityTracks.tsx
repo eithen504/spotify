@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useUIPreferencesStore } from '../store/useUIPreferenceStore';
-import type { Columns, MenuOptions, Track } from '../types';
+import type { MenuOptions, TableColumns, Track, TrackMenuState } from '../types';
 import { formatDate, formatDuration } from '../utils';
 import { AddIcon, MoreIcon, PauseIcon, PlayIcon, SavedIcon } from '../Svgs';
 import { EntityTrackMusicPlaceholder } from './Placeholders';
@@ -10,28 +10,27 @@ import { useTrackDetailsStore } from '../store/useTrackDetailsStore';
 import { useBreakPoint } from '../hooks/breakPoint';
 import EntityOptionsMenu from './EntityOptionsMenu';
 import EntityOptionsDrawer from './EntityOptionsDrawer';
+import { useTableColumnVisibilityStore } from '../store/useTableColumnVisibilityStore';
 
-interface EntityTracksProps {
+type EntityTracksProps = {
     tracks: Track[]
-    columns: Columns;
-    view: "Compact List" | "Default List";
+    tableColumns: TableColumns;
     isPlayingCurrentEntity: boolean;
-    currentMenuTrackIndex: number;
-    setCurrentMenuTrackIndex: React.Dispatch<React.SetStateAction<number>>
     trackMenuOptions: MenuOptions;
     entityDrawerHeight?: string;
+    trackMenu: TrackMenuState;
+    setTrackMenu: React.Dispatch<React.SetStateAction<TrackMenuState>>
     handlePlayPauseTrack: (track: Track, isPlayingCurrentTrack: boolean, source?: "PlayButton" | "EntityTracks") => void;
 }
 
 const EntityTracks: React.FC<EntityTracksProps> = ({
     tracks,
-    columns,
-    view,
+    tableColumns,
     isPlayingCurrentEntity,
-    currentMenuTrackIndex,
-    setCurrentMenuTrackIndex,
     trackMenuOptions,
     entityDrawerHeight,
+    trackMenu,
+    setTrackMenu,
     handlePlayPauseTrack
 }) => {
     /* ---------- Internal Hooks ---------- */
@@ -42,11 +41,11 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
     const trackMenuRefs = useRef<Array<HTMLDivElement | null>>([]);
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, rightSidebar } = preferences;
+    const { leftSidebar, rightSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { showNowPlayingView, showQueueView } = rightSidebar;
     const { trackDetails } = useTrackDetailsStore();
+    const { tableView } = useTableColumnVisibilityStore();
 
     /* ---------- Custom Hooks ---------- */
     const { breakPoint } = useBreakPoint();
@@ -55,14 +54,14 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
 
     /* ---------- Derived Values ---------- */
     const isAlbumPage = pathname.startsWith("/album");
-    const currentMenuTrack = tracks[currentMenuTrackIndex];
+    let { isOpen: isCurrenTrackMenuOpen, track: currentMenuTrack } = trackMenu;
 
     return (
         <div className='px-1 md:px-6'>
             {tracks?.map((track, index) => {
-                let isPlayingCurrentTrack = (isPlayingCurrentEntity && trackDetails._id == track._id)
-                const hasLiked = getTrackLikeStatus({ hasLiked: track.hasLiked, trackId: track._id })
-                const isTrackMenuOpen = currentMenuTrackIndex == index;
+                let isPlayingCurrentTrack = (isPlayingCurrentEntity && trackDetails._id == track._id);
+                const hasLiked = getTrackLikeStatus({ hasLiked: track.hasLiked, trackId: track._id });
+                isCurrenTrackMenuOpen = (isCurrenTrackMenuOpen && currentMenuTrack?._id == track._id);
 
                 return (
                     <div
@@ -104,7 +103,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                         {/* Title with Image */}
                         <div className="flex-1 min-w-0 flex items-center gap-3">
                             {
-                                view == "Default List" && !isAlbumPage && (
+                                tableView == "Default List" && !isAlbumPage && (
                                     track.coverImageUrl ? (
                                         <img
                                             src={track.coverImageUrl}
@@ -129,7 +128,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                 </div>
 
                                 {
-                                    view == "Default List" && (
+                                    tableView == "Default List" && (
                                         <div className="text-white/70 dynamic-text-group-hover text-sm truncate">{track.artist}</div>
                                     )
                                 }
@@ -137,11 +136,11 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                         </div>
 
                         {
-                            view == "Compact List" ? (
+                            tableView == "Compact List" ? (
                                 <>
                                     <div className={`flex-1 truncate ml-5 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"}`}>
                                         <span className="text-white/70">
-                                            {columns["Artist"] && track.artist}
+                                            {tableColumns["ARTIST"]?.visible && track.artist}
                                         </span>
                                     </div>
 
@@ -152,7 +151,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                                 navigate(`/album/${track.albumId}`)
                                             }}
                                         >
-                                            {columns["Album"] && track.albumName}
+                                            {tableColumns["ALBUM"]?.visible && track.albumName}
                                         </span>
                                     </div>
                                 </>
@@ -165,12 +164,12 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                                 navigate(`/album/${track.albumId}`)
                                             }}
                                         >
-                                            {columns["Album"] && track.albumName}
+                                            {tableColumns["ALBUM"]?.visible && track.albumName}
                                         </span>
                                     </div>
 
                                     <div className={`w-32 text-white/70 truncate text-sm ml-5 ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"}`}>
-                                        {columns["Date added"] && formatDate(track.createdAt)}
+                                        {tableColumns["DATE ADDED"]?.visible && formatDate(track.createdAt)}
                                     </div>
                                 </>
                             )
@@ -180,8 +179,8 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                             <button
                                 className="text-white/70 dynamic-text-hover cursor-pointer group-hover-opacity"
                                 onClick={(e) => {
-                                    e.stopPropagation()
-                                    likeTrack(track)
+                                    e.stopPropagation();
+                                    likeTrack(track);
                                 }}
                                 title={hasLiked ? "Remove" : "Add"}
                             >
@@ -191,7 +190,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                             </button>
 
                             <span className="truncate text-white/70">
-                                {columns["Duration"] && formatDuration(track.duration)}
+                                {tableColumns["DURATION"]?.visible && formatDuration(track.duration)}
                             </span>
 
                             <div
@@ -204,22 +203,24 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                     className="text-white/70 dynamic-text-hover cursor-pointer group-hover-opacity"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setCurrentMenuTrackIndex(index);
+                                        setTrackMenu({ isOpen: true, track });
                                     }}
                                 >
                                     <MoreIcon width="20" height="20" />
                                 </button>
 
                                 {/* Track Options Menu */}
-                                {isTrackMenuOpen && (
-                                    <EntityOptionsMenu
-                                        options={trackMenuOptions}
-                                        entityMenuRef={{ current: trackMenuRefs.current[index] }}
-                                        subMenuleftShift={true}
-                                        rightPosition={((!showNowPlayingView && !showQueueView) || breakPoint == "md") ? "45px" : ""}
-                                        onClose={() => setCurrentMenuTrackIndex(-1)}
-                                    />
-                                )}
+                                {
+                                    isCurrenTrackMenuOpen && (
+                                        <EntityOptionsMenu
+                                            options={trackMenuOptions}
+                                            entityMenuRef={{ current: trackMenuRefs.current[index] }}
+                                            subMenuleftShift={true}
+                                            rightPosition={((!showNowPlayingView && !showQueueView) || breakPoint == "md") ? "45px" : ""}
+                                            onClose={() => setTrackMenu({ isOpen: false, track: currentMenuTrack })}
+                                        />
+                                    )
+                                }
                             </div>
                         </div>
 
@@ -230,7 +231,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                                     className="rotate-90 cursor-pointer"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setCurrentMenuTrackIndex(index);
+                                        setTrackMenu({ isOpen: true, track });
                                     }}
                                 >
                                     <MoreIcon />
@@ -238,14 +239,14 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
 
                                 {/* Track Options Drawer */}
                                 {
-                                    breakPoint == "sm" && isTrackMenuOpen && (
+                                    (breakPoint == "sm" && isCurrenTrackMenuOpen) && (
                                         <EntityOptionsDrawer
                                             entity={{
                                                 title: currentMenuTrack?.title,
                                                 imgUrl: currentMenuTrack?.coverImageUrl
                                             }}
                                             options={trackMenuOptions || []}
-                                            onClose={() => setCurrentMenuTrackIndex(-1)}
+                                            onClose={() => setTrackMenu({ isOpen: false, track: currentMenuTrack })}
                                             height={entityDrawerHeight}
                                         />
                                     )

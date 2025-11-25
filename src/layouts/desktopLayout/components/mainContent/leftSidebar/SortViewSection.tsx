@@ -11,8 +11,7 @@ const SortViewSection: React.FC<SortViewSectionProps> = ({ isSearchBarActive }) 
     const [isSortViewMenuOpen, setIsSortViewMenuOpen] = useState(false);
     const sortViewMenuRef = useRef<HTMLDivElement>(null);
 
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, library } = preferences;
+    const { leftSidebar, library } = useUIPreferencesStore();
     const { isExpanded: isLeftSidebarExpanded } = leftSidebar;
     const { sort: librarySort, view: libraryView } = library;
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useUIPreferencesStore } from '../../../store/useUIPreferenceStore';
 import { LeftArrowIcon, RightArrowIcon } from '../../../Svgs';
-import { LEFT_SIDEBAR_TABS } from '../../../constants';
+import { LIBRARY_TABS } from '../../../constants';
 
 const TabsSection = () => {
     /* ---------- Local States ---------- */
@@ -11,8 +11,7 @@ const TabsSection = () => {
     const scrollRef = useRef(null);
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { leftSidebar, library } = preferences;
+    const { leftSidebar, library, setLibrary } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { activeTab: libraryActiveTab } = library;
 
@@ -81,7 +80,7 @@ const TabsSection = () => {
                 onScroll={checkScrollability}
             >
                 {
-                    LEFT_SIDEBAR_TABS.map((tab) => (
+                    LIBRARY_TABS.map((tab) => (
                         <button
                             key={tab}
                             className={`${libraryActiveTab == tab ? "text-[#000000] bg-[#ffffff]" : "bg-[#2a2a2a] dynamic-bg-hover"} cursor-pointer px-3 py-[6px] rounded-full text-sm font-medium`}
@@ -89,10 +88,7 @@ const TabsSection = () => {
                                 '--bgHoverColor': '#303030',
                             } as React.CSSProperties}
                             onClick={() => {
-                                const updatedLibrary = { ...library, activeTab: tab };
-                                setPreferences({ library: updatedLibrary });
-                                const updatedPreferences = { ...preferences, library: updatedLibrary };
-                                localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+                               setLibrary({activeTab: tab});
                             }}
                         >
                             {tab}

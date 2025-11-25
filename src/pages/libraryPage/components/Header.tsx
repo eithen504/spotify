@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
 import { useCheckAuth, useLogoutUser } from "../../../hooks/auth";
 import { useDeleteFolder, useGetFolderPlaylists, useUpdateFolder, useUploadFolder } from "../../../hooks/folder";
 import type { MenuOptions, Playlist } from "../../../types";
-import { AddPlaylistIcon, AlertIcon, DeleteIcon, EditIcon, ExternalLinkIcon, FolderIcon, LeftArrowIcon, MoreIcon, MusicIcon, PlusIcon, PodcastIcon, RightArrowIndicatorIcon, SearchIcon } from "../../../Svgs";
-import FolderOptionsMenu from "../../../layouts/desktopLayout/components/mainContent/leftSidebar/FolderOptionsMenu";
+import { AddPlaylistIcon, AlertIcon, DeleteIcon, EditIcon, ExternalLinkIcon, FolderIcon, LeftArrowIcon, MusicIcon, PlusIcon, PodcastIcon, RightArrowIndicatorIcon, SearchIcon } from "../../../Svgs";
 import UploadPlaylistDialog from "../../../components/UploadPlaylistDialog";
 import UploadTrackDialog from "../../../components/UploadTrackDialog";
 import EditFolderDialog from "../../../components/EditFolderDialog";
@@ -12,10 +11,14 @@ import UserOptionsSidePanel from "../../../components/UserOptionsSidePanel";
 import { useNavigate } from "react-router-dom";
 import CreateOptionsDrawer from "./CreateOptionsDrawer";
 
-const Header = () => {
+type HeaderProps = {
+    setIsSearchLibraryActive: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Header: React.FC<HeaderProps> = ({ setIsSearchLibraryActive }) => {
     /* ---------- Internal Hooks ---------- */
     const navigate = useNavigate();
-    
+
     /* ---------- Local States ---------- */
     const [isUserSidePanelOpen, setIsUserSidePanelOpen] = useState(false);
     const [userSidePanelOptions, setUserSidePanelOptions] = useState<MenuOptions>([]);
@@ -31,9 +34,8 @@ const Header = () => {
 
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { activeFolder } = preferences;
-    const { id: activeFolderId, name: activeFolderName } = activeFolder;
+    const { openedFolder, setOpenedFolder } = useUIPreferencesStore();
+    const { id: openedFolderId, name: openedFolderName } = openedFolder;
 
     /* ---------- Custom Hooks ---------- */
     const { data: currentUser } = useCheckAuth();
@@ -41,18 +43,17 @@ const Header = () => {
     const { mutateAsync: logoutUser } = useLogoutUser();
     const { mutateAsync: updateFolder, isPending } = useUpdateFolder();
     const { mutateAsync: deleteFolder } = useDeleteFolder();
-    const { data: playlists } = useGetFolderPlaylists(activeFolderId);
+    const { data: playlists } = useGetFolderPlaylists(openedFolderId);
 
     /* ---------- Methods Or Functions ---------- */
     const navigateBackFromFolder = () => {
         const updatedFolder = { id: "", name: "" };
-        setPreferences({ activeFolder: updatedFolder });
-        localStorage.setItem("folder", JSON.stringify(updatedFolder));
+        setOpenedFolder(updatedFolder);
     }
 
     const handleUpdateFolder = (payload: { name?: string, playlistIds?: string[] }) => {
         setIsEditFolderDialogOpen(false);
-        if (payload.name == activeFolderName) return;
+        if (payload.name == openedFolderName) return;
         updateFolder(payload);
     }
 
@@ -260,12 +261,11 @@ const Header = () => {
     return (
         <>
             <div className="flex items-center justify-between mb-1 px-5 py-4">
-
                 <div className="flex gap-2 items-center overflow-hidden">
                     <div
                         className={`text-md font-bold text-[#ffffff] transition-all duration-400`}
                     >
-                        {activeFolderId ? (
+                        {openedFolderId ? (
                             <div className="text-[#8f8f8f] flex items-center w-full space-x-3">
                                 {/* Left Arrow Button */}
                                 <button
@@ -280,7 +280,7 @@ const Header = () => {
                                     className="dynamic-text-hover cursor-pointer truncate flex-1 min-w-0"
                                     onClick={() => setIsEditFolderDialogOpen(true)}
                                 >
-                                    {activeFolderName}
+                                    {openedFolderName}
                                 </span>
                             </div>
                         ) : (
@@ -309,12 +309,13 @@ const Header = () => {
                 <div className="flex items-center space-x-6">
                     <button
                         className="text-[#8f8f8f] dynamic-text-hover flex items-center justify-center transition cursor-pointer"
+                        onClick={() => setIsSearchLibraryActive(true)}
                     >
                         <SearchIcon width="20" height="20" />
                     </button>
 
                     {
-                        activeFolderId && (
+                        openedFolderId && (
                             // <div className="relative" ref={folderMenuRef}>
                             //     <button
                             //         className="text-[#8f8f8f] dynamic-text-hover flex items-center justify-center transition cursor-pointer"
@@ -368,7 +369,7 @@ const Header = () => {
                     <EditFolderDialog
                         isOpen={isEditFolderDialogOpen}
                         onClose={() => setIsEditFolderDialogOpen(false)}
-                        defaultName={activeFolderName}
+                        defaultName={openedFolderName}
                         isPending={isPending}
                         handleUpdateFolder={handleUpdateFolder}
                     />

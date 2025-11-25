@@ -26,14 +26,13 @@ const Header = () => {
     const folderMenuRef = useRef<HTMLDivElement | null>(null);
 
     /* ---------- Stores ---------- */
-    const { preferences, setPreferences } = useUIPreferencesStore();
-    const { leftSidebar, activeFolder } = preferences;
+    const { leftSidebar, openedFolder, setLeftSidebar, setOpenedFolder } = useUIPreferencesStore();
     const { panelSize: leftPanelSize, isExpanded: isLeftSidebarExpanded } = leftSidebar;
-    const { id: activeTrackId, name: activeFolderName } = activeFolder;
+    const { id: openedFolderId, name: openedFolderName } = openedFolder;
 
     /* ---------- Custom Hooks ---------- */
     const { data: currentUser } = useCheckAuth();
-    const { data: playlists } = useGetFolderPlaylists(activeTrackId);
+    const { data: playlists } = useGetFolderPlaylists(openedFolderId);
     const { breakPoint } = useBreakPoint();
     const { mutateAsync: uploadFolder } = useUploadFolder();
     const { mutateAsync: updateFolder, isPending } = useUpdateFolder();
@@ -42,62 +41,41 @@ const Header = () => {
     /* ---------- Methods Or Functions ---------- */
     const handleCollapsedLibrary = () => {
         if (breakPoint == "lg") {
-            const updatedLeftSidebar = { ...leftSidebar, panelSize: 7 };
-            const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-            setPreferences({ leftSidebar: updatedLeftSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setLeftSidebar({ panelSize: 7 });
         }
 
         if (breakPoint == "md") {
-            const updatedLeftSidebar = { ...leftSidebar, panelSize: 10 };
-            const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-            setPreferences({ leftSidebar: updatedLeftSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setLeftSidebar({ panelSize: 10 });
         }
     }
 
     const handleOpenLibrary = () => {
         if (breakPoint == "lg") {
-            const updatedLeftSidebar = { ...leftSidebar, panelSize: 22 };
-            const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-            setPreferences({ leftSidebar: updatedLeftSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setLeftSidebar({ panelSize: 22 });
         }
 
         if (breakPoint == "md") {
-            const updatedLeftSidebar = { ...leftSidebar, panelSize: 32 };
-            const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-            setPreferences({ leftSidebar: updatedLeftSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setLeftSidebar({ panelSize: 32 });
         }
     }
 
     const handleToggleExpandLibrary = () => {
         if (isLeftSidebarExpanded) {
-            const updatedLeftSidebar = {
-                ...leftSidebar,
-                panelSize: breakPoint == "lg" ? 22 : 32,
-                isExpanded: false
-            };
-            const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-            setPreferences({ leftSidebar: updatedLeftSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            if (breakPoint == "lg") {
+                setLeftSidebar({ panelSize: 22 });
+            }
+
+            if (breakPoint == "md") {
+                setLeftSidebar({ panelSize: 32 });
+            }
         } else {
-            const updatedLeftSidebar = {
-                ...leftSidebar,
-                panelSize: 100,
-                isExpanded: true
-            };
-            const updatedPreferences = { ...preferences, leftSidebar: updatedLeftSidebar };
-            setPreferences({ leftSidebar: updatedLeftSidebar });
-            localStorage.setItem("preferences", JSON.stringify(updatedPreferences));
+            setLeftSidebar({ panelSize: 100 });
         }
     }
 
     const navigateBackFromFolder = () => {
         const updatedFolder = { id: "", name: "" };
-        setPreferences({ activeFolder: updatedFolder });
-        localStorage.setItem("folder", JSON.stringify(updatedFolder));
+        setOpenedFolder(updatedFolder);
     }
 
     const handleUpdateFolder = (payload: { name?: string, playlistIds?: string[] }) => {
@@ -238,7 +216,7 @@ const Header = () => {
                             <div
                                 className={`text-md font-bold text-[#ffffff] ${isLeftSidebarExpanded ? "ml-0" : "-ml-[25px] group-header-hover-ml"} transition-all duration-400`}
                             >
-                                {activeTrackId ? (
+                                {openedFolderId ? (
                                     <div className="text-[#8f8f8f] flex items-center w-full space-x-3">
                                         {/* Left Arrow Button */}
                                         <button
@@ -253,7 +231,7 @@ const Header = () => {
                                             className="dynamic-text-hover cursor-pointer truncate flex-1 min-w-0"
                                             onClick={() => setIsEditFolderDialogOpen(true)}
                                         >
-                                            {activeFolderName}
+                                            {openedFolderName}
                                         </span>
                                     </div>
                                 ) : (
@@ -293,7 +271,7 @@ const Header = () => {
                             </div>
 
                             {
-                                activeTrackId && (
+                                openedFolderId && (
                                     <div className="relative" ref={folderMenuRef}>
                                         <button
                                             className="p-[6px] rounded-full text-[#8f8f8f] dynamic-text-hover dynamic-bg-hover flex items-center justify-center transition cursor-pointer"
@@ -352,7 +330,7 @@ const Header = () => {
                             </button>
 
                             {
-                                activeTrackId && (
+                                openedFolderId && (
                                     <button
                                         className="cursor-pointer text-[#8f8f8f] dynamic-text-hover"
                                         title={`Go Back From ${name}`}
@@ -401,7 +379,7 @@ const Header = () => {
                 <EditFolderDialog
                     isOpen={isEditFolderDialogOpen}
                     onClose={() => setIsEditFolderDialogOpen(false)}
-                    defaultName={activeFolderName}
+                    defaultName={openedFolderName}
                     isPending={isPending}
                     handleUpdateFolder={handleUpdateFolder}
                 />

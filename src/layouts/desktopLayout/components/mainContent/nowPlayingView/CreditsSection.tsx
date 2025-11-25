@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useTrackDetailsStore } from "../../../../../store/useTrackDetailsStore";
 import { formatDate } from "../../../../../utils";
-import ShowCreditDialog from "./ShowCreditDialog";
+import TrackCreditsDialog from "../../../../../components/TrackCreditsDialog";
 
-const CreditSection = () => {
+const CreditsSection = () => {
     const { trackDetails } = useTrackDetailsStore();
-    const [isShowCreditsDialogOpen, setIsShowCreditsDialogOpen] = useState(false);
+    const [isTrackCreditsDialogOpen, setIsTrackCreditsDialogOpen] = useState(false);
 
     return (
         <div className="mt-6 bg-[#1e1e1e] p-4 rounded-md shadow-md text-[#ffffff]">
@@ -13,7 +13,7 @@ const CreditSection = () => {
                 <h3 className="text-md font-semibold">Credits</h3>
                 <button
                     className={`text-sm font-medium text-[#aaaaaa] ${trackDetails._id ? "dynamic-text-hover hover:underline cursor-pointer" : ""}`}
-                    onClick={() => setIsShowCreditsDialogOpen(true)}
+                    onClick={() => setIsTrackCreditsDialogOpen(true)}
                     disabled={!trackDetails._id}
                 >
                     Show all
@@ -36,10 +36,10 @@ const CreditSection = () => {
             </div>
 
             {
-                isShowCreditsDialogOpen && (
-                    <ShowCreditDialog
-                        isOpen={isShowCreditsDialogOpen}
-                        onClose={() => setIsShowCreditsDialogOpen(false)}
+                isTrackCreditsDialogOpen && (
+                    <TrackCreditsDialog
+                        track={trackDetails}
+                        onClose={() => setIsTrackCreditsDialogOpen(false)}
                     />
                 )
             }
@@ -47,4 +47,4 @@ const CreditSection = () => {
     )
 }
 
-export default CreditSection
+export default CreditsSection

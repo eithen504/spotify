@@ -5,17 +5,17 @@ import { useBreakPoint } from "../../../../hooks/breakPoint";
 
 interface RecentSearchesDropdownProps {
     searchQuery: string;
-    recentSearches: SearchItem[];
-    searchSuggestions: SearchItem[];
-    addItemToRecentSearches: (navigateUrl: string, id: string) => void;
-    removeItemFromRecentSearches: (id: string) => void;
+    recentSearchItems: SearchItem[];
+    searchSuggestionItems: SearchItem[];
+    addItemToRecentSearches: (searchItem: SearchItem, navigateUrl: string) => void
+    removeItemFromRecentSearches: (id: string) => void
     clearRecentSearchHistory: () => void;
 }
 
 const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({
     searchQuery,
-    recentSearches,
-    searchSuggestions,
+    recentSearchItems,
+    searchSuggestionItems,
     addItemToRecentSearches,
     removeItemFromRecentSearches,
     clearRecentSearchHistory
@@ -34,7 +34,6 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({
                         <div
                             className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-2 rounded-sm flex items-center relative"
                             style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
-                            onClick={() => addItemToRecentSearches(`/search/${searchQuery}`, `${searchQuery}-search`)}
                         >
                             <button className="text-[#8f8f8f] dynamic-text-group-hover bg-[#282828] p-3 rounded-full">
                                 <SearchIcon />
@@ -47,16 +46,15 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({
                         </div>
 
                         {
-                            searchSuggestions.map((item: SearchItem) => {
-                                const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : item.type == "Search" ? `/search/${searchQuery}` : `/playlist/${item._id}`;
-                                const id = `${item._id}-visit`;
+                            searchSuggestionItems.map((item: SearchItem) => {
+                                const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : `/playlist/${item._id}`;
 
                                 return (
                                     <div
                                         key={item._id}
                                         className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-2 rounded-sm flex items-center relative"
                                         style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
-                                        onClick={() => addItemToRecentSearches(navigateUrl, id)}
+                                        onClick={() => addItemToRecentSearches(item, navigateUrl)}
                                     >
                                         {/* coverImageUrl */}
                                         <div className="shrink-0 w-12 h-12">
@@ -78,18 +76,15 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({
                         }
                     </>
                 ) : (
-                    recentSearches.map((item: SearchItem) => {
-                        if (!item) return null;
-
-                        const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : item.type == "Search" ? `/search/${item._id}` : `/playlist/${item._id}`;
-                        const id = item.type == "Search" ? `${item._id}-search` : `${item._id}-visit`;
+                    recentSearchItems.map((item: SearchItem) => {
+                        const navigateUrl = item.type == "Album" ? `/album/${item._id}` : item.type == "Track" ? `/track/${item._id}` : `/playlist/${item._id}`;
 
                         return (
                             <div
                                 key={item._id}
                                 className="group cursor-pointer dynamic-bg-hover text-[#ffffff] p-2 rounded-sm flex items-center relative"
                                 style={{ '--bgHoverColor': '#404040' } as React.CSSProperties}
-                                onClick={() => addItemToRecentSearches(navigateUrl, id)}
+                                onClick={() => addItemToRecentSearches(item, navigateUrl)}
                             >
                                 {/* CoverImageUrl */}
                                 {
@@ -121,7 +116,7 @@ const RecentSearchesDropdown: React.FC<RecentSearchesDropdownProps> = ({
                                     className="mr-1 absolute right-2 text-[#8f8f8f] dynamic-text-hover group-hover-opacity cursor-pointer"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        removeItemFromRecentSearches(id);
+                                        removeItemFromRecentSearches(item._id);
                                     }}
                                 >
                                     <CrossIcon width="15" height="15" />

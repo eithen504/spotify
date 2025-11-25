@@ -13,8 +13,8 @@ const LibraryToolbar: React.FC<LibraryToolbarProps> = ({ sidebarRef }) => {
     const [isSearchBarActive, setIsSearchBarActive] = useState(false);
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar: { panelSize: leftPanelSize } } = preferences;
+    const { leftSidebar } = useUIPreferencesStore();
+    const { panelSize: leftPanelSize } = leftSidebar;
     const { setSearchQuery } = useLibrarySearchStore();
 
     /* ---------- Methods Or Functions ---------- */

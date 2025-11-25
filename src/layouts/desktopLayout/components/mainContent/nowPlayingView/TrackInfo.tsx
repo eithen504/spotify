@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { NowPlayingViewMusicPlaceholder } from '../../../../../components/Placeholders';
 import { useLikeTrack, useTrackLikeStatus } from '../../../../../hooks/like';
 import { useShare } from '../../../../../hooks/share';
@@ -5,6 +6,9 @@ import { useTrackDetailsStore } from '../../../../../store/useTrackDetailsStore'
 import { AddIcon, SavedIcon, ShareIcon } from '../../../../../Svgs'
 
 const TrackInfo = () => {
+    /* ---------- Internal Hooks ---------- */
+    const navigate = useNavigate();
+
     /* ---------- Stores ---------- */
     const { trackDetails } = useTrackDetailsStore();
 
@@ -16,25 +20,35 @@ const TrackInfo = () => {
 
     return (
         <div>
-            {
-                trackDetails.coverImageUrl ? (
-                    <img
-                        src={trackDetails.coverImageUrl}
-                        alt="Play Date"
-                        className="rounded-[4px] w-full object-cover aspect-square"
-                    />
-                ) : (
-                    trackDetails._id ? (
-                        <NowPlayingViewMusicPlaceholder shouldShowPlaceholderIcon={true} />
+            <div
+                className="cursor-pointer"
+                onClick={() => navigate(`/track/${trackDetails._id}`)}
+            >
+                {
+                    trackDetails.coverImageUrl ? (
+                        <img
+                            src={trackDetails.coverImageUrl}
+                            alt="Play Date"
+                            className="rounded-[4px] w-full object-cover aspect-square"
+                        />
                     ) : (
-                        <NowPlayingViewMusicPlaceholder shouldShowPlaceholderIcon={false} />
+                        trackDetails._id ? (
+                            <NowPlayingViewMusicPlaceholder shouldShowPlaceholderIcon={true} />
+                        ) : (
+                            <NowPlayingViewMusicPlaceholder shouldShowPlaceholderIcon={false} />
+                        )
                     )
-                )
-            }
+                }
+            </div>
             <div className="mt-6 flex items-center justify-between">
                 {/* Left: Title and Subtitle */}
                 <div className="flex-1 min-w-0 pr-4">
-                    <p className="text-2xl font-bold truncate">{trackDetails.title || "No Track Selected"}</p>
+                    <p
+                        className="text-2xl font-bold truncate cursor-pointer hover:underline"
+                        onClick={() => navigate(`/track/${trackDetails._id}`)}
+                    >
+                        {trackDetails.title || "No Track Selected"}
+                    </p>
                     <p className="text-md text-[#aaaaaa] font-medium truncate">{trackDetails.artist}</p>
                 </div>
 

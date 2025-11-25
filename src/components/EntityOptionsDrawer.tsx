@@ -65,6 +65,7 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
                             onClick={(e) => {
                                 e.stopPropagation();
                                 action();
+                                onClose();
                             }}
                         >
                             <span className="flex items-center gap-3">

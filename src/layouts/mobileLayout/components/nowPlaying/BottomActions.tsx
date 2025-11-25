@@ -16,7 +16,7 @@ const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => 
     const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
 
     /* ---------- Stores ---------- */
-    const { preferences: { systemVolume } } = useUIPreferencesStore();
+    const { systemVolume } = useUIPreferencesStore();
     const { trackDetails } = useTrackDetailsStore();
 
     /* ---------- Custom Hooks ---------- */

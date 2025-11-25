@@ -4,38 +4,40 @@ import { useUIPreferencesStore } from '../../../../../store/useUIPreferenceStore
 import { useBreakPoint } from '../../../../../hooks/breakPoint';
 import { usePlaylistStore } from '../../../../../store/usePlaylistStore';
 import { useTrackDetailsStore } from '../../../../../store/useTrackDetailsStore';
-import type { Album, Folder, LeftSidebarTab, Playlist } from '../../../../../types';
+import type { Album, Folder, Playlist } from '../../../../../types';
 import { useGetCurrentUserLibraryItems } from '../../../../../hooks/library';
 import { useAlbumStore } from '../../../../../store/useAlbumStore';
 import { usePlaylistActions } from '../../../../../hooks/playlist';
 import { useAlbumActions } from '../../../../../hooks/album';
 import { useFolderActions, useGetFolderPlaylists } from '../../../../../hooks/folder';
 import { VIEW_SKELETONS } from '../../../../../constants';
-import { DefaultGridItemsAlbumPlaceHolder, DefaultGridItemsFolderPlaceHolder, DefaultGridItemsPlaylistPlaceHolder } from '../../../../../components/Placeholders';
+import { DefaultGridAlbumPlaceHolder, DefaultGridFolderPlaceHolder, DefaultGridPlaylistPlaceHolder } from '../../../../../components/Placeholders';
 import { NotFoundFolderPlaylists } from '../../../../../components/NotFounds';
 import { useLocation } from 'react-router-dom';
 import { useLibrarySearchStore } from '../../../../../store/useLibrarySearchStore';
 import { highlightText } from '../../../../../hooks/text';
 
 type LibraryItemGridProps = {
-    itemId: string,
     itemTitle: string,
-    subItemTitle: string,
+    itemSubTitle: string,
     itemCoverImageUrl: string,
     isCurrentItemPage: boolean,
     isPlayingCurrentItem: boolean,
+    hidePlayIcon?: boolean,
+    isItemPinned?: boolean,
     DefaultItemPlaceHolder: () => JSX.Element,
     navigateToItem: () => void,
     handlePlayPauseItem: () => void,
 }
 
 const LibraryItemGrid: React.FC<LibraryItemGridProps> = ({
-    itemId,
     itemTitle,
-    subItemTitle,
+    itemSubTitle,
     itemCoverImageUrl,
     isCurrentItemPage,
     isPlayingCurrentItem,
+    hidePlayIcon,
+    isItemPinned,
     DefaultItemPlaceHolder,
     navigateToItem,
     handlePlayPauseItem
@@ -44,7 +46,6 @@ const LibraryItemGrid: React.FC<LibraryItemGridProps> = ({
 
     return (
         <div
-            key={itemId}
             className={`group p-3 ${isCurrentItemPage ? "bg-[#272727]" : "dynamic-bg-hover"} cursor-pointer rounded-[4px] flex flex-col overflow-hidden`}
             style={{
                 '--bgHoverColor': '#191919',
@@ -66,30 +67,41 @@ const LibraryItemGrid: React.FC<LibraryItemGridProps> = ({
                 }
 
                 {/* Play Button */}
-                <div className="absolute bottom-2 right-2 transform opacity-0 group-hover-translate-y-0 group-hover-opacity transition-all duration-300 ease-in-out">
-                    <button
-                        className="text-black bg-[#1ed760] dynamic-bg-hover rounded-full p-4 cursor-pointer transition-transform shadow-lg"
-                        style={{
-                            '--bgHoverColor': '#3BE477',
-                        } as React.CSSProperties}
-                        title={isPlayingCurrentItem ? `Pause ${itemTitle}` : `Play ${itemTitle}`}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handlePlayPauseItem();
-                        }}
-                    >
-                        {
-                            isPlayingCurrentItem ? <PauseIcon width="17" height="17" /> : <PlayIcon width="17" height="17" />
-                        }
-                    </button>
-                </div>
+                {
+                    !hidePlayIcon && (
+                        <div className="absolute bottom-2 right-2 transform opacity-0 group-hover-translate-y-0 group-hover-opacity transition-all duration-300 ease-in-out">
+                            <button
+                                className="text-black bg-[#1ed760] dynamic-bg-hover rounded-full p-4 cursor-pointer transition-transform shadow-lg"
+                                style={{
+                                    '--bgHoverColor': '#3BE477',
+                                } as React.CSSProperties}
+                                title={isPlayingCurrentItem ? `Pause ${itemTitle}` : `Play ${itemTitle}`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePlayPauseItem();
+                                }}
+                            >
+                                {
+                                    isPlayingCurrentItem ? <PauseIcon width="17" height="17" /> : <PlayIcon width="17" height="17" />
+                                }
+                            </button>
+                        </div>
+                    )
+                }
             </div>
 
             {/* Item Info Section */}
             <div className="w-full mt-2 text-left">
                 <p className="text-md font-medium truncate">{highlightText(itemTitle, searchQuery)}</p>
                 <div className="flex items-center gap-1 text-gray-400 truncate text-sm">
-                    <p>{subItemTitle}</p>
+                    {
+                        isItemPinned && (
+                            <div className="rotate-45 text-[#1ed760]">
+                                <PinIcon width="14" height="14" />
+                            </div>
+                        )
+                    }
+                    <p>{itemSubTitle}</p>
                 </div>
             </div>
         </div>
@@ -131,13 +143,13 @@ const DefaultGridPlaylists = () => {
 
                     return (
                         <LibraryItemGrid
-                            itemId={playlist._id}
+                            key={playlist._id}
                             itemTitle={playlist.title}
-                            subItemTitle={`Total Tracks : ${playlist.tracks.length}`}
+                            itemSubTitle={`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
                             itemCoverImageUrl={playlist.coverImageUrl}
                             isCurrentItemPage={isCurrentPlaylistPage}
                             isPlayingCurrentItem={isPlayingCurrentPlaylist}
-                            DefaultItemPlaceHolder={DefaultGridItemsPlaylistPlaceHolder}
+                            DefaultItemPlaceHolder={DefaultGridPlaylistPlaceHolder}
                             navigateToItem={() => navigateToPlaylist(navigateUrl)}
                             handlePlayPauseItem={() => handlePlayPausePlaylist(isPlayingCurrentPlaylist, playlist._id, navigateUrl)}
                         />
@@ -183,13 +195,13 @@ const DefaultGridSavePlaylists = () => {
 
                     return (
                         <LibraryItemGrid
-                            itemId={playlist._id}
+                            key={playlist._id}
                             itemTitle={playlist.title}
-                            subItemTitle={`Total Tracks : ${playlist.tracks.length}`}
+                            itemSubTitle={`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
                             itemCoverImageUrl={playlist.coverImageUrl}
                             isCurrentItemPage={isCurrentPlaylistPage}
                             isPlayingCurrentItem={isPlayingCurrentPlaylist}
-                            DefaultItemPlaceHolder={DefaultGridItemsPlaylistPlaceHolder}
+                            DefaultItemPlaceHolder={DefaultGridPlaylistPlaceHolder}
                             navigateToItem={() => navigateToPlaylist(navigateUrl)}
                             handlePlayPauseItem={() => handlePlayPausePlaylist(isPlayingCurrentPlaylist, playlist._id, navigateUrl)}
                         />
@@ -235,13 +247,13 @@ const DefaultGridSaveAlbums = () => {
 
                     return (
                         <LibraryItemGrid
-                            itemId={album._id}
+                            key={album._id}
                             itemTitle={album.title}
-                            subItemTitle="Album . Spotify"
+                            itemSubTitle="Album · Spotify"
                             itemCoverImageUrl={album.coverImageUrl}
                             isCurrentItemPage={isCurrentAlbumPage}
                             isPlayingCurrentItem={isPlayingCurrentAlbum}
-                            DefaultItemPlaceHolder={DefaultGridItemsAlbumPlaceHolder}
+                            DefaultItemPlaceHolder={DefaultGridAlbumPlaceHolder}
                             navigateToItem={() => navigateToAlbum(navigateUrl)}
                             handlePlayPauseItem={() => handlePlayPauseAlbum(isPlayingCurrentAlbum, album._id, navigateUrl)}
                         />
@@ -277,25 +289,18 @@ const DefaultGridFolders = () => {
             {
                 searchResults.map((folder: Folder) => {
                     return (
-                        <div
+                        <LibraryItemGrid
                             key={folder._id}
-                            className={`group p-3 dynamic-bg-hover cursor-pointer rounded-[4px] flex flex-col overflow-hidden`}
-                            style={{
-                                '--bgHoverColor': '#191919',
-                            } as React.CSSProperties}
-                            onClick={() => navigateToFolder({ id: folder._id, name: folder.name })}
-                        >
-                            {/* Folder Cover */}
-                            <DefaultGridItemsFolderPlaceHolder />
-
-                            {/* Folder Info Section */}
-                            <div className="w-full mt-2 text-left">
-                                <p className="text-md font-medium truncate">{highlightText(folder.name, searchQuery)}</p>
-                                <div className="flex items-center gap-1 text-gray-400 truncate text-sm">
-                                    <p>Folder . Spotify</p>
-                                </div>
-                            </div>
-                        </div>
+                            itemTitle={folder.name}
+                            itemSubTitle={`Folder · ${folder.playlists.length} ${folder.playlists.length === 1 ? "Playlist" : "Playlists"}`}
+                            itemCoverImageUrl={""}
+                            isCurrentItemPage={false}
+                            isPlayingCurrentItem={false}
+                            hidePlayIcon={true}
+                            DefaultItemPlaceHolder={DefaultGridFolderPlaceHolder}
+                            navigateToItem={() => navigateToFolder({ id: folder._id, name: folder.name })}
+                            handlePlayPauseItem={() => { }}
+                        />
                     )
                 })
             }
@@ -312,15 +317,14 @@ const FolderPlaylists = () => {
 
     /* ---------- Stores ---------- */
     const { searchQuery } = useLibrarySearchStore();
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, activeFolder } = preferences;
+    const { leftSidebar, openedFolder } = useUIPreferencesStore();
     const { panelSize: leftPanelSize, isExpanded: isLeftSidebarExpanded } = leftSidebar;
-    const { id: activeFolderId } = activeFolder;
+    const { id: openedFolderId } = openedFolder;
     const { trackDetails } = useTrackDetailsStore();
     const { playlistData: { activeTrackId, playlistId } } = usePlaylistStore();
 
     /* ---------- Custom Hooks ---------- */
-    const { data: playlists, isLoading } = useGetFolderPlaylists(activeFolderId);
+    const { data: playlists, isLoading } = useGetFolderPlaylists(openedFolderId);
     const { navigateToPlaylist, handlePlayPausePlaylist } = usePlaylistActions();
     const { breakPoint } = useBreakPoint();
 
@@ -348,7 +352,6 @@ const FolderPlaylists = () => {
                         : "custom-grid-layout"
                 } px-3 mb-4`}
         >
-
             {
                 searchResults?.map((playlist: Playlist) => {
                     const isPlayingCurrentPlaylist = (playlistId == playlist._id && activeTrackId == trackDetails._id && trackDetails.isPlaying)
@@ -357,13 +360,13 @@ const FolderPlaylists = () => {
 
                     return (
                         <LibraryItemGrid
-                            itemId={playlist._id}
+                            key={playlist._id}
                             itemTitle={playlist.title}
-                            subItemTitle={`Total Tracks : ${playlist.tracks.length}`}
+                            itemSubTitle={`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
                             itemCoverImageUrl={playlist.coverImageUrl}
                             isCurrentItemPage={isCurrentPlaylistPage}
                             isPlayingCurrentItem={isPlayingCurrentPlaylist}
-                            DefaultItemPlaceHolder={DefaultGridItemsPlaylistPlaceHolder}
+                            DefaultItemPlaceHolder={DefaultGridPlaylistPlaceHolder}
                             navigateToItem={() => navigateToPlaylist(navigateUrl)}
                             handlePlayPauseItem={() => handlePlayPausePlaylist(isPlayingCurrentPlaylist, playlist._id, navigateUrl)}
                         />
@@ -372,10 +375,9 @@ const FolderPlaylists = () => {
             }
         </div>
     )
-
 }
 
-const DefaultGridComponents: Record<LeftSidebarTab, () => JSX.Element> = {
+const DefaultGridComponents = {
     "Playlists": DefaultGridPlaylists,
     "Save Playlists": DefaultGridSavePlaylists,
     "Save Albums": DefaultGridSaveAlbums,
@@ -387,11 +389,10 @@ const DefaultGridItems = () => {
     const { pathname } = useLocation();
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, library, activeFolder } = preferences;
+    const { leftSidebar, library, openedFolder } = useUIPreferencesStore();
     const { panelSize: leftPanelSize, isExpanded: isLeftSidebarExpanded } = leftSidebar;
     const { activeTab: libraryActiveTab } = library;
-    const { id: activeFolderId } = activeFolder;
+    const { id: openedFolderId } = openedFolder;
     const { trackDetails } = useTrackDetailsStore();
     const { playlistData: { activeTrackId, playlistId } } = usePlaylistStore();
 
@@ -403,11 +404,12 @@ const DefaultGridItems = () => {
     const id = "collectionTracks";
 
     /* ---------- Derived Values ---------- */
-    const isCollectionTracksPage = pathname == "/collection/tracks";
     const isPlayingCollectionTracks = (playlistId == id && activeTrackId == trackDetails._id && trackDetails.isPlaying);
+    const navigateUrl = "/collection/tracks";
+    const isCollectionTracksPage = pathname == navigateUrl;
     const Component = DefaultGridComponents[libraryActiveTab];
 
-    if (activeFolderId) return <FolderPlaylists />;
+    if (openedFolderId) return <FolderPlaylists />;
 
     return (
         <div
@@ -420,55 +422,20 @@ const DefaultGridItems = () => {
                         : "custom-grid-layout"
                 } px-3 mb-4`}
         >
-            <div
-                className={`group p-3 ${isCollectionTracksPage ? "bg-[#272727]" : "dynamic-bg-hover"} cursor-pointer rounded-[4px] flex flex-col overflow-hidden`}
-                style={{
-                    '--bgHoverColor': '#191919',
-                } as React.CSSProperties}
-                onClick={() => navigateToPlaylist("/collection/tracks")}
-            >
-                {/* Collection Track CoverImage */}
-                <div className="relative w-full aspect-square rounded-[4px] overflow-hidden">
-                    <img
-                        src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
-                        alt="Liked Songs"
-                        className="absolute top-0 left-0 w-full h-full object-cover"
-                    />
-
-                    {/* Play Button */}
-                    <div className="absolute bottom-2 right-2 transform opacity-0 group-hover-translate-y-0 group-hover-opacity transition-all duration-300 ease-in-out">
-                        <button
-                            className="text-black bg-[#1ed760] dynamic-bg-hover rounded-full p-4 cursor-pointer transition-transform shadow-lg"
-                            style={{
-                                '--bgHoverColor': '#3BE477',
-                            } as React.CSSProperties}
-                            title={isPlayingCollectionTracks ? 'Pause Liked Tracks' : 'Play Liked Tracks'}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handlePlayPausePlaylist(isPlayingCollectionTracks, id, "/collection/tracks")
-                            }}
-                        >
-                            {
-                                isPlayingCollectionTracks ? <PauseIcon width="17" height="17" /> : <PlayIcon width="17" height="17" />
-                            }
-                        </button>
-                    </div>
-                </div>
-
-                {/* Collection Track Info Section */}
-                <div className="w-full mt-2 text-left">
-                    <p className="text-md font-medium truncate">Liked Songs</p>
-                    <div className="flex items-center gap-1 text-gray-400 truncate text-sm">
-                        <div className="rotate-45 text-[#1dc95a]">
-                            <PinIcon width="15" height="15" />
-                        </div>
-                        <p>Playlist</p>
-                    </div>
-                </div>
-            </div>
+            {/* Liked Tracks */}
+            <LibraryItemGrid
+                itemTitle="Liked Tracks"
+                itemSubTitle="Playlist"
+                itemCoverImageUrl="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
+                isCurrentItemPage={isCollectionTracksPage}
+                isPlayingCurrentItem={isPlayingCollectionTracks}
+                isItemPinned={true}
+                DefaultItemPlaceHolder={DefaultGridPlaylistPlaceHolder}
+                navigateToItem={() => navigateToPlaylist(navigateUrl)}
+                handlePlayPauseItem={() => handlePlayPausePlaylist(isPlayingCollectionTracks, id, navigateUrl)}
+            />
 
             <Component />
-
         </div>
     )
 };

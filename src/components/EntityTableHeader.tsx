@@ -1,28 +1,28 @@
 import { useRef, useState } from "react";
-import type { Column, Columns } from "../types";
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import { useScrollStore } from "../store/useScrollStore";
 import { useBreakPoint } from "../hooks/breakPoint";
 import { getScrollThreshold } from "../utils";
 import { ClockIcon, DropdownIcon, TickIcon } from "../Svgs";
+import type { MenuOptions, TableColumnKey, TableColumns } from "../types";
+import { useTableColumnVisibilityStore } from "../store/useTableColumnVisibilityStore";
 
 interface EntityTableHeaderProps {
-    view: "Compact List" | "Default List";
-    columns: Record<Column, boolean>;
-    setColumns: React.Dispatch<React.SetStateAction<Columns>>
+    tableColumns: TableColumns;
+    options: MenuOptions;
 }
 
-const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, setColumns }) => {
+const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ tableColumns, options }) => {
     /* ---------- Local States ---------- */
     const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
 
     /* ---------- Stores ---------- */
-    const { preferences } = useUIPreferencesStore();
-    const { leftSidebar, rightSidebar } = preferences;
+    const { leftSidebar, rightSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
     const { showNowPlayingView, showQueueView } = rightSidebar;
+    const { tableView } = useTableColumnVisibilityStore();
     const { scrollFromTop } = useScrollStore();
- 
+
     /* ---------- Local References ---------- */
     const columnMenuRef = useRef<HTMLDivElement>(null);
 
@@ -37,33 +37,34 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
             <div className="w-6">#</div>
             <div className="flex-1 truncate">Title</div>
             {
-                view == "Compact List" ? (
+                tableView == "Compact List" ? (
                     <>
                         <div className={`${leftPanelSize <= 28 ? "block" : "hidden"} flex-1 truncate ml-5`}>
-                            {columns["Artist"] && "Artist"}
+                            {tableColumns["ARTIST"].visible && "Artist"}
                         </div>
                         <div className={`${leftPanelSize <= 25 ? "block" : "hidden"} w-32 truncate ml-5`}>
-                            {columns["Album"] && "Album"}
+                            {tableColumns["ALBUM"]?.visible && "Album"}
                         </div>
                     </>
                 ) : (
                     <>
                         <div className={`${leftPanelSize <= 28 ? "block" : "hidden"} flex-1 truncate ml-5`}>
-                            {columns["Album"] && "Album"}
+                            {tableColumns["ALBUM"]?.visible && "Album"}
                         </div>
                         <div className={`${leftPanelSize <= 25 ? "block" : "hidden"} w-32 truncate ml-5`}>
-                            {columns["Date added"] && "Date added"}
+                            {tableColumns["DATE ADDED"]?.visible && "Date added"}
                         </div>
                     </>
                 )
             }
 
             <div className="w-20 text-right truncate flex items-center justify-center">
-                {columns["Duration"] && <ClockIcon width="18" height="18" />}
+                {tableColumns["DURATION"].visible && <ClockIcon width="18" height="18" />}
             </div>
 
             <div className="relative flex items-center" ref={columnMenuRef}>
-                <button className="cursor-pointer group-hover-opacity dynamic-text-hover"
+                <button
+                    className="cursor-pointer group-hover-opacity dynamic-text-hover"
                     onClick={() => {
                         setIsColumnMenuOpen((prev) => !prev);
                     }}
@@ -87,7 +88,6 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                                     right: `47px`,
                                 }),
                             }}
-
                         >
                             <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
                                 <span className="flex items-center gap-3 text-xs">
@@ -96,161 +96,29 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
                             </div>
 
                             {
-                                view == "Compact List" ? (
-                                    <>
+                                options.map(({ label, action }) => {
+                                    return (
                                         <button
                                             className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
                                             style={{
                                                 '--bgHoverColor': '#3E3E3E',
                                             } as React.CSSProperties}
-                                            onClick={() => {
-                                                setColumns((prev) => ({
-                                                    ...prev,
-                                                    Artist: !prev.Artist,
-                                                }));
-                                            }}
+                                            onClick={action}
                                         >
-                                            <span className={`${columns["Artist"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                                Artist
+                                            <span className={`${tableColumns[label.toUpperCase() as TableColumnKey]?.visible ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                                                {label}
                                             </span>
 
                                             {
-                                                columns["Artist"] && (
+                                                tableColumns[label.toUpperCase() as TableColumnKey]?.visible && (
                                                     <p className="text-[#3BE477]">
                                                         <TickIcon width="15" height="15" />
                                                     </p>
                                                 )
                                             }
                                         </button>
-
-                                        <button
-                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
-                                            style={{
-                                                '--bgHoverColor': '#3E3E3E',
-                                            } as React.CSSProperties}
-                                            onClick={() => {
-                                                setColumns((prev) => ({
-                                                    ...prev,
-                                                    Album: !prev.Album,
-                                                }));
-                                            }}
-                                        >
-                                            <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                                Album
-                                            </span>
-
-                                            {
-                                                columns["Album"] && (
-                                                    <p className="text-[#3BE477]">
-                                                        <TickIcon width="15" height="15" />
-                                                    </p>
-                                                )
-                                            }
-                                        </button>
-
-                                        <button
-                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
-                                            style={{
-                                                '--bgHoverColor': '#3E3E3E',
-                                            } as React.CSSProperties}
-                                            onClick={() => {
-                                                setColumns((prev) => ({
-                                                    ...prev,
-                                                    Duration: !prev.Duration,
-                                                }));
-                                            }}
-                                        >
-                                            <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                                Duration
-                                            </span>
-
-                                            {
-                                                columns["Duration"] && (
-                                                    <p className="text-[#3BE477]">
-                                                        <TickIcon width="15" height="15" />
-                                                    </p>
-                                                )
-                                            }
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button
-                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
-                                            style={{
-                                                '--bgHoverColor': '#3E3E3E',
-                                            } as React.CSSProperties}
-                                            onClick={() => {
-                                                setColumns((prev) => ({
-                                                    ...prev,
-                                                    Album: !prev.Album,
-                                                }));
-                                            }}
-                                        >
-                                            <span className={`${columns["Album"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                                Album
-                                            </span>
-
-                                            {
-                                                columns["Album"] && (
-                                                    <p className="text-[#3BE477]">
-                                                        <TickIcon width="15" height="15" />
-                                                    </p>
-                                                )
-                                            }
-                                        </button>
-
-                                        <button
-                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
-                                            style={{
-                                                '--bgHoverColor': '#3E3E3E',
-                                            } as React.CSSProperties}
-                                            onClick={() => {
-                                                setColumns((prev) => ({
-                                                    ...prev,
-                                                    "Date added": !prev["Date added"],
-                                                }));
-                                            }}
-                                        >
-                                            <span className={`${columns["Date added"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                                Date added
-                                            </span>
-
-                                            {
-                                                columns["Date added"] && (
-                                                    <p className="text-[#3BE477]">
-                                                        <TickIcon width="15" height="15" />
-                                                    </p>
-                                                )
-                                            }
-                                        </button>
-
-                                        <button
-                                            className="text-white/90 cursor-pointer w-full dynamic-bg-hover flex items-center justify-between p-2.5"
-                                            style={{
-                                                '--bgHoverColor': '#3E3E3E',
-                                            } as React.CSSProperties}
-                                            onClick={() => {
-                                                setColumns((prev) => ({
-                                                    ...prev,
-                                                    Duration: !prev.Duration,
-                                                }));
-                                            }}
-                                        >
-                                            <span className={`${columns["Duration"] ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
-                                                Duration
-                                            </span>
-
-                                            {
-                                                columns["Duration"] && (
-                                                    <p className="text-[#3BE477]">
-                                                        <TickIcon width="15" height="15" />
-                                                    </p>
-                                                )
-                                            }
-                                        </button>
-                                    </>
-                                )
+                                    )
+                                })
                             }
                         </div>
                     </>
@@ -261,3 +129,4 @@ const EntityTableHeader: React.FC<EntityTableHeaderProps> = ({ view, columns, se
 }
 
 export default EntityTableHeader
+

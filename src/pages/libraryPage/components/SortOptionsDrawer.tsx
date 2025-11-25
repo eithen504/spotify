@@ -15,8 +15,7 @@ const SortOptionsDrawer: React.FC<SortOptionsDrawerProps> = ({
   onClose,
   height
 }) => {
-  const { preferences } = useUIPreferencesStore();
-  const { library } = preferences;
+  const { library } = useUIPreferencesStore();
   const { sort: librarySort } = library;
 
   return (

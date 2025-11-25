@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import CreditSection from "./CreditSection"
+import CreditsSection from "./CreditsSection"
 import Header from "./Header"
 import QueueSection from "./QueueSection"
 import TrackInfo from "./TrackInfo"
@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom"
 import { useShare } from "../../../../../hooks/share"
 import { useGetCurrentUserLibraryItems } from "../../../../../hooks/library"
 import { useAddItemsToPlaylist, useUploadPlaylist } from "../../../../../hooks/playlist"
+import EmptyQueueSection from "./EmptyQueueSection"
+import TrackCreditsDialog from "../../../../../components/TrackCreditsDialog"
 
 interface NowPlayingViewProps {
     rightPanelSize: number;
@@ -25,6 +27,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
 
     /* ---------- Local States ---------- */
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isTrackCreditsDialogOpen, setIsTrackCreditsDialogOpen] = useState(false);
 
     /* ---------- Local References ---------- */
     const sidebarRef = useRef<HTMLDivElement | null>(null)
@@ -45,7 +48,7 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
     const { share } = useShare();
 
     /* ---------- Derived Values ---------- */
-    const nextQueueItem = customQueue.head.next?.value || activeEntityQueueListNode?.next?.value;
+    const hasNextItemInQueue = customQueue.head.next?.value || activeEntityQueueListNode?.next?.value;
     const queueItemId = albumId ? `Album-${albumId}-${trackDetails?._id}` : `Playlist-${playlistId}-${trackDetails?._id}`;
     const hasTrackInQueue = queueMap[queueItemId];
     const trackMenuOptions: MenuOptions = [
@@ -121,8 +124,10 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
         },
         {
             icon: <CreditIcon width="16" height="16" />,
-            label: "View Credits",
-            action: () => { },
+            label: "View Credits", 
+            action: () => {
+                setIsTrackCreditsDialogOpen(true);
+            },
         },
         {
             icon: <AlbumIcon width="16" height="16" />,
@@ -181,13 +186,22 @@ const NowPlayingView: React.FC<NowPlayingViewProps> = ({ rightPanelSize }) => {
                 <TrackInfo />
 
                 {/* Credit Section */}
-                <CreditSection />
+                <CreditsSection />
 
                 {/* Queue Section */}
                 {
-                    nextQueueItem && <QueueSection />
+                    hasNextItemInQueue ? <QueueSection /> : <EmptyQueueSection />
                 }
             </div>
+
+            {
+                isTrackCreditsDialogOpen && (
+                    <TrackCreditsDialog
+                        track={trackDetails}
+                        onClose={() => setIsTrackCreditsDialogOpen(false)}
+                    />
+                )
+            }
         </aside>
     )
 }

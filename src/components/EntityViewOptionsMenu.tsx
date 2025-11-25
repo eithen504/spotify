@@ -2,24 +2,21 @@ import React from 'react'
 import { useBreakPoint } from '../hooks/breakPoint'
 import { useUIPreferencesStore } from '../store/useUIPreferenceStore';
 import { CompactListIcon, DefaultListIcon, TickIcon } from '../Svgs';
+import { useTableColumnVisibilityStore } from '../store/useTableColumnVisibilityStore';
 
 interface EntityViewOptionsMenuProps {
-    view?: "Compact List" | "Default List";
-    setView?: React.Dispatch<React.SetStateAction<"Default List" | "Compact List">>;
     entityViewMenuRef: React.RefObject<HTMLDivElement | null>;
     onClose: () => void;
 }
 
 const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
-    view,
-    setView,
     entityViewMenuRef,
     onClose
 }) => {
     const { breakPoint } = useBreakPoint();
-    const { preferences } = useUIPreferencesStore();
-    const { rightSidebar } = preferences;
+    const { rightSidebar } = useUIPreferencesStore();
     const { showNowPlayingView, showQueueView } = rightSidebar;
+    const { tableView, setTableView } = useTableColumnVisibilityStore();
 
     return (
         <>
@@ -34,7 +31,7 @@ const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
                     top: `${(entityViewMenuRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
                     ...((breakPoint === "md" || (!showNowPlayingView && !showQueueView)) && {
                         right: `30px`,
-                    }),
+                    }), 
                 }}
             >
                 <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>
@@ -48,15 +45,15 @@ const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
                     style={{
                         '--bgHoverColor': '#3E3E3E',
                     } as React.CSSProperties}
-                    onClick={() => setView?.("Compact List")}
+                    onClick={() => setTableView("Compact List")}
                 >
-                    <span className={`${view == "Compact List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                    <span className={`${tableView == "Compact List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                         <CompactListIcon width="15" height="15" />
                         Compact List
                     </span>
 
                     {
-                        view == "Compact List" && (
+                        tableView == "Compact List" && (
                             <p className="text-[#3BE477]">
                                 <TickIcon width="15" height="15" />
                             </p>
@@ -69,15 +66,15 @@ const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
                     style={{
                         '--bgHoverColor': '#3E3E3E',
                     } as React.CSSProperties}
-                    onClick={() => setView?.("Default List")}
+                    onClick={() => setTableView("Default List")}
                 >
-                    <span className={`${view == "Default List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
+                    <span className={`${tableView == "Default List" ? "text-[#3BE477]" : ""} flex items-center gap-3`}>
                         <DefaultListIcon width="15" height="15" />
                         Default List
                     </span>
 
                     {
-                        view == "Default List" && (
+                        tableView == "Default List" && (
                             <p className="text-[#3BE477]">
                                 <TickIcon width="15" height="15" />
                             </p>

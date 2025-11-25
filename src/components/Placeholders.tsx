@@ -9,7 +9,8 @@ interface EntityCoverPlaceholderProps {
 }
 
 const EntityCoverPlaceholder: React.FC<EntityCoverPlaceholderProps> = ({ placeholderIcon, isOwnEntity }) => {
-    const { preferences: { leftPanelSize } } = useUIPreferencesStore();
+    const { leftSidebar } = useUIPreferencesStore();
+    const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
         <div
@@ -131,7 +132,7 @@ const PreviewEntityDialogMusicPlaceHolder: React.FC<PreviewEntityDialogMusicPlac
     )
 }
 
-const DefaultListItemsPlaylistPlaceHolder = () => {
+const DefaultListPlaylistPlaceHolder = () => {
     return (
         <div className="w-full h-full object-cover bg-[#282828] flex items-center justify-center">
             <PlaylistIcon />
@@ -139,7 +140,7 @@ const DefaultListItemsPlaylistPlaceHolder = () => {
     )
 }
 
-const DefaultListItemsAlbumPlaceHolder = () => {
+const DefaultListAlbumPlaceHolder = () => {
     return (
         <div className="w-full h-full object-cover bg-[#282828] flex items-center justify-center">
             <AlbumIcon />
@@ -147,16 +148,16 @@ const DefaultListItemsAlbumPlaceHolder = () => {
     )
 }
 
-const DefaultListItemsFolderPlaceHolder = () => {
+const DefaultListFolderPlaceHolder = () => {
     return (
-        <div className="w-12 h-12 rounded-[4px] overflow-hidden relative bg-[#282828] flex items-center justify-center">
+        <div className="w-full h-full object-cover bg-[#282828] flex items-center justify-center">
             <FolderIcon />
         </div>
     )
 }
 
 
-const CompactGridItemsPlaylistPlaceHolder = () => {
+const CompactGridPlaylistPlaceHolder = () => {
     return (
         <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#333333] flex items-center justify-center">
             <PlaylistIcon width="50" height="50" />
@@ -164,7 +165,7 @@ const CompactGridItemsPlaylistPlaceHolder = () => {
     )
 }
 
-const CompactGridItemsAlbumPlaceHolder = () => {
+const CompactGridAlbumPlaceHolder = () => {
     return (
         <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#333333] flex items-center justify-center">
             <AlbumIcon width="50" height="50" />
@@ -172,16 +173,16 @@ const CompactGridItemsAlbumPlaceHolder = () => {
     )
 }
 
-const CompactGridItemsFolderPlaceHolder = () => {
+const CompactGridFolderPlaceHolder = () => {
     return (
-        <div className="relative w-full aspect-square rounded-[4px] overflow-hidden bg-[#333333] flex items-center justify-center">
+        <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#333333] flex items-center justify-center">
             <FolderIcon width="50" height="50" />
         </div>
     )
 }
 
 
-const DefaultGridItemsPlaylistPlaceHolder = () => {
+const DefaultGridPlaylistPlaceHolder = () => {
     return (
         <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#333333] flex items-center justify-center">
             <PlaylistIcon width="50" height="50" />
@@ -189,7 +190,7 @@ const DefaultGridItemsPlaylistPlaceHolder = () => {
     )
 }
 
-const DefaultGridItemsAlbumPlaceHolder = () => {
+const DefaultGridAlbumPlaceHolder = () => {
     return (
         <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#333333] flex items-center justify-center">
             <AlbumIcon width="50" height="50" />
@@ -197,9 +198,9 @@ const DefaultGridItemsAlbumPlaceHolder = () => {
     )
 }
 
-const DefaultGridItemsFolderPlaceHolder = () => {
+const DefaultGridFolderPlaceHolder = () => {
     return (
-        <div className="relative w-full aspect-square rounded-[4px] overflow-hidden bg-[#333333] flex items-center justify-center">
+        <div className="absolute top-0 left-0 w-full h-full object-cover bg-[#333333] flex items-center justify-center">
             <FolderIcon width="50" height="50" />
         </div>
     )
@@ -256,15 +257,15 @@ export {
     MobileMiniPlayerMusicPlaceholder,
     NowPlayingMusicPlaceholder,
     PreviewEntityDialogMusicPlaceHolder,
-    DefaultListItemsPlaylistPlaceHolder,
-    DefaultListItemsAlbumPlaceHolder,
-    DefaultListItemsFolderPlaceHolder,
-    DefaultGridItemsPlaylistPlaceHolder,
-    DefaultGridItemsAlbumPlaceHolder,
-    DefaultGridItemsFolderPlaceHolder,
-    CompactGridItemsPlaylistPlaceHolder,
-    CompactGridItemsAlbumPlaceHolder,
-    CompactGridItemsFolderPlaceHolder,
+    DefaultListPlaylistPlaceHolder,
+    DefaultListAlbumPlaceHolder,
+    DefaultListFolderPlaceHolder,
+    DefaultGridPlaylistPlaceHolder,
+    DefaultGridAlbumPlaceHolder,
+    DefaultGridFolderPlaceHolder,
+    CompactGridPlaylistPlaceHolder,
+    CompactGridAlbumPlaceHolder,
+    CompactGridFolderPlaceHolder,
     SmallScreenPlaylistPlaceHolder,
     SmallScreenAlbumPlaceHolder,
     SmallScreenFolderPlaceHolder,
