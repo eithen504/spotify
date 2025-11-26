@@ -43,12 +43,13 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
                         alt="Entity"
                         className="w-12 h-12 rounded"
                     />
-                    <div className="text-[#ffffff]">
-                        <div className="font-semibold text-md">{title}</div>
+                    <div className="text-[#ffffff] min-w-0">
+                        <div className="font-semibold text-md truncate overflow-hidden text-ellipsis whitespace-nowrap">
+                            {title}
+                        </div>
+
                         <div className="text-sm text-white/70">
-                            {
-                                isPlaylistPage ? "Playlist" : isAlbumPage ? "Album" : "Track"
-                            }
+                            {isPlaylistPage ? "Playlist" : isAlbumPage ? "Album" : "Track"}
                         </div>
                     </div>
                 </div>

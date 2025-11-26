@@ -30,7 +30,6 @@ const Header: React.FC<HeaderProps> = ({ isScrolled }) => {
             >
                 <CrossIcon width="15" height="15" />
             </button>
-
         </div>
     )
 }

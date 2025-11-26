@@ -52,15 +52,16 @@ const useGetFeedPlaylists = () => {
 const useGetRecentPlaylists = () => {
     const { data: currentUser } = useCheckAuth();
     let playlistIds: string[] = JSON.parse(localStorage.getItem(RECENT_PLAYLISTS_KEY) || "[]")
-    if (!currentUser) {
-        playlistIds = [];
-    }
     const params = new URLSearchParams();
     playlistIds.forEach(id => params.append("ids", id));
 
     return useQuery({
         queryKey: ["getRecentPlaylists"],
         queryFn: async () => {
+            if (!currentUser) {
+                return [];
+            }
+            
             const res = await fetch(`${baseUrl}/api/v1/playlist/recent?${params.toString()}`, {
                 method: "GET", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
@@ -98,6 +99,7 @@ const useGetGenrePlaylists = (id: string) => {
 }
 
 const useUploadPlaylist = () => {
+    const { data: currentUser } = useCheckAuth();
     const queryClient = useQueryClient();
 
     return useMutation({
@@ -108,6 +110,8 @@ const useUploadPlaylist = () => {
             tracks: string[],
             visibility: Visibility
         }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/playlist`, {
                 method: "POST", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
@@ -143,9 +147,12 @@ const useUploadPlaylist = () => {
 const useUpdatePlaylist = () => {
     const { id } = useParams();
     const queryClient = useQueryClient();
+    const { data: currentUser } = useCheckAuth();
 
     return useMutation({
         mutationFn: async (payload: { title?: string, coverImageUrl?: string, tracks?: Track[] }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const { title, coverImageUrl, tracks } = payload;
             const trackIds = tracks?.map((t) => t._id);
 
@@ -217,9 +224,12 @@ const useUpdatePlaylist = () => {
 
 const useAddItemsToPlaylist = () => {
     const queryClient = useQueryClient();
+    const { data: currentUser } = useCheckAuth();
 
     return useMutation({
         mutationFn: async (payload: { playlistId: string, tracks: Track[] }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const { playlistId, tracks } = payload;
             const trackIds = tracks.map((t) => t._id);
 

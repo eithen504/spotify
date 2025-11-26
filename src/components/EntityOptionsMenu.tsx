@@ -90,10 +90,9 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
                                 {subMenu && (
                                     <div
                                         className={`${subMenuleftShift ? "right-full" : "left-full"} absolute top-0 w-70 p-1 hidden group-hover-inner-flex h-50 overflow-y-auto custom-scrollbar flex-col bg-[#282828] shadow-[0_4px_5px_rgba(0,0,0,0.8)] rounded-[4px] z-900`}
+                                        onClick={(e) => e.stopPropagation()}
                                     >
-                                        <div className="p-1"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
+                                        <div className="p-1">
                                             <div className="bg-[#3E3E3E] w-full flex items-center p-[7px] rounded-[4px]">
                                                 <button className="text-[#ffffff] ml-1">
                                                     <SearchIcon width="18" height="18" />

@@ -8,8 +8,13 @@ import { useBreakPoint } from '../../hooks/breakPoint';
 import { NotFoundPage } from '../../components/NotFounds';
 import { useState } from 'react';
 import SearchBar from './components/SearchBar';
+import { useCheckAuth } from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
 
 const LibraryPage = () => {
+  /* ---------- Internal Hooks ---------- */
+  const navigate = useNavigate();
+
   /* ---------- Local States ---------- */
   const [isSearchLibraryActive, setIsSearchLibraryActive] = useState(false);
 
@@ -19,9 +24,14 @@ const LibraryPage = () => {
   const { isScrolled } = useScrollStore();
 
   /* ---------- Custom Hooks ---------- */
+  const { data: currentUser, isLoading } = useCheckAuth();
   const { breakPoint } = useBreakPoint();
 
   if (breakPoint != "sm") return <NotFoundPage title="Unsupported browser" description="Spotify is unavailable on this browser. For the best listening experience update your browser or download the Spotify app." />;
+
+  if (isLoading) return null;
+
+  if (!currentUser) return navigate(-1);
 
   return (
     <div className="bg-[#121212] text-[#ffffff] rounded-md flex flex-col h-full overflow-y-auto hide-scrollbar group/header">

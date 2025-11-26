@@ -62,14 +62,14 @@ const Header = () => {
     const handleToggleExpandLibrary = () => {
         if (isLeftSidebarExpanded) {
             if (breakPoint == "lg") {
-                setLeftSidebar({ panelSize: 22 });
+                setLeftSidebar({ panelSize: 22, isExpanded: false });
             }
 
             if (breakPoint == "md") {
-                setLeftSidebar({ panelSize: 32 });
+                setLeftSidebar({ panelSize: 32, isExpanded: false });
             }
         } else {
-            setLeftSidebar({ panelSize: 100 });
+            setLeftSidebar({ panelSize: 100, isExpanded: true });
         }
     }
 

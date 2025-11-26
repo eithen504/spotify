@@ -11,7 +11,7 @@ const useSavePlaylist = () => {
 
     return useMutation({
         mutationFn: async (playlist: Playlist) => {
-            if(!currentUser) throw new Error("Authentication required. Please log in or create an account to save this playlist.");
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
 
             const res = await fetch(`${baseUrl}/api/v1/savePlaylist/${playlist._id}`, {
                 method: "POST",
@@ -45,7 +45,7 @@ const useSavePlaylist = () => {
                                 coverImageUrl: playlist.coverImageUrl,
                                 userId: playlist.userId,
                                 username: "",
-                                genre: playlist.genre,
+                                genre: playlist.genres,
                                 tracks: playlist.tracks,
                                 hasSaved: false,
                                 createdAt: playlist.createdAt,

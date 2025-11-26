@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDominantColor } from "../hooks/color";
 import { Link, useNavigate } from "react-router-dom";
-import { PlaylistSectionItemPlaceholder } from "./Placeholders";
 import { SPOTIFY_IMAGE_URL } from "../constants";
 
 interface AuthRequiredModalProps {

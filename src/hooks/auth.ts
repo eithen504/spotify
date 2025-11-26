@@ -58,7 +58,12 @@ const useVerifyGoogleToken = () => {
                     updatedAt: data.updatedAt
                 }
             ))
-            navigate("/", { replace: true })
+
+            queryClient.invalidateQueries({
+                queryKey: ['getRecentPlaylists'],
+            });
+
+            navigate("/", { replace: true });
         },
 
         onError: (error) => {
@@ -82,8 +87,10 @@ const useLogoutUser = () => {
         },
 
         onSuccess: () => {
-            queryClient.setQueryData(['checkAuth'], null)
-            toast.success("Logout Successfully.")
+            setTimeout(() => {
+                queryClient.setQueryData(['checkAuth'], null);
+                toast.success("Logout Successfully.");
+            }, 1000)
         }
     })
 }

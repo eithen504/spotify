@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useTrackDetailsStore } from "../store/useTrackDetailsStore";
 import { useAlbumStore } from "../store/useAlbumStore";
+import { useCheckAuth } from "./auth";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,8 +29,12 @@ const useGetAlbumTracks = (id: string) => {
 }
 
 const useUploadAlbum = () => {
+    const { data: currentUser } = useCheckAuth();
+
     return useMutation({
         mutationFn: async (payload: { title: string, coverImageUrl: string | null }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/album`, {
                 method: "POST", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
@@ -60,8 +65,12 @@ const useUploadAlbum = () => {
 }
 
 const useUpdateAlbum = (id: string) => {
+    const { data: currentUser } = useCheckAuth();
+
     return useMutation({
         mutationFn: async (payload: { title: string, coverImageUrl: string }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/album/${id}`, {
                 method: "PATCH",
                 credentials: "include",

@@ -21,8 +21,11 @@ const TrackInfo = () => {
     return (
         <div>
             <div
-                className="cursor-pointer"
-                onClick={() => navigate(`/track/${trackDetails._id}`)}
+                className={`${trackDetails._id ? "cursor-pointer": ""}`}
+                onClick={() => {
+                    if(!trackDetails._id) return;
+                    navigate(`/track/${trackDetails._id}`);
+                }}
             >
                 {
                     trackDetails.coverImageUrl ? (
@@ -44,8 +47,11 @@ const TrackInfo = () => {
                 {/* Left: Title and Subtitle */}
                 <div className="flex-1 min-w-0 pr-4">
                     <p
-                        className="text-2xl font-bold truncate cursor-pointer hover:underline"
-                        onClick={() => navigate(`/track/${trackDetails._id}`)}
+                        className={`text-2xl font-bold truncate ${trackDetails._id ? "cursor-pointer hover:underline": ""}`}
+                        onClick={() => {
+                            if(!trackDetails._id) return;
+                            navigate(`/track/${trackDetails._id}`)
+                        }}
                     >
                         {trackDetails.title || "No Track Selected"}
                     </p>

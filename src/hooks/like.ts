@@ -55,10 +55,9 @@ const useLikeTrack = () => {
     const { data: currentUser } = useCheckAuth();
     const queryClient = useQueryClient()
 
-
     return useMutation({
         mutationFn: async (track: Track) => {
-            if (!currentUser) throw new Error("Authentication required. Please log in or create an account to like this track.");
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
 
             const res = await fetch(`${baseUrl}/api/v1/like/${track._id}`, {
                 method: "POST",

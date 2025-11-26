@@ -8,6 +8,8 @@ import EntityOptionsMenu from "./EntityOptionsMenu";
 import EntityViewOptionsMenu from "./EntityViewOptionsMenu";
 import EntityOptionsDrawer from "./EntityOptionsDrawer";
 import { useTableColumnVisibilityStore } from "../store/useTableColumnVisibilityStore";
+import { useCheckAuth } from "../hooks/auth";
+import { toast } from "sonner";
 
 interface EntityInfo {
     title?: string;
@@ -48,10 +50,25 @@ const EntityControls: React.FC<EntityControlsProps> = ({
     /* ---------- Stores ---------- */
     const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
-    const {tableView} = useTableColumnVisibilityStore();
- 
+    const { tableView } = useTableColumnVisibilityStore();
+
     /* ---------- Custom Hooks ---------- */
+    const { data: currentUser } = useCheckAuth();
     const { breakPoint } = useBreakPoint();
+
+    /* ---------- Methods Or Functions ---------- */
+    const handleMoreIconClick = () => {
+        if (!currentUser) {
+            toast.error("Please Login or Signup First!");
+            return;
+        };
+
+        if (breakPoint == "sm") {
+            setIsEntityDrawerOpen((prev) => !prev);
+        } else {
+            setIsEntityMenuOpen((prev) => !prev);
+        }
+    }
 
     return (
         <div
@@ -144,13 +161,7 @@ const EntityControls: React.FC<EntityControlsProps> = ({
                         className="relative flex items-center"
                     >
                         <button
-                            onClick={() => {
-                                if (breakPoint == "sm") {
-                                    setIsEntityDrawerOpen((prev) => !prev)
-                                } else {
-                                    setIsEntityMenuOpen((prev) => !prev)
-                                }
-                            }}
+                            onClick={handleMoreIconClick}
                             className="text-white/70 dynamic-text-hover cursor-pointer"
                         >
                             <MoreIcon width="30" height="30" />

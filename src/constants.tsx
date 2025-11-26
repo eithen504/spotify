@@ -4,7 +4,7 @@ import CompactListItems from "./layouts/desktopLayout/components/mainContent/lef
 import DefaultGridItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultGridItems";
 import DefaultListItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, LibraryTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language, LibrarySortOptionsMap } from "./types";
+import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language, LibrarySortOptionsMap } from "./types";
 
 const GENRES: Genres = [
     "Party",

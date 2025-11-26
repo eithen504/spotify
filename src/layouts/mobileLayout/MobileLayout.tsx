@@ -45,7 +45,7 @@ export default function MobileLayout() {
         const nextEntityQueueItem = activeEntityQueueListNode!.next!.value;
 
         const [activeEntityType, activeEntityId, activeTrackId] = activeEntityQueueListNode!.value!._id.split('-');
-        const isActiveEntityQueueListNodeCustom = activeEntityId != queueEntityId;
+        const isActiveQueueListNodeCustom = activeEntityId != queueEntityId;
 
         if (nextCustomQueueItem) {
             const nextCustomQueueListNode = customQueue!.head!.next!;
@@ -106,7 +106,7 @@ export default function MobileLayout() {
                     isPlaying: true,
                 });
 
-                // that means playlist already initilize 
+                // that means playlist already initilize
                 if (nextEntityType == "Album") {
                     setAlbumData({ albumId: nextEntityId, activeTrackId: nextTrackId });
                 } else {
@@ -117,7 +117,7 @@ export default function MobileLayout() {
             }
         }
 
-        if (isActiveEntityQueueListNodeCustom) {
+        if (isActiveQueueListNodeCustom) {
             removeItemFromQueue(activeEntityType as "Playlist" | "Album", activeEntityId, activeTrackId);
         }
     }

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 import type { Folder, Playlist } from "../types";
+import { useCheckAuth } from "./auth";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,9 +28,12 @@ const useGetFolderPlaylists = (id: string) => {
 
 const useUploadFolder = () => {
     const queryClient = useQueryClient();
+    const { data: currentUser } = useCheckAuth();
 
     return useMutation({
         mutationFn: async (payload: { name: string, playlistIds: string[] }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/folder`, {
                 method: "POST", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
@@ -66,9 +70,12 @@ const useUpdateFolder = () => {
     const queryClient = useQueryClient();
     const { openedFolder, setOpenedFolder } = useUIPreferencesStore();
     const { id: openedFolderId } = openedFolder;
+    const { data: currentUser } = useCheckAuth();
 
     return useMutation({
         mutationFn: async (payload: { name?: string, playlists?: Playlist[] }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const { name, playlists } = payload;
             const playlistIds = playlists?.map((p) => p._id);
 
@@ -133,9 +140,12 @@ const useDeleteFolder = () => {
     const { openedFolder, setOpenedFolder } = useUIPreferencesStore();
     const { id: openedFolderId } = openedFolder;
     const queryClient = useQueryClient();
+    const { data: currentUser } = useCheckAuth();
 
     return useMutation({
         mutationFn: async () => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/folder/${openedFolderId}`, {
                 method: "DELETE",
                 credentials: "include",
@@ -171,9 +181,12 @@ const useDeleteFolder = () => {
 
 const useAddItemToFolder = () => {
     const queryClient = useQueryClient();
+    const { data: currentUser } = useCheckAuth();
 
     return useMutation({
         mutationFn: async (payload: { folderId: string, playlist: Playlist }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const { folderId, playlist } = payload;
             const res = await fetch(`${baseUrl}/api/v1/folder/${folderId}/items`, {
                 method: "PATCH",

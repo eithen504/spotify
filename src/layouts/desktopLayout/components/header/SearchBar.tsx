@@ -7,6 +7,7 @@ import type { AlphabetLetter, SearchItem } from '../../../../types';
 import { SEARCH_DICTIONARY } from '../../../../data';
 import { FUSION_SEARCH_HISTORY_KEY } from '../../../../constants';
 import { isValidSearchItem } from '../../../../validators';
+import { useCheckAuth } from '../../../../hooks/auth';
 
 const SearchBar = () => {
     /* ---------- Internal Hooks ---------- */
@@ -26,6 +27,9 @@ const SearchBar = () => {
 
     /* ---------- Derived Values ---------- */
     const isSearchPage = pathname == "/search";
+
+    /* ---------- Custom Hooks ---------- */
+    const { data: currentUser } = useCheckAuth();
 
     /* ---------- Methods Or Functions ---------- */
     const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
@@ -147,7 +151,7 @@ const SearchBar = () => {
                         onFocus={() => setIsRecentSearchesDropdownOpen(true)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
-
+                                navigate(`/search/${searchQuery}`)
                             }
                         }}
                         placeholder="What do you want to play?"
@@ -190,7 +194,7 @@ const SearchBar = () => {
                     </Link>
                 </div>
 
-                {isRecentSearchesDropdownOpen && (
+                {(isRecentSearchesDropdownOpen && currentUser) && (
                     <RecentSearchesDropdown
                         searchQuery={searchQuery}
                         recentSearchItems={recentSearchItems}
@@ -203,7 +207,7 @@ const SearchBar = () => {
             </div>
 
             {
-                isListeningDialogOpen && (
+                (isListeningDialogOpen && currentUser) && (
                     <ListeningDialog
                         inputRef={inputRef}
                         setSearchQuery={setSearchQuery}

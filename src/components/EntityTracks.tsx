@@ -11,6 +11,8 @@ import { useBreakPoint } from '../hooks/breakPoint';
 import EntityOptionsMenu from './EntityOptionsMenu';
 import EntityOptionsDrawer from './EntityOptionsDrawer';
 import { useTableColumnVisibilityStore } from '../store/useTableColumnVisibilityStore';
+import { useCheckAuth } from '../hooks/auth';
+import { toast } from 'sonner';
 
 type EntityTracksProps = {
     tracks: Track[]
@@ -48,6 +50,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
     const { tableView } = useTableColumnVisibilityStore();
 
     /* ---------- Custom Hooks ---------- */
+    const { data: currentUser } = useCheckAuth();
     const { breakPoint } = useBreakPoint();
     const { getTrackLikeStatus } = useTrackLikeStatus();
     const { mutateAsync: likeTrack } = useLikeTrack();
@@ -55,6 +58,16 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
     /* ---------- Derived Values ---------- */
     const isAlbumPage = pathname.startsWith("/album");
     let { isOpen: isCurrenTrackMenuOpen, track: currentMenuTrack } = trackMenu;
+
+    /* ---------- Methods Or Functions ---------- */
+    const handleMoreIconClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, track: Track) => {
+        e.stopPropagation();
+        if (!currentUser) {
+            toast.error("Please Login or Signup First!");
+            return;
+        };
+        setTrackMenu({ isOpen: true, track });
+    }
 
     return (
         <div className='px-1 md:px-6'>
@@ -201,10 +214,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                             >
                                 <button
                                     className="text-white/70 dynamic-text-hover cursor-pointer group-hover-opacity"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setTrackMenu({ isOpen: true, track });
-                                    }}
+                                    onClick={(e) => handleMoreIconClick(e, track)}
                                 >
                                     <MoreIcon width="20" height="20" />
                                 </button>
@@ -226,13 +236,10 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
 
                         {/* for small screen */}
                         <div className="w-16 text-right justify-end items-center gap-1 flex md:hidden">
-                            <div className="text-white/70 dynamic-text-hover relative">
+                            <div className="text-white/70 dynamic-text-hover relative flex justify-center items-center">
                                 <button
                                     className="rotate-90 cursor-pointer"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setTrackMenu({ isOpen: true, track });
-                                    }}
+                                    onClick={(e) => handleMoreIconClick(e, track)}
                                 >
                                     <MoreIcon />
                                 </button>

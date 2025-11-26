@@ -1,11 +1,12 @@
 import type React from "react"
-import { ShareIcon } from "../../../../Svgs"
+import { QueueIcon, ShareIcon } from "../../../../Svgs"
 import { getVolumeIcon } from "../../../../utils"
 import { useUIPreferencesStore } from "../../../../store/useUIPreferenceStore"
 import { useState } from "react"
 import { Slider } from "../../../../components/ui/slider"
 import { useShare } from "../../../../hooks/share"
 import { useTrackDetailsStore } from "../../../../store/useTrackDetailsStore"
+import QueueDrawer from "./queueDrawer/QueueDrawer"
 
 interface BottomActionsProps {
     handleVolumeChange: (value: number[]) => void
@@ -14,6 +15,7 @@ interface BottomActionsProps {
 const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => {
     /* ---------- Local States ---------- */
     const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
+    const [isQueueDrawerOpen, setIsQueueDrawerOpen] = useState(false);
 
     /* ---------- Stores ---------- */
     const { systemVolume } = useUIPreferencesStore();
@@ -33,7 +35,7 @@ const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => 
                         className="cursor-pointer"
                         onClick={() => setIsVolumeSliderOpen((prev) => !prev)}
                     >
-                        {suggestedVolumeIcon({ width: "16", height: "16" })}
+                        {suggestedVolumeIcon({ width: "17", height: "17" })}
                     </button>
 
                     {isVolumeSliderOpen && (
@@ -48,12 +50,30 @@ const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => 
                     )}
                 </div>
 
-                <button className="cursor-pointer"
-                    onClick={() => share(`/track/${trackDetails._id}`)}
-                >
-                    <ShareIcon width="17" height="17" />
-                </button>
+                <div className="space-x-5">
+                    <button
+                        className="cursor-pointer"
+                        onClick={() => share(`/track/${trackDetails._id}`)}
+                    >
+                        <ShareIcon width="17" height="17" />
+                    </button>
+
+                    <button
+                        className="cursor-pointer"
+                        onClick={() => setIsQueueDrawerOpen(true)}
+                    >
+                        <QueueIcon width="16" height="16" />
+                    </button>
+                </div>
             </div>
+
+            {
+                isQueueDrawerOpen && (
+                    <QueueDrawer
+                        onClose={() => setIsQueueDrawerOpen(false)}
+                    />
+                )
+            }
         </div>
     )
 }

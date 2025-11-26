@@ -11,7 +11,7 @@ const useSaveAlbum = () => {
 
     return useMutation({
         mutationFn: async (album: Album) => {
-            if (!currentUser) throw new Error("Authentication required. Please log in or create an account to save this album.");
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
 
             const res = await fetch(`${baseUrl}/api/v1/saveAlbum/${album._id}`, {
                 method: "POST",
@@ -80,7 +80,7 @@ const useSaveAlbum = () => {
         },
 
         onError: (error) => {
-            toast.error(error.message)
+            toast.error(error.message);
         }
     })
 }

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { type Genres, type Language, type Track } from "../types";
+import { useCheckAuth } from "./auth";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -43,6 +44,8 @@ const useGetTrack = (id: string) => {
 }
 
 const useUploadTrack = () => {
+    const { data: currentUser } = useCheckAuth();
+
     return useMutation({
         mutationFn: async (payload: {
             title: string,
@@ -54,6 +57,8 @@ const useUploadTrack = () => {
             albumId: string | null,
             language: Language
         }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/track`, {
                 method: "POST",
                 credentials: "include",
@@ -64,7 +69,6 @@ const useUploadTrack = () => {
                     payload
                 }),
             });
-            console.log(res, "res");
 
             const data = await res.json();
 
@@ -86,8 +90,12 @@ const useUploadTrack = () => {
 }
 
 const useUpdateTrack = (id: string) => {
+    const { data: currentUser } = useCheckAuth();
+
     return useMutation({
         mutationFn: async (payload: { title: string, coverImageUrl: string }) => {
+            if (!currentUser) throw new Error("Please Login Or Signup First!");
+
             const res = await fetch(`${baseUrl}/api/v1/track/${id}`, {
                 method: "PATCH",
                 credentials: "include",

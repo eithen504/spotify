@@ -305,7 +305,7 @@ const PlaylistPage = () => {
                 isPlaying: true
             });
 
-            let playlistIds: string[] = JSON.parse(localStorage.getItem("recentPlaylists") || "[]");
+            let playlistIds: string[] = JSON.parse(localStorage.getItem(RECENT_PLAYLISTS_KEY) || "[]");
             if (playlistIds[0] != id) {
                 playlistIds = playlistIds.filter((i) => i != id);
                 playlistIds = [id || "", ...playlistIds];
@@ -320,10 +320,10 @@ const PlaylistPage = () => {
                         title: data.playlist.title,
                         coverImageUrl: data.playlist.coverImageUrl,
                         userId: data.playlist.userId,
-                        genres: [],
-                        tracks: [],
-                        createdAt: new Date(),
-                        updatedAt: new Date()
+                        genres: data.playlist.genres,
+                        tracks: data.playlist.tracks,
+                        createdAt: data.playlist.createdAt,
+                        updatedAt: data.playlist.updatedAt
                     }
 
                     return [
