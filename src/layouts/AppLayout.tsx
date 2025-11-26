@@ -111,7 +111,7 @@ export default function AppLayout() {
 
         /* Table Columns */
         let tableView = localStorage.getItem(TABLE_VIEW_KEY) || "Compact List";
-        tableView = tableView == "Compact List" ? "Compact List" : "Default List";
+        tableView = (tableView == "Compact List" && breakPoint != "sm") ? "Compact List" : "Default List";
 
         const rawTableColumns = localStorage.getItem(TABLE_COLUMNS_CONFIG_KEY) || "{}";
         const fallbackTableColumns = {
