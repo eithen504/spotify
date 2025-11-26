@@ -88,7 +88,7 @@ const TabsSection = () => {
                                 '--bgHoverColor': '#303030',
                             } as React.CSSProperties}
                             onClick={() => {
-                               setLibrary({activeTab: tab});
+                                setLibrary({ activeTab: tab });
                             }}
                         >
                             {tab}
@@ -108,7 +108,7 @@ const TabsSection = () => {
                         >
                             <RightArrowIcon width="18" height="18" />
                         </button>
-                        
+
                         {/* Enhanced right-side shadow (deeper and darker) */}
                         <div className="absolute right-5 top-0 bottom-0 w-16 bg-gradient-to-l from-[#121212] via-[#121212]/70 to-transparent pointer-events-none z-10" />
                     </>

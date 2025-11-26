@@ -49,7 +49,9 @@ export default function AppLayout() {
             view: "Default List",
         }
         let library = safeJSONParse(rawLibrary, fallbackLibrary);
+        console.log("is", library);
         const isValidLibrary = validateLibrary(library);
+        
 
         if (!isValidLibrary) {
             library = fallbackLibrary;

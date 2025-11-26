@@ -10,7 +10,7 @@ import UserOptionsMenu from "./UserOptionsMenu";
 
 const RightSection = () => {
     /* ---------- Internal Hooks ---------- */
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     /* ---------- Local States ---------- */
     const [userMenuOptions, setUserMenuOptions] = useState<MenuOptions>([]);

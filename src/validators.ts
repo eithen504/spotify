@@ -1,4 +1,4 @@
-import { LIBRARY_TABS, LIBRARY_VIEWS, SEARCH_ITEM_TYPES } from "./constants";
+import { LIBRARY_SORTS, LIBRARY_TABS, LIBRARY_VIEWS, SEARCH_ITEM_TYPES } from "./constants";
 
 function isValidSearchItem(obj: any) {
     return (
@@ -97,7 +97,7 @@ function validateLibrary(obj: any) {
         LIBRARY_TABS.includes(obj.activeTab) &&
 
         typeof obj.sort === "string" &&
-        LIBRARY_VIEWS.includes(obj.sort) &&
+        LIBRARY_SORTS.includes(obj.sort) &&
 
         typeof obj.view === "string" &&
         LIBRARY_VIEWS.includes(obj.view)
