@@ -21,10 +21,10 @@ const BottomActions = () => {
     }
 
     return (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 text-[#ffffff] flex gap-4 z-[2000]">
+        <div className="fixed bottom-3 left-1/2 -translate-x-1/2 text-[#ffffff] flex gap-4 z-[2000]">
             {/* Repeat Button */}
             <button
-                className={`${hasTrackInRepeat ? "text-[#3BE477]" : ""} bg-[#3a3a3a] dynamic-bg-hover cursor-pointer px-10 py-2 rounded-md flex flex-col items-center`}
+                className={`${hasTrackInRepeat ? "text-[#3BE477]" : ""} bg-[#3a3a3a] dynamic-bg-hover cursor-pointer px-14 py-3 rounded-md flex flex-col items-center`}
                 style={{
                     '--bgHoverColor': '#5c5b5b',
                 } as React.CSSProperties}
@@ -36,7 +36,7 @@ const BottomActions = () => {
 
             {/* Timer Button */}
             <button
-                className="bg-[#3a3a3a] dynamic-bg-hover cursor-pointer px-10 py-2 rounded-md flex flex-col items-center"
+                className="bg-[#3a3a3a] dynamic-bg-hover cursor-pointer px-14 py-3 rounded-md flex flex-col items-center"
                 style={{
                     '--bgHoverColor': '#5c5b5b',
                 } as React.CSSProperties}

@@ -383,6 +383,7 @@ const CollectionTracksPage = () => {
                                 tableColumns={playlistTableColumns}
                                 isPlayingCurrentEntity={isPlayingCollectionTracks}
                                 trackMenuOptions={trackMenuOptions}
+                                entityDrawerHeight="477px"
                                 trackMenu={trackMenu}
                                 setTrackMenu={setTrackMenu}
                                 handlePlayPauseTrack={handlePlayPauseTrack}

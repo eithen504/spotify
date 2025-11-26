@@ -520,7 +520,7 @@ const PlaylistPage = () => {
                                 tableColumns={playlistTableColumns}
                                 isPlayingCurrentEntity={isPlayingCurrentPlaylist}
                                 trackMenuOptions={trackMenuOptions}
-                                entityDrawerHeight="429px"
+                                entityDrawerHeight="477px"
                                 trackMenu={trackMenu}
                                 setTrackMenu={setTrackMenu}
                                 handlePlayPauseTrack={handlePlayPauseTrack}

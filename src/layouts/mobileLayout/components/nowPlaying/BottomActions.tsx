@@ -50,7 +50,7 @@ const BottomActions: React.FC<BottomActionsProps> = ({ handleVolumeChange }) => 
                     )}
                 </div>
 
-                <div className="space-x-5">
+                <div className="space-x-7">
                     <button
                         className="cursor-pointer"
                         onClick={() => share(`/track/${trackDetails._id}`)}

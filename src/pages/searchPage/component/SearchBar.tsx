@@ -7,6 +7,7 @@ import type { AlphabetLetter, SearchItem } from '../../../types';
 import { SEARCH_DICTIONARY } from '../../../data';
 import { FUSION_SEARCH_HISTORY_KEY } from '../../../constants';
 import { isValidSearchItem } from '../../../validators';
+import { useCheckAuth } from '../../../hooks/auth';
 
 const SearchBar = () => {
     /* ---------- Internal Hooks ---------- */
@@ -21,7 +22,10 @@ const SearchBar = () => {
 
     /* ---------- Local References ---------- */
     const searchBarRef = useRef<HTMLDivElement | null>(null);
-    const inputRef = useRef<HTMLInputElement>(null); 
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    /* ---------- Custom Hooks ---------- */
+    const { data: currentUser } = useCheckAuth();
 
     /* ---------- Methods Or Functions ---------- */
     const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value);
@@ -125,7 +129,10 @@ const SearchBar = () => {
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchQueryChange}
-                        onFocus={() => setIsRecentSearchesDropdownOpen(true)}
+                        onFocus={() => {
+                            if (!currentUser) return;
+                            setIsRecentSearchesDropdownOpen(true)
+                        }}
                         placeholder="What do you want to listen to?"
                         className="bg-transparent focus:outline-none w-full placeholder-black"
                     />
@@ -142,6 +149,8 @@ const SearchBar = () => {
                             <button className="cursor-pointer"
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    if (!currentUser) return;
+
                                     setIsRecentSearchesDropdownOpen(false);
                                     setIsListeningDialogOpen(true);
                                 }}
