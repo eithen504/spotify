@@ -10,6 +10,7 @@ import EditFolderDialog from "../../../components/EditFolderDialog";
 import UserOptionsSidePanel from "../../../components/UserOptionsSidePanel";
 import { useNavigate } from "react-router-dom";
 import CreateOptionsDrawer from "./CreateOptionsDrawer";
+import { DEFAULT_USER_IMAGE_URL } from "../../../constants";
 
 type HeaderProps = {
     setIsSearchLibraryActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -169,7 +170,7 @@ const Header: React.FC<HeaderProps> = ({ setIsSearchLibraryActive }) => {
     }, [playlists])
 
     useEffect(() => {
-        if (!currentUser) return
+        if (!currentUser) return;
 
         const adminId = import.meta.env.VITE_ADMIN_ID;
         const isAdminProfile = currentUser._id == adminId;
@@ -189,24 +190,24 @@ const Header: React.FC<HeaderProps> = ({ setIsSearchLibraryActive }) => {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Track',
                     action: () => {
-                        setIsUploadTrackDialogOpen(true)
-                        setIsUserSidePanelOpen(false)
+                        setIsUploadTrackDialogOpen(true);
+                        // setIsUserMenuOpen(false);
                     }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Playlist',
                     action: () => {
-                        setIsUploadPlaylistDialogOpen(true)
-                        setIsUserSidePanelOpen(false)
+                        setIsUploadPlaylistDialogOpen(true);
+                        // setIsUserMenuOpen(false);
                     }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Album',
                     action: () => {
-                        // setIsUploadAlbumDialogOpen(true)
-                        setIsUserSidePanelOpen(false)
+                        // setIsUploadAlbumDialogOpen(true);
+                        // setIsUserMenuOpen(false);
                     }
                 },
                 {
@@ -291,7 +292,7 @@ const Header: React.FC<HeaderProps> = ({ setIsSearchLibraryActive }) => {
                                     onClick={() => setIsUserSidePanelOpen(true)}
                                 >
                                     <img
-                                        src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
+                                        src={currentUser?.avatarUrl || DEFAULT_USER_IMAGE_URL}
                                         alt="Liked Songs"
                                         className="w-8 h-8 rounded-full object-cover"
                                     />

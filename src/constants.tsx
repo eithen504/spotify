@@ -295,6 +295,8 @@ const LANGUAGES: Language[] = [
 
 const SPOTIFY_IMAGE_URL = "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c438d2441afb02250f8cd040e";
 
+const DEFAULT_USER_IMAGE_URL = "https://static.vecteezy.com/system/resources/thumbnails/057/998/997/small/person-icon-user-sign-profile-icon-man-symbol-flat-design-vector.jpg";
+
 const FUSION_SEARCH_HISTORY_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:fusionSearchHistory";
 
 const TABLE_VIEW_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:table-view";
@@ -334,6 +336,7 @@ export {
     LANGUAGES,
     SEARCH_ITEM_TYPES,
     SPOTIFY_IMAGE_URL,
+    DEFAULT_USER_IMAGE_URL,
     FUSION_SEARCH_HISTORY_KEY,
     TABLE_VIEW_KEY,
     TABLE_COLUMNS_CONFIG_KEY,

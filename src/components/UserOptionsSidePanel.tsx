@@ -1,6 +1,7 @@
 import React from 'react'
 import type { MenuOptions } from '../types';
 import { useCheckAuth } from '../hooks/auth';
+import { DEFAULT_USER_IMAGE_URL } from '../constants';
 
 interface UserOptionsSidePanelProps {
     isOpen: boolean;
@@ -41,7 +42,7 @@ const UserOptionsSidePanel: React.FC<UserOptionsSidePanelProps> = ({ isOpen, opt
                     {/* Profile Content */}
                     <div className="flex flex-col items-center mb-6">
                         <img
-                            src="https://misc.scdn.co/liked-songs/liked-songs-300.jpg"
+                            src={currentUser?.avatarUrl || DEFAULT_USER_IMAGE_URL}
                             alt="Profile"
                             className="w-24 h-24 rounded-full object-cover mb-4"
                         />
@@ -59,11 +60,6 @@ const UserOptionsSidePanel: React.FC<UserOptionsSidePanelProps> = ({ isOpen, opt
                             ))
                         }
                     </div>
-
-                    {/* Logout Button */}
-                    <button className="w-full py-3 bg-[#282828] text-white rounded-full hover:bg-[#3e3e3e] transition font-semibold">
-                        Log Out
-                    </button>
                 </div>
             </div>
         </>
