@@ -237,6 +237,27 @@ const PreviewEntityModal: React.FC<PreviewEntityModalProps> = ({ tracks, onClose
         };
     }, [isTrackDrawerOpen]);
 
+    useEffect(() => {
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                containerRef.current &&
+                !containerRef.current.contains(event.target as Node)
+            ) {
+                onClose();
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            // Restore body scroll when modal closes
+            document.body.style.overflow = 'unset';
+        };
+    }, [onClose]);
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/90 backdrop-grayscale-[100%] z-700">
             {/* Your modal content */}
