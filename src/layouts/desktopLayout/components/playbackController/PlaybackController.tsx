@@ -192,7 +192,7 @@ const PlaybackController = () => {
         if ((trackDetails.isPlaying)) {
             audio.play();
         } else if (!trackDetails.isPlaying) {
-            audio.pause();
+            audio.pause();;
         }
     }, [trackDetails]);
 

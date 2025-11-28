@@ -157,7 +157,7 @@ const PlaylistSectionItems: React.FC<PlaylistSectionItemsProps> = ({ playlists }
                             </div>
                             <div className="font-medium text-md mt-2 truncate overflow-ellipsis">{playlist.title}</div>
                             <div className="text-sm text-gray-400 truncate overflow-ellipsis mt-0.5">
-                                {`Playlist . Tracks . ${playlist.tracks.length}`}
+                                {`Playlist · ${playlist.tracks.length} ${playlist.tracks.length === 1 ? "Track" : "Tracks"}`}
                             </div>
                         </div>
                     );

@@ -32,9 +32,10 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
     return (
         <Drawer open={true} onClose={onClose}>
             <DrawerContent
-                className="bg-[#282828] rounded-t-2xl z-1000 w-full"
+                className="bg-[#282828] rounded-t-2xl z-1000 w-[97%] mx-auto"
                 style={{ height: height || "100%" }}
                 shouldShowDragHandle={true}
+                onClick={(e) => e.stopPropagation()}
             >
                 {/* Track Info */}
                 <div className="flex items-center gap-3 p-4 border-b border-[#3E3E3E]">

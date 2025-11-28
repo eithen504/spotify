@@ -100,6 +100,7 @@ export type Language =
     | "Arabic"
     | "Chinese"
     | "Czech"
+    | "Croatian"
     | "Dutch"
     | "English"
     | "Finnish"

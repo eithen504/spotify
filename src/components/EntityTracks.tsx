@@ -74,7 +74,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
             {tracks?.map((track, index) => {
                 let isPlayingCurrentTrack = (isPlayingCurrentEntity && trackDetails._id == track._id);
                 const hasLiked = getTrackLikeStatus({ hasLiked: track.hasLiked, trackId: track._id });
-                isCurrenTrackMenuOpen = (isCurrenTrackMenuOpen && currentMenuTrack?._id == track._id);
+                const isMenuOpen = (isCurrenTrackMenuOpen && currentMenuTrack?._id == track._id);
 
                 return (
                     <div
@@ -221,7 +221,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
 
                                 {/* Track Options Menu */}
                                 {
-                                    isCurrenTrackMenuOpen && (
+                                    isMenuOpen && (
                                         <EntityOptionsMenu
                                             options={trackMenuOptions}
                                             entityMenuRef={{ current: trackMenuRefs.current[index] }}
@@ -246,7 +246,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
 
                                 {/* Track Options Drawer */}
                                 {
-                                    (breakPoint == "sm" && isCurrenTrackMenuOpen) && (
+                                    (breakPoint == "sm" && isMenuOpen) && (
                                         <EntityOptionsDrawer
                                             entity={{
                                                 title: currentMenuTrack?.title,
