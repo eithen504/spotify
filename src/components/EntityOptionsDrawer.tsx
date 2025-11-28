@@ -56,7 +56,9 @@ const EntityOptionsDrawer: React.FC<EntityOptionsDrawerProps> = ({
                 </div>
 
                 {/* Options */}
-                {options?.map(({ icon, label, action, rightSideIcon }) => {
+                {options?.map(({ icon, label, action, rightSideIcon, hideOption }) => {
+                    if(hideOption) return null;
+
                     return (
                         <button
                             className="text-[#ffffff] dynamic-text-hover cursor-pointer w-full py-3 px-4 flex items-center justify-between font-normal text-md transition-transform duration-200 dynamic-scale-hover"
