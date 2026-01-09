@@ -4,8 +4,11 @@ import { formatDate } from "../../../../../utils";
 import TrackCreditsDialog from "../../../../../components/TrackCreditsDialog";
 
 const CreditsSection = () => {
-    const { trackDetails } = useTrackDetailsStore();
+    /* ---------- Local States ---------- */
     const [isTrackCreditsDialogOpen, setIsTrackCreditsDialogOpen] = useState(false);
+
+    /* ---------- Stores ---------- */
+    const { trackDetails } = useTrackDetailsStore();
 
     return (
         <div className="mt-6 bg-[#1e1e1e] p-4 rounded-md shadow-md text-[#ffffff]">
