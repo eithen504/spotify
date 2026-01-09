@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { useDominantColor } from "../hooks/color";
 import { Link, useNavigate } from "react-router-dom";
+import { useDominantColor } from "../hooks/color";
 import { SPOTIFY_IMAGE_URL } from "../constants";
 
 interface AuthRequiredModalProps {
@@ -13,96 +13,109 @@ const AuthRequiredModal: React.FC<AuthRequiredModalProps> = ({
     imgUrl,
 }) => {
     const navigate = useNavigate();
-
     const containerRef = useRef<HTMLDivElement>(null);
-
     const { dominantColor } = useDominantColor(imgUrl || SPOTIFY_IMAGE_URL);
 
     useEffect(() => {
-        // Prevent body scroll when modal is open
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = "hidden";
 
-        function handleClickOutside(event: MouseEvent) {
+        const handleClickOutside = (event: MouseEvent) => {
             if (
                 containerRef.current &&
                 !containerRef.current.contains(event.target as Node)
             ) {
                 onClose();
             }
-        }
+        };
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
-            // Restore body scroll when modal closes
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = "unset";
         };
     }, [onClose]);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/90 backdrop-grayscale-[100%] z-[100]">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-grayscale-[100%] px-4">
             <div ref={containerRef}>
                 {/* Modal */}
                 <div
-                    className="flex animate-slide-up flex-col md:flex-row items-center gap-6 md:gap-10 p-8 md:p-16 text-white border border-[#1F1F1F] rounded-md w-full max-w-[815px] shadow-lg relative"
+                    className="animate-slide-up flex flex-col md:flex-row items-center gap-8 p-12 md:p-16 text-white border border-[#1F1F1F] rounded-md w-full max-w-[815px] shadow-lg"
                     style={{
                         background: `linear-gradient(${dominantColor}, #121212)`,
                     }}
                 >
-                    {/* Left: Album/Poster */}
-                    <div className="flex-shrink-0 w-[180px] h-[180px] md:w-[290px] md:h-[290px] overflow-hidden rounded-md">
+                    {/* Image */}
+                    <div className="flex-shrink-0 w-[200px] h-[200px] md:w-[290px] md:h-[290px] overflow-hidden rounded-md">
                         <img
                             src={imgUrl || SPOTIFY_IMAGE_URL}
                             alt="Auth Required"
-                            className="w-full h-full object-cover rounded-md"
+                            className="w-full h-full object-cover"
                         />
                     </div>
 
-                    {/* Right: Content */}
-                    <div className="flex flex-col justify-center flex-1 text-center">
-                        <h2 className="text-xl md:text-[32px] font-bold leading-snug">
+                    {/* Content */}
+                    <div className="flex flex-col items-center text-center flex-1">
+                        <h2 className="text-2xl md:text-3xl font-bold text-center max-w-[20rem] mx-auto">
                             Start listening with a free Spotify account
                         </h2>
 
                         {/* Buttons */}
-                        <div className="flex flex-col gap-3 md:gap-4 mt-4 w-full md:w-auto items-center">
+                        <div className="flex flex-col gap-4 mt-8 items-center w-full">
                             <button
-                                className="bg-[#1ED760] dynamic-bg-hover text-black font-semibold px-6 py-2 md:px-8 md:py-3 rounded-full transition w-full md:w-auto cursor-pointer text-sm md:text-base"
+                                className="
+                                    bg-[#1ED760] dynamic-bg-hover text-black font-bold md:font-semibold
+                                    px-6 py-3 text-sm
+                                    md:px-8 md:py-3 md:text-lg
+                                    rounded-full transition
+                                    min-w-[160px] md:min-w-[220px]
+                                    cursor-pointer
+                                "
                                 style={{
                                     '--bgHoverColor': '#3BE477',
                                 } as React.CSSProperties}
-                                onClick={() => navigate("/auth")}
+                                onClick={() => navigate('/auth')}
                             >
                                 Sign up for free
                             </button>
+
                             <Link
-                                to={"https://www.spotify.com/in-en/download/windows/?referrer=dwp"}
-                                className="bg-transparent border border-white/30 dynamic-border-hover text-white font-semibold px-6 py-2 md:px-8 md:py-3 rounded-full transition w-full md:w-auto cursor-pointer text-sm md:text-base"
+                                to="https://www.spotify.com/in-en/download/windows/?referrer=dwp"
+                                className="
+                                    bg-transparent border border-white/30 dynamic-border-hover text-white font-semibold
+                                     px-6 py-3 text-sm
+                                    md:px-8 md:py-3 md:text-lg
+                                    rounded-full transition
+                                    min-w-[160px] md:min-w-[220px]
+                                    cursor-pointer
+                                "
                             >
                                 Download app
                             </Link>
                         </div>
 
-                        {/* Login link */}
-                        <p className="text-xs md:text-sm text-white/70 mt-4 md:mt-6 text-center">
+                        {/* Login */}
+                        <p className="text-[11px] md:text-sm text-white/70 mt-8">
                             Already have an account?{" "}
-                            <Link to={"/auth"} className="underline hover:text-white font-extrabold cursor-pointer">
+                            <Link
+                                to="/auth"
+                                className="underline font-extrabold hover:text-white"
+                            >
                                 Log in
                             </Link>
                         </p>
                     </div>
                 </div>
 
-                {/* Close text outside modal */}
-                <div className="w-full flex justify-center mt-4">
-                    <div
-                        className="text-md font-semibold text-white/80 dynamic-text-hover px-4 py-1 rounded-md cursor-pointer"
+                {/* Close */}
+                <div className="flex justify-center mt-4">
+                    <button
                         onClick={onClose}
+                        className="text-sm font-semibold text-white/80 hover:text-white transition cursor-pointer"
                     >
-                        <span>Close</span>
-                    </div>
+                        Close
+                    </button>
                 </div>
-
             </div>
         </div>
     );

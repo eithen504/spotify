@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { GENRE_OPTIONS } from "../../../constants";
+import { GENRES } from "../../../constants";
 import { useUIPreferencesStore } from "../../../store/useUIPreferenceStore";
+import { useBreakPoint } from "../../../hooks/breakPoint";
 
 const GenreGrid = () => {
     const navigate = useNavigate()
     const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
+    const { breakPoint } = useBreakPoint();
 
     return (
         <>
@@ -13,10 +15,14 @@ const GenreGrid = () => {
                 <h1 className="text-md md:text-3xl font-bold">Browse all</h1>
             </div>
             <div className={`grid grid-cols-2 ${leftPanelSize > 25 ? "md:grid-cols-2" : "md:grid-cols-3"} gap-6 px-4 md:px-6`}>
-                {GENRE_OPTIONS.map((genre) => (
+                {GENRES.map((genre) => (
                     <div
                         key={genre.id}
-                        className={`${genre.bgColor} rounded-md p-6 h-28 relative overflow-hidden cursor-pointer transform transition-all duration-300 group`}
+                        className={`rounded-md p-6 h-28 relative overflow-hidden cursor-pointer transform transition-all duration-300 group ${breakPoint == "sm" ? "dynamic-scale-hover" : ""}`}
+                        style={{
+                            background: genre.bgColor,
+                            '--scale': '0.95'
+                        } as React.CSSProperties}
                         onClick={() => navigate(`/genre/${genre.id}`)}
                     >
                         {/* Top-left text */}
@@ -31,7 +37,7 @@ const GenreGrid = () => {
                             className="group-hover-rotate absolute -bottom-2 -right-3 w-23 h-23 z-0 transform transition-transform duration-300"
                             style={{
                                 '--initialRotate': '27deg',
-                                '--hoverRotate': '0deg',
+                                '--hoverRotate': (breakPoint != "sm" ? '0deg': '27deg'),
                             } as React.CSSProperties}
                         >
                             <img src={genre.image} alt={genre.title} className="w-full h-full object-cover rounded shadow-[0_0_20px_rgba(0,0,0,0.4)]" />

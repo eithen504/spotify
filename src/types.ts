@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import type { LIBRARY_SORTS, LIBRARY_TABS, LIBRARY_VIEWS, SEARCH_ITEM_TYPES } from "./constants";
+import type { GENRES, LANGUAGES, LIBRARY_SORTS, LIBRARY_TABS, LIBRARY_VIEWS, SEARCH_ITEM_TYPES } from "./constants";
 
 export type TrackDetails = Track & {
     isPlaying: boolean;
@@ -18,43 +18,16 @@ export type MenuOption = {
 
 export type MenuOptions = MenuOption[];
 
-export type GenresIdTitleMap = Record<string, Genre>
-
-export type GenresIdBgColorMap = Record<string, string>;
-
-export type Genre =
-    | "Party"
-    | "Chill"
-    | "Summer"
-    | "Love"
-    | "Emotional & HeartBreaking"
-    | "Road Trip"
-    | "Sleep"
-    | "Strees Relief"
-    | "Instrumental"
-    | "Happy"
-    | "Workout"
-    | "Focus"
-    | "Dance"
-    | "Cooking"
-    | "Travel"
-    | "Rain & Monsoon"
-    | "Lofi"
-    | "Nature & Noise";
-
-export type Genres = Genre[]
-
-export type GenreOption = {
-    id: string;
-    title: Genre;
-    bgColor: string;
-    image: string;
-}
-
 export type ResizePanel = 'left' | 'right' | null;
 
 export type HomePageTab = "All" | "Music" | "Podcasts";
 export type HomePageTabs = HomePageTab[];
+
+
+export type GenreTitle = (typeof GENRES)[number]['title'];
+export type GenreId = (typeof GENRES)[number]["id"];
+export type Genre = (typeof GENRES)[number];
+export type GenresMap = Record<GenreId, Genre>;
 
 
 
@@ -64,7 +37,6 @@ export type LibraryTabs = LibraryTab[];
 export type LibrarySort = typeof LIBRARY_SORTS[number];
 
 export type LibraryView = typeof LIBRARY_VIEWS[number];
-
 
 
 export type LibrarySortOptionsMap = Record<LibrarySort, boolean>;
@@ -95,38 +67,8 @@ export type TrackMenuState = {
     isOpen: boolean;
     track: Track | null;
 };
-
-export type Language =
-    | "Arabic"
-    | "Chinese"
-    | "Czech"
-    | "Croatian"
-    | "Dutch"
-    | "English"
-    | "Finnish"
-    | "French"
-    | "German"
-    | "Greek"
-    | "Hebrew"
-    | "Indonesian"
-    | "Italian"
-    | "Japanese"
-    | "Korean"
-    | "Malay"
-    | "Norwegian"
-    | "Persian"
-    | "Polish"
-    | "Portuguese"
-    | "Romanian"
-    | "Russian"
-    | "Spanish"
-    | "Swedish"
-    | "Thai"
-    | "Turkish"
-    | "Ukrainian"
-    | "Vietnamese"
-    | "Other";
-
+// clear all cache
+export type Language = typeof LANGUAGES[number];
 
 export type SearchItemType = typeof SEARCH_ITEM_TYPES[number];
 
@@ -186,10 +128,9 @@ export type Track = {
     audioUrl: string;
     artist: string;
     duration: number;
-    genres: Genre[];
     albumId: string | null;
     albumName: string,
-    language: Language,
+    languages: Language[],
     hasLiked: boolean,
     createdAt: Date;
     updatedAt: Date;

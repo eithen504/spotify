@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { CrossIcon, DownArrowIcon, UploadIcon } from "../Svgs";
 import { GENRES } from "../constants";
-import type { Genre, Genres, Visibility } from "../types";
+import type { GenreTitle, Visibility } from "../types";
 import { usePreviewFile } from "../hooks/file";
 import { useUploadPlaylist } from "../hooks/playlist";
 
@@ -17,7 +17,7 @@ const UploadPlaylistDialog: React.FC<UploadPlaylistDialogProps> = ({ isOpen, onC
     title: "",
     visibility: "Public" as Visibility,
   });
-  const [selectedGenres, setSelectedGenres] = useState<Genres>([]);
+  const [selectedGenres, setSelectedGenres] = useState<GenreTitle[]>([]);
 
   /* ---------- Local References ---------- */
   const imageInputRef = useRef<HTMLInputElement | null>(null);
@@ -38,13 +38,13 @@ const UploadPlaylistDialog: React.FC<UploadPlaylistDialogProps> = ({ isOpen, onC
   };
 
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value as Genre;
+    const selectedValue = event.target.value as GenreTitle;
     if (!selectedGenres.includes(selectedValue)) {
       setSelectedGenres((prev) => [...prev, selectedValue]);
     }
   };
 
-  const removeGenre = (genreToRemove: Genre) => {
+  const removeGenre = (genreToRemove: GenreTitle) => {
     setSelectedGenres(selectedGenres.filter(genre => genre !== genreToRemove));
   };
 
@@ -133,13 +133,13 @@ const UploadPlaylistDialog: React.FC<UploadPlaylistDialogProps> = ({ isOpen, onC
             <div className="relative">
               <select
                 className="w-full bg-[#282828] border border-white rounded-lg px-4 py-3 text-white cursor-pointer appearance-none"
-                defaultValue=""
+                defaultValue="" 
                 onChange={handleGenreChange}
               >
                 <option value="" disabled>Select a genre</option>
                 {
-                  GENRES.map((option) => (
-                    <option key={option} value={option}>{option}</option>
+                  GENRES.map(({ title }) => (
+                    <option key={title} value={title}>{title}</option>
                   ))
                 }
               </select>

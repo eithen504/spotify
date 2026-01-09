@@ -37,7 +37,7 @@ export const useTableColumnVisibilityStore = create<TableColumnVisibilityStates>
 
   setTableView: (view) =>
     set(() => {
-      localStorage.setItem(TABLE_VIEW_KEY, view);
+      localStorage.setItem(TABLE_VIEW_KEY, JSON.stringify(view));
 
       return {
         tableView: view

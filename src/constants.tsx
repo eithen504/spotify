@@ -4,204 +4,158 @@ import CompactListItems from "./layouts/desktopLayout/components/mainContent/lef
 import DefaultGridItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultGridItems";
 import DefaultListItems from "./layouts/desktopLayout/components/mainContent/leftSidebar/DefaultListItems";
 import { AccountfilledIcon, AccountIcon, CompactGridIcon, CompactListIcon, DefaultGridIcon, DefaultListIcon, HomeFilledIcon, HomeIcon, LibraryFilledIcon, LibraryIcon, SearchFilledIcon, SearchIcon } from "./Svgs";
-import type { GenreOption, Genres, GenresIdBgColorMap, GenresIdTitleMap, HomePageTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, Language, LibrarySortOptionsMap } from "./types";
+import type { HomePageTabs, NavigationItem, ViewComponent, ViewIcon, ViewSkelton, ShowPageTabs, LibrarySortOptionsMap, GenresMap } from "./types";
 
-const GENRES: Genres = [
-    "Party",
-    "Chill",
-    "Summer",
-    "Love",
-    "Emotional & HeartBreaking",
-    "Road Trip",
-    "Sleep",
-    "Strees Relief",
-    "Instrumental",
-    "Happy",
-    "Workout",
-    "Focus",
-    "Dance",
-    "Cooking",
-    "Travel",
-    "Rain & Monsoon",
-    "Lofi",
-    "Nature & Noise"
-];
+const GENRES = [
+  // {
+  //   id: "3ZJr7yHSWEdqUfnIPpASXo",
+  //   title: "Summer",
+  //   bgColor: "#27856A",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf1d858b423c5b3194d72c7c28"
+  // },
+  // {
+  //   id: "1KLPoBkeHXzq3NaGMyvCYx",
+  //   title: "Love",
+  //   bgColor: "#DC148C",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf21c9a95a2702ce535fb07915"
+  // },
+  // {
+  //   id: "7MqAxb9kT8t2w70zkTqRj5",
+  //   title: "Mood",
+  //   bgColor: "#B31048",
+  //   image: "https://i.scdn.co/image/ab67fb8200005cafe542e9b59b1d2ae04b46b91c"
+  // },
+  // {
+  //   id: "0PLU8u8MyjYbV5uWiRjHte",
+  //   title: "Party",
+  //   bgColor: "#8D67AB",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf0b0d0bfac454671832311615"
+  // },
+  // {
+  //   id: "6GKJrPQfutE3SmAMv6Vnrn",
+  //   title: "Decades",
+  //   bgColor: "#A56752",
+  //   image: "https://i.scdn.co/image/ab67fb8200005cafb7e805033eb938aa75d09336"
+  // },
+  // {
+  //   id: "5A9qKLA4R1tQhPnYH1k7vB",
+  //   title: "Dance/Electronic",
+  //   bgColor: "#477D95",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf26ada793217994216c79dad8"
+  // },
+  // {
+  //   id: "4RqvmyV7Wk3xNCePuFYvRh",
+  //   title: "Student",
+  //   bgColor: "#AF2896",
+  //   image: "https://i.scdn.co/image/ab67fb8200005cafdad1281e13697e8d8cf8f347"
+  // },
+  // {
+  //   id: "1Cvx9rtfJmZqB32TQHcuvV",
+  //   title: "Chill",
+  //   bgColor: "#B06239",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf330ca3a3bfaf8b18407fb33e"
+  // },
+  // {
+  //   id: "6FkaUzp9yrx4hqhVp6wS4a",
+  //   title: "Workout",
+  //   bgColor: "#777777",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf6af6d83c78493644c9b0627b"
+  // },
+  // {
+  //   id: "4DkfSna2hTbbYTuKe3gMwg",
+  //   title: "Sleep",
+  //   bgColor: "#1E3264",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf1cef0cee1e498abb8e74955f"
+  // },
+  // {
+  //   id: "7JZp2b9VcX8F2tMkwe1RyM",
+  //   title: "Instrumental",
+  //   bgColor: "#537AA1",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf44774504bdbe31a7bc45598c"
+  // },
+  // {
+  //   id: "2NKCcdSy8DaCgeuv5ZkWNb",
+  //   title: "At Home",
+  //   bgColor: "#5179A1",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf60ad5f3ea4988eff993d5e1a"
+  // },
+  // {
+  //   id: "7jNQXo7S7HB5zZqRneMx28",
+  //   title: "Classical",
+  //   bgColor: "#7D4B32",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf4597370d1058e1ec3c1a56fa"
+  // },
+  // {
+  //   id: "0xJtDdgA1id36SjaqTlwBt",
+  //   title: "Folk & Acoustic",
+  //   bgColor: "#BC5900",
+  //   image: "https://i.scdn.co/image/ab67fb8200005cafcc70a3c2e4c71398708bdc4a"
+  // },
+  // {
+  //   id: "5mK7Zut2Y9kZye8gPNgm7v",
+  //   title: "Focus",
+  //   bgColor: "#A56752",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf9a27506d5dde68b9da373196"
+  // },
+  // {
+  //   id: "4r9Gw7mGxHkXybjvxN2I6y",
+  //   title: "Children & Family",
+  //   bgColor: "#4D96E2",
+  //   image: "https://i.scdn.co/image/ab67fb8200005cafe72590f91baff169b1595ab4"
+  // },
+  // {
+  //   id: "7iNFAUtQtr2oAc16p6DqCk",
+  //   title: "Cooking & Dining",
+  //   bgColor: "#BA5D07",
+  //   image: "https://i.scdn.co/image/ab67fb8200005cafacbcb985978c387411d69e4f"
+  // },
+  {
+    id: "2d0pm4ytxytr5LRZkijPNJ",
+    title: "Wellness",
+    bgColor: "#148A08",
+    image: "https://i.scdn.co/image/ab67fb8200005cafd4a8da930bccd56ebd7e48b0"
+  },
+  // {
+  //   id: "4Pxr7y2ph4EBZCD5xG7kZJ",
+  //   title: "Travel",
+  //   bgColor: "#0D72ED",
+  //   image: "https://i.scdn.co/image/ab67fb8200005caf879a886d22672d9b5b987746"
+  // },
+  {
+    id: "6Bxqye6sr9FofZy7Jj9eH2",
+    title: "Nature & Noise",
+    bgColor: "#477D95",
+    image: "https://i.scdn.co/image/ab67fb8200005caf71ab47ac71efc219fa2cb171"
+  }
+] as const;
 
-const GENRE_OPTIONS: GenreOption[] = [
-    {
-        id: "1KLPoBkeHXzq3NaGMyvCYx",
-        title: "Party",
-        bgColor: "bg-[#2e112d]",
-        image: "https://i.scdn.co/image/ab67fb8200005caf0b0d0bfac454671832311615"
-    },
-    {
-        id: "2QW8TMxFVuGe7LidpUoRlf",
-        title: "Chill",
-        bgColor: "bg-[#c7816a]",
-        image: "https://i.scdn.co/image/ab67706f0000000243cc4425ca68418fcab705fd"
-    },
-    {
-        id: "3ZJr7yHSWEdqUfnIPpASXo",
-        title: "Summer",
-        bgColor: "bg-[#c7999d]",
-        image: "https://i.scdn.co/image/ab67fb8200005caf1d858b423c5b3194d72c7c28"
-    },
-    {
-        id: "4VPedCbnHr3zAgLNvFcTks",
-        title: "Love",
-        bgColor: "bg-[#4f6972]",
-        image: "https://i.scdn.co/image/ab67706f00000002dcb7b32f8bf2e6a7851245e3"
-    },
-    {
-        id: "5ETghADu9pQvbiKpPcknOj",
-        title: "Emotional & HeartBreaking",
-        bgColor: "bg-[#c7d9e0]",
-        image: "https://i.scdn.co/image/ab67706f000000026a529b45bf70807cc16b1a88"
-    },
-    {
-        id: "6RSjhZNCLaUcYiKXoxSgDt",
-        title: "Road Trip",
-        bgColor: "bg-[#9d9b9b]",
-        image: "https://i.scdn.co/image/ab67fb8200005caf879a886d22672d9b5b987746"
-    },
-    {
-        id: "7LKbgJMTxx1EWHWslrBnMc",
-        title: "Sleep",
-        bgColor: "bg-[#3a4c63]",
-        image: "https://i.scdn.co/image/ab67706f00000002cd17d41419faa97069e06c16"
-    },
-    {
-        id: "8DLoXEHwnZpVuJkNHgwUex",
-        title: "Strees Relief",
-        bgColor: "bg-[#3a5563]",
-        image: "https://i.scdn.co/image/ab67706f000000025db1394baf8862336f19ac83"
-    },
-    {
-        id: "9NKebCaYi6TH1VRGyxVtBP",
-        title: "Instrumental",
-        bgColor: "bg-[#51170c]",
-        image: "https://i.scdn.co/image/ab67616d00001e026dcf35ade34953e62884a3b0"
-    },
-    {
-        id: "10JXpYKDwxUR6LsZyGbUVo",
-        title: "Happy",
-        bgColor: "bg-[#ee8f37]",
-        image: "https://i.scdn.co/image/ab67616d0000b27317f480c5a24fd7b5c7929521"
-    },
-    {
-        id: "11FYRxapWUkowNzXFtVLyB",
-        title: "Workout",
-        bgColor: "bg-[#bcbfba]",
-        image: "https://i.scdn.co/image/ab67706f00000002681908e31127979d43c8dbc6"
-    },
-    {
-        id: "12HBETGksRQzyXtDjVqvMe",
-        title: "Focus",
-        bgColor: "bg-[#3b322c]",
-        image: "https://i.scdn.co/image/ab67706f000000026020f2f6476db518ef747da4"
-    },
-    {
-        id: "13MYkJpzyXTvCAWDtzJKVE",
-        title: "Dance",
-        bgColor: "bg-[#873c92]",
-        image: "https://i.scdn.co/image/ab67616d0000b27366e49eb6cd91bf870ae08dd0"
-    },
-    {
-        id: "14QJFnkPLTqEVdSgXLHkZe",
-        title: "Cooking",
-        bgColor: "bg-[#eac05e]",
-        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da84eec4b5eaa5f9893e6df4e25b"
-    },
-    {
-        id: "15UJEnpbLMWsEfQgOpBmKH",
-        title: "Travel",
-        bgColor: "bg-[#75797a]",
-        image: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8404fd89ab8064c32896fd0cdc"
-    },
-    {
-        id: "16LHRwGizVQymAfBkwCKoT",
-        title: "Rain & Monsoon",
-        bgColor: "bg-[#507897]",
-        image: "https://i.scdn.co/image/ab67706f00000002eaf2ff074e8e4db414e0f686"
-    },
-    {
-        id: "17EVnyjKwUdCQaHnpLmBeX",
-        title: "Lofi",
-        bgColor: "bg-[#571674]",
-        image: "https://i.scdn.co/image/ab67616d00001e02c9cdb8a6f71db82df0a37459"
-    },
-    {
-        id: "18PUKrniLDuoxAcSmBZjJG",
-        title: "Nature & Noise",
-        bgColor: "bg-[#727851]",
-        image: "https://i.scdn.co/image/ab67706f00000002928c0c54749ddf4ad5709849"
-    }
-];
-
-const GENRES_ID_TITLE_MAP: GenresIdTitleMap = {
-    "1KLPoBkeHXzq3NaGMyvCYx": "Party",
-    "2QW8TMxFVuGe7LidpUoRlf": "Chill",
-    "3ZJr7yHSWEdqUfnIPpASXo": "Summer",
-    "4VPedCbnHr3zAgLNvFcTks": "Love",
-    "5ETghADu9pQvbiKpPcknOj": "Emotional & HeartBreaking",
-    "6RSjhZNCLaUcYiKXoxSgDt": "Road Trip",
-    "7LKbgJMTxx1EWHWslrBnMc": "Sleep",
-    "8DLoXEHwnZpVuJkNHgwUex": "Strees Relief",
-    "9NKebCaYi6TH1VRGyxVtBP": "Instrumental",
-    "10JXpYKDwxUR6LsZyGbUVo": "Happy",
-    "11FYRxapWUkowNzXFtVLyB": "Workout",
-    "12HBETGksRQzyXtDjVqvMe": "Focus",
-    "13MYkJpzyXTvCAWDtzJKVE": "Dance",
-    "14QJFnkPLTqEVdSgXLHkZe": "Cooking",
-    "15UJEnpbLMWsEfQgOpBmKH": "Travel",
-    "16LHRwGizVQymAfBkwCKoT": "Rain & Monsoon",
-    "17EVnyjKwUdCQaHnpLmBeX": "Lofi",
-    "18PUKrniLDuoxAcSmBZjJG": "Nature & Noise"
-};
-
-const GENRES_ID_BGCOLOR_MAP: GenresIdBgColorMap = {
-    "1KLPoBkeHXzq3NaGMyvCYx": "#2e112d",
-    "2QW8TMxFVuGe7LidpUoRlf": "#c7816a",
-    "3ZJr7yHSWEdqUfnIPpASXo": "#c7999d",
-    "4VPedCbnHr3zAgLNvFcTks": "#4f6972",
-    "5ETghADu9pQvbiKpPcknOj": "#c7d9e0",
-    "6RSjhZNCLaUcYiKXoxSgDt": "#9d9b9b",
-    "7LKbgJMTxx1EWHWslrBnMc": "#3a4c63",
-    "8DLoXEHwnZpVuJkNHgwUex": "#3a5563",
-    "9NKebCaYi6TH1VRGyxVtBP": "#51170c",
-    "10JXpYKDwxUR6LsZyGbUVo": "#ee8f37",
-    "11FYRxapWUkowNzXFtVLyB": "#bcbfba",
-    "12HBETGksRQzyXtDjVqvMe": "#3b322c",
-    "13MYkJpzyXTvCAWDtzJKVE": "#873c92",
-    "14QJFnkPLTqEVdSgXLHkZe": "#eac05e",
-    "15UJEnpbLMWsEfQgOpBmKH": "#75797a",
-    "16LHRwGizVQymAfBkwCKoT": "#507897",
-    "17EVnyjKwUdCQaHnpLmBeX": "#571674",
-    "18PUKrniLDuoxAcSmBZjJG": "#727851"
-};
+const GENRES_MAP: GenresMap= GENRES.reduce((acc, option) => {
+  acc[option.id] = option;
+  return acc;
+}, {} as any);
 
 const MAX_AUDIO_DURATION = 420;
 
 const HOMEPAGE_TABS: HomePageTabs = ["All", "Music", "Podcasts"];
 
 const LIBRARY_TABS = [
-  "Playlists",
-  "Save Playlists",
-  "Save Albums",
-  "Folders",
+    "Playlists",
+    "Save Playlists",
+    "Save Albums",
+    "Folders",
 ] as const;
 
 const LIBRARY_SORTS = [
-  "Recently Added",
-  "Alphabetical A To Z",
-  "Alphabetical Z To A",
+    "Recently Added",
+    "Alphabetical A To Z",
+    "Alphabetical Z To A",
 ] as const;
 
 const LIBRARY_VIEWS = [
-  "Compact List",
-  "Default List",
-  "Compact Grid",
-  "Default Grid",
+    "Compact List",
+    "Default List",
+    "Compact Grid",
+    "Default Grid",
 ] as const;
 
 const SEARCH_ITEM_TYPES = ["Album", "Track", "Playlist"] as const;
@@ -262,8 +216,9 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
 
 const SHOW_PAGE_TABS: ShowPageTabs = ["All", "Public", "Private"];
 
-const LANGUAGES: Language[] = [
+const LANGUAGES = [
     "Arabic",
+    "Albanian",
     "Chinese",
     "Czech",
     "Croatian",
@@ -292,7 +247,7 @@ const LANGUAGES: Language[] = [
     "Ukrainian",
     "Vietnamese",
     "Other"
-];
+] as const;
 
 const SPOTIFY_IMAGE_URL = "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c438d2441afb02250f8cd040e";
 
@@ -320,9 +275,7 @@ const RECENT_PLAYLISTS_KEY = "31i3bxane7wwd3uc2bjv4v4owwcu:recent-playlist";
 
 export {
     GENRES,
-    GENRE_OPTIONS,
-    GENRES_ID_TITLE_MAP,
-    GENRES_ID_BGCOLOR_MAP,
+    GENRES_MAP,
     MAX_AUDIO_DURATION,
     HOMEPAGE_TABS,
     LIBRARY_TABS,

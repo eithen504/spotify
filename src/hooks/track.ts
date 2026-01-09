@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { type Genres, type Language, type Track } from "../types";
+import { type Language, type Track } from "../types";
 import { useCheckAuth } from "./auth";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -53,12 +53,11 @@ const useUploadTrack = () => {
             audioUrl: string,
             artist: string,
             duration: number,
-            genres: Genres,
             albumId: string | null,
-            language: Language
+            languages: Language[]
         }) => {
             if (!currentUser) throw new Error("Please Login Or Signup First!");
-
+        
             const res = await fetch(`${baseUrl}/api/v1/track`, {
                 method: "POST",
                 credentials: "include",

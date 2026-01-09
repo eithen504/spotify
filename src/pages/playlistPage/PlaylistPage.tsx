@@ -297,24 +297,32 @@ const PlaylistPage = () => {
 
         if (!isPlaylistInitialized) {
             setPlaylistData({ activeTrackId: track._id, playlistId: id || "" });
-
             setAlbumData({ activeTrackId: "", albumId: "" });
 
-            setTrackDetails({
-                ...track,
-                isPlaying: true
-            });
+            setTrackDetails({ ...track, isPlaying: true });
 
             let playlistIds: string[] = JSON.parse(localStorage.getItem(RECENT_PLAYLISTS_KEY) || "[]");
-            if (playlistIds[0] != id) {
-                playlistIds = playlistIds.filter((i) => i != id);
+
+            // If the first item is not the same as current playlist ID
+            if (playlistIds[0] !== id) {
+                // Remove duplicates
+                playlistIds = playlistIds.filter((i) => i !== id);
+
+                // Add to start
                 playlistIds = [id || "", ...playlistIds];
+
+                // 🔥 Limit to max 10 items
+                playlistIds = playlistIds.slice(0, 10);
+
+                // Save in localStorage
                 localStorage.setItem(RECENT_PLAYLISTS_KEY, JSON.stringify(playlistIds));
 
+                // Update React Query cache
                 queryClient.setQueryData(["getRecentPlaylists"], (prev: Playlist[]) => {
                     if (!prev) return prev;
 
-                    const filteredPlaylists = prev.filter((p) => p?._id != id);
+                    const filteredPlaylists = prev.filter((p) => p?._id !== id);
+
                     const currentPlaylist = {
                         _id: data.playlist._id,
                         title: data.playlist.title,
@@ -324,13 +332,13 @@ const PlaylistPage = () => {
                         tracks: data.playlist.tracks,
                         createdAt: data.playlist.createdAt,
                         updatedAt: data.playlist.updatedAt
-                    }
+                    };
 
-                    return [
-                        currentPlaylist,
-                        ...filteredPlaylists
-                    ]
-                })
+                    const updated = [currentPlaylist, ...filteredPlaylists];
+
+                    // 🔥 Limit to max 10 items in query as well
+                    return updated.slice(0, 10);
+                });
             }
 
             initializeEntityQueue(data.tracks, "Playlist", id || "", data.playlist.title);
@@ -353,7 +361,7 @@ const PlaylistPage = () => {
                 setActiveEntityQueueListNode("Playlist", id || "", track._id);
             }
         }
-    }
+    } 
 
     const handleUpdatePlaylist = (payload: { title: string, coverImageUrl: string }) => {
         const { title, coverImageUrl } = payload;

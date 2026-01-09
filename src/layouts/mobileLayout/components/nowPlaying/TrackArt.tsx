@@ -13,7 +13,7 @@ const TrackArt = () => {
                         <img
                             src={trackDetails.coverImageUrl}
                             alt="Album Cover"
-                            className="now-playing-track-size"
+                            className="now-playing-track-size shadow-[0_0_20px_rgba(0,0,0,0.4)] rounded-sm"
                         />
                     ) : (
                         <NowPlayingMusicPlaceholder />

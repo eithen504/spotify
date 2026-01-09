@@ -90,9 +90,9 @@ const AlbumPageSkeleton = () => {
     const { tableView } = useTableColumnVisibilityStore();
 
     return (
-        <div className="relative text-[#ffffff] min-h-screen">
+        <div className="relative text-[#ffffff] min-h-screen max-w-[90rem] mx-auto">
             {/* Album Info Section */}
-            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
+            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6`}>
                 {/* Album Cover */}
                 <div
                     className={`w-50 h-50 ${leftPanelSize >= 7 && leftPanelSize <= 10
@@ -222,9 +222,9 @@ const TrackPageSkeleton = () => {
     const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
-        <div className="relative text-[#ffffff] min-h-screen">
+        <div className="relative text-[#ffffff] min-h-screen  max-w-[90rem] mx-auto">
             {/* Track Info Section */}
-            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
+            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6`}>
                 {/* Track Cover */}
                 <div
                     className={`w-50 h-50 ${leftPanelSize >= 7 && leftPanelSize <= 10
@@ -329,9 +329,9 @@ const PlaylistPageSkeleton = () => {
     const { tableView } = useTableColumnVisibilityStore();
 
     return (
-        <div className="relative text-[#ffffff] min-h-screen">
+        <div className="relative text-[#ffffff] min-h-screen max-w-[90rem] mx-auto">
             {/* Playlist Info Section */}
-            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
+            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6`}>
                 {/* Playlist Cover */}
                 <div
                     className={`w-50 h-50 ${leftPanelSize >= 7 && leftPanelSize <= 10
@@ -352,7 +352,7 @@ const PlaylistPageSkeleton = () => {
 
             {/* Playlist Controls */}
             <div
-                className={`gap-7 ${leftPanelSize <= 28 ? "md:gap-7" : "md:gap-4"} flex items-center px-4 md:px-6 py-6 relative max-w-[90rem] mx-auto`}
+                className={`gap-7 ${leftPanelSize <= 28 ? "md:gap-7" : "md:gap-4"} flex items-center px-4 md:px-6 py-6 relative`}
             >
                 {/* Play */}
                 <div
@@ -473,9 +473,9 @@ const CollectionTracksPageSkeleton = () => {
     const {tableView} = useTableColumnVisibilityStore();
 
     return (
-        <div className="relative text-[#ffffff] min-h-screen">
+        <div className="relative text-[#ffffff] min-h-screen max-w-[90rem] mx-auto">
             {/* Collection Info Section */}
-            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
+            <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6`}>
                 {/* Collection Cover */}
                 <div
                     className={`w-50 h-50 ${leftPanelSize >= 7 && leftPanelSize <= 10
@@ -496,7 +496,7 @@ const CollectionTracksPageSkeleton = () => {
 
             {/* Collection Controls */}
             <div
-                className={`gap-7 ${leftPanelSize <= 28 ? "md:gap-7" : "md:gap-4"} flex items-center px-4 md:px-6 py-6 relative max-w-[90rem] mx-auto`}
+                className={`gap-7 ${leftPanelSize <= 28 ? "md:gap-7" : "md:gap-4"} flex items-center px-4 md:px-6 py-6 relative`}
             >
                 {/* Play */}
                 <div

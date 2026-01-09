@@ -112,7 +112,7 @@ const MobileMiniPlayerMusicPlaceholder = () => {
 
 const NowPlayingMusicPlaceholder = () => {
     return (
-        <div className="w-full h-full object-cover bg-[#282828] text-[#ffffff] flex items-center justify-center">
+        <div className="w-full h-full object-cover bg-[#282828] text-[#ffffff] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.4)]">
             <MusicIcon width="100" height="100" />
         </div>
     )

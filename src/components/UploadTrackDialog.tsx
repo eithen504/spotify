@@ -3,8 +3,8 @@ import { useUploadTrack } from "../hooks/track";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { CrossIcon, DownArrowIcon, UploadIcon } from "../Svgs";
-import { GENRES, LANGUAGES, MAX_AUDIO_DURATION } from "../constants";
-import type { Genre, Genres, Language } from "../types";
+import { LANGUAGES, MAX_AUDIO_DURATION } from "../constants";
+import type { Language } from "../types";
 import { usePreviewFile } from "../hooks/file";
 
 interface UploadTrackDialogProps {
@@ -19,9 +19,8 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
         artist: "",
         duration: 0,
         albumId: "",
-        language: "English"
     });
-    const [selectedGenres, setSelectedGenres] = useState<Genres>([]);
+    const [languages, setLanguages] = useState<Language[]>([]);
 
     /* ---------- Local References ---------- */
     const imageInputRef = useRef<HTMLInputElement | null>(null);
@@ -31,7 +30,7 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
     const { handleFileChange: handleImgChange, fileURL: imgUrl } = usePreviewFile("image");
     const { handleFileChange: handleAudioChange, fileURL: audioUrl } = usePreviewFile("audio");
     const { mutateAsync: uploadTrack, isPending } = useUploadTrack();
- 
+
     /* ---------- Methods Or Functions ---------- */
     const handleTrackDataChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -43,15 +42,17 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
         }));
     };
 
-    const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedValue = event.target.value as Genre;
-        if (!selectedGenres.includes(selectedValue)) {
-            setSelectedGenres((prev) => [...prev, selectedValue]);
+
+    const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const newLanguage = event.target.value as Language;
+        if (!languages.includes(newLanguage)) {
+            setLanguages((prev) => [...prev, newLanguage]);
         }
     };
 
-    const removeGenre = (genreToRemove: Genre) => {
-        setSelectedGenres(selectedGenres.filter(genre => genre !== genreToRemove));
+    const removeLanguage = (language: Language) => {
+        const newLanguages = languages.filter(l => l !== language);
+        setLanguages(newLanguages);
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,9 +79,8 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
             audioUrl,
             artist: trackData.artist,
             duration: trackData.duration,
-            genres: selectedGenres,
             albumId: trackData.albumId || null,
-            language: trackData.language as Language
+            languages
         })
     };
 
@@ -93,7 +93,6 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
                             <DialogTitle className="text-white">Add New Track</DialogTitle>
                             <DialogDescription className="text-white">Add a new track to your app</DialogDescription>
                         </div>
-
                     </div>
                 </DialogHeader>
 
@@ -212,52 +211,6 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
                         />
                     </div>
 
-                    {/* Genre Selection */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-white">Genre</label>
-                        <div className="relative">
-                            <select
-                                className="w-full bg-[#282828] border border-white rounded-lg px-4 py-3 text-white cursor-pointer appearance-none"
-                                defaultValue=""
-                                onChange={handleGenreChange}
-                            >
-                                <option value="" disabled>Select a genre</option>
-                                {
-                                    GENRES.map((option) => (
-                                        <option key={option} value={option}>{option}</option>
-                                    ))
-                                }
-                            </select>
-
-                            {/* Custom Dropdown Arrow */}
-                            <div className="absolute inset-y-0 right-2 text-white flex items-center pointer-events-none">
-                                <DownArrowIcon width="17" height="17" />
-                            </div>
-                        </div>
-                    </div>
-
-
-                    {/* Selected Genre Tags */}
-                    {selectedGenres.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                            {selectedGenres.map((genre) => (
-                                <div
-                                    key={genre}
-                                    className="flex items-center bg-[#1db954] rounded-full px-3 py-1 text-white text-sm"
-                                >
-                                    {genre}
-                                    <button
-                                        type="button"
-                                        onClick={() => removeGenre(genre)}
-                                        className="ml-2 text-gray-200 dynamic-text-hover cursor-pointer"
-                                    >
-                                        <CrossIcon width="12" height="12" />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
                     {/* Language Section */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-white">Language</label>
@@ -265,8 +218,8 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
                             <select
                                 name="language"
                                 className="w-full bg-[#282828] border border-white rounded-lg px-4 py-3 text-white cursor-pointer appearance-none"
-                                defaultValue={trackData.language}
-                                onChange={handleTrackDataChange}
+                                // defaultValue={trackData.language}
+                                onChange={handleLanguageChange}
                             >
                                 <option value="" disabled>Select a language</option>
                                 {
@@ -282,6 +235,27 @@ const UploadTrackDialog: React.FC<UploadTrackDialogProps> = ({ isOpen, onClose }
                             </div>
                         </div>
                     </div>
+
+                    {/* Selected Languages */}
+                    {languages.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            {languages.map((language) => (
+                                <div
+                                    key={language}
+                                    className="flex items-center bg-[#1db954] rounded-full px-3 py-1 text-white text-sm"
+                                >
+                                    {language}
+                                    <button
+                                        type="button"
+                                        onClick={() => removeLanguage(language)}
+                                        className="ml-2 text-gray-200 dynamic-text-hover cursor-pointer"
+                                    >
+                                        <CrossIcon width="12" height="12" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <DialogFooter className="mt-7">
                         <button

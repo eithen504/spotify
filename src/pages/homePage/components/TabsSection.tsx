@@ -114,7 +114,7 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
 
     return (
         <>
-            <div className="fixed md:sticky top-0 left-0 w-full z-50 px-4 md:px-10 py-4 max-w-[90rem] mx-auto">
+            <div className="fixed md:sticky top-0 left-0 w-full z-50">
                 {/* Background layer with scroll-dependent opacity */}
                 <div
                     className="absolute inset-0"
@@ -125,7 +125,7 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
                 />
 
                 {/* Tabs container - always fully opaque */}
-                <div className="relative flex items-center space-x-3">
+                <div className="relative flex items-center space-x-3 max-w-[90rem] mx-auto px-4 md:px-10 py-4">
                     <div
                         className="cursor-pointer flex-shrink-0 block md:hidden"
                         onClick={() => setIsUserSidePanelOpen(true)}

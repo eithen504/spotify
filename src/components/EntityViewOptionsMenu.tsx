@@ -3,6 +3,7 @@ import { useBreakPoint } from '../hooks/breakPoint'
 import { useUIPreferencesStore } from '../store/useUIPreferenceStore';
 import { CompactListIcon, DefaultListIcon, TickIcon } from '../Svgs';
 import { useTableColumnVisibilityStore } from '../store/useTableColumnVisibilityStore';
+import { useCheckAuth } from '../hooks/auth';
 
 interface EntityViewOptionsMenuProps {
     entityViewMenuRef: React.RefObject<HTMLDivElement | null>;
@@ -13,6 +14,7 @@ const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
     entityViewMenuRef,
     onClose
 }) => {
+    const { data: currentUser } = useCheckAuth();
     const { breakPoint } = useBreakPoint();
     const { rightSidebar } = useUIPreferencesStore();
     const { showNowPlayingView, showQueueView } = rightSidebar;
@@ -29,9 +31,9 @@ const EntityViewOptionsMenu: React.FC<EntityViewOptionsMenuProps> = ({
                 className="w-45 fixed z-800 bg-[#282828] rounded-[4px] shadow-[0_0_20px_rgba(0,0,0,0.8)] py-1 px-1 text-sm"
                 style={{
                     top: `${(entityViewMenuRef.current?.getBoundingClientRect().bottom ?? 0) + 12}px`,
-                    ...((breakPoint === "md" || (!showNowPlayingView && !showQueueView)) && {
+                    ...((breakPoint === "md" || (!showNowPlayingView && !showQueueView) || !currentUser) && {
                         right: `30px`,
-                    }), 
+                    }),
                 }}
             >
                 <div className={`text-white/90 w-full flex items-center justify-between p-2.5 `}>

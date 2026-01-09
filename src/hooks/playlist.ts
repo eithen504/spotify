@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Genres, Playlist, Track, Visibility } from "../types";
+import type { GenreTitle, Playlist, Track, Visibility } from "../types";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTrackDetailsStore } from "../store/useTrackDetailsStore";
@@ -51,7 +51,13 @@ const useGetFeedPlaylists = () => {
 
 const useGetRecentPlaylists = () => {
     const { data: currentUser } = useCheckAuth();
-    let playlistIds: string[] = JSON.parse(localStorage.getItem(RECENT_PLAYLISTS_KEY) || "[]")
+    let playlistIds: string[] = JSON.parse(localStorage.getItem(RECENT_PLAYLISTS_KEY) || "[]");
+
+    if (playlistIds.length > 10) {
+        playlistIds = playlistIds.slice(0, 10);
+        localStorage.setItem(RECENT_PLAYLISTS_KEY, JSON.stringify(playlistIds));
+    }
+
     const params = new URLSearchParams();
     playlistIds.forEach(id => params.append("ids", id));
 
@@ -61,7 +67,7 @@ const useGetRecentPlaylists = () => {
             if (!currentUser) {
                 return [];
             }
-            
+
             const res = await fetch(`${baseUrl}/api/v1/playlist/recent?${params.toString()}`, {
                 method: "GET", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
@@ -106,7 +112,7 @@ const useUploadPlaylist = () => {
         mutationFn: async (payload: {
             title: string,
             coverImageUrl: string | null,
-            genres: Genres,
+            genres: GenreTitle[],
             tracks: string[],
             visibility: Visibility
         }) => {
@@ -260,10 +266,10 @@ const useAddItemsToPlaylist = () => {
                 if (!prev) return prev;
 
                 return {
-                    playlist: prev.playlist,
+                    playlist: updatedPlaylist,
                     tracks: [
-                        ...tracks,
-                        ...prev.tracks
+                        ...prev.tracks,
+                        ...tracks
                     ]
                 }
             });

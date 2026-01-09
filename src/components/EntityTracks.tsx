@@ -130,14 +130,16 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                             }
 
                             <div className="min-w-0">
-                                <div
-                                    className={`${isPlayingCurrentTrack ? "text-[#3BE477]" : ""} font-medium truncate text-[16px] cursor-pointer hover:underline`}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        navigate(`/track/${track._id}`)
-                                    }}
-                                >
-                                    {track.title}
+                                <div className={`${isPlayingCurrentTrack ? "text-[#3BE477]" : ""} font-medium truncate text-[16px]`}>
+                                    <span
+                                        className="cursor-pointer hover:underline"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(`/track/${track._id}`);
+                                        }}
+                                    >
+                                        {track.title}
+                                    </span>
                                 </div>
 
                                 {

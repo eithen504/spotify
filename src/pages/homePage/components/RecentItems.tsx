@@ -9,7 +9,7 @@ import { RecentPlaylistPlaceHolder } from "../../../components/Placeholders";
 
 interface RecentItemsProps {
     playlists: Playlist[];
-    setPlaylistCoverImageUrl: React.Dispatch<React.SetStateAction<string>>
+    setPlaylistCoverImageUrl: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const RecentItems: React.FC<RecentItemsProps> = ({ playlists, setPlaylistCoverImageUrl }) => {

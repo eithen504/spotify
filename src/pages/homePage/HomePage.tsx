@@ -7,10 +7,8 @@ import PlaylistSectionItems from './components/PlaylistSectionItems';
 import RecentItems from './components/RecentItems';
 import TabsSection from './components/TabsSection';
 import { useDominantColor } from '../../hooks/color';
-import { useCheckAuth } from '../../hooks/auth';
 
 const HomePage = () => {
-    const { data: currentUser } = useCheckAuth();
     const { data: playlists, isLoading: isFetchingFeedPlaylists } = useGetFeedPlaylists();
     const { data: recentPlaylists, isLoading: isFetchingRecentPlaylists } = useGetRecentPlaylists();
     const [playlistCoverImageUrl, setPlaylistCoverImageUrl] = useState("");
@@ -40,11 +38,7 @@ const HomePage = () => {
             <TabsSection background={dominantColor || "#3C3C3C"} />
 
             {/* Recent Items */}
-            {
-                currentUser && (
-                    <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
-                )
-            }
+            <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
 
             {chunkedPlaylists.map((chunk, idx) => (
                 <div

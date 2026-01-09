@@ -31,8 +31,14 @@ const TrackCreditsDialog: React.FC<TrackCreditsDialogProps> = ({ track, onClose 
                             <p className="text-sm text-[#aaaaaa]">{formatDate(track?.createdAt || new Date)}</p>
                         </div>
                         <div>
-                            <p className="font-medium">Langauge</p>
-                            <p className="text-sm text-[#aaaaaa]">{track?.language}</p>
+                            <p className="font-medium">Language</p>
+                            <p className="text-sm text-[#aaaaaa]">
+                                {
+                                    track?.languages?.length
+                                        ? track.languages.join(", ")
+                                        : "Not specified"
+                                }
+                            </p>
                         </div>
                     </div>
                 </div>

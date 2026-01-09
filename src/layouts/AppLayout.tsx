@@ -49,9 +49,7 @@ export default function AppLayout() {
             view: "Default List",
         }
         let library = safeJSONParse(rawLibrary, fallbackLibrary);
-        console.log("is", library);
         const isValidLibrary = validateLibrary(library);
-        
 
         if (!isValidLibrary) {
             library = fallbackLibrary;
@@ -112,8 +110,10 @@ export default function AppLayout() {
         setOpenedFolder(openedFolder);
 
         /* Table Columns */
-        let tableView = localStorage.getItem(TABLE_VIEW_KEY) || "Compact List";
-        tableView = (tableView == "Compact List" && breakPoint != "sm") ? "Compact List" : "Default List";
+        const tableView =
+            localStorage.getItem(TABLE_VIEW_KEY) === "Compact List"
+                ? "Compact List"
+                : "Default List";
 
         const rawTableColumns = localStorage.getItem(TABLE_COLUMNS_CONFIG_KEY) || "{}";
         const fallbackTableColumns = {
@@ -121,7 +121,7 @@ export default function AppLayout() {
                 INDEX: { visible: true },
                 TITLE: { visible: true },
                 ARTIST: { visible: true },
-                DURATION: { visible: true },
+                DURATION: { visible: true }
             },
 
             playlistTableColumns: {

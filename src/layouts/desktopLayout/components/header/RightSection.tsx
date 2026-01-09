@@ -7,10 +7,11 @@ import { ExternalLinkIcon, PlusIcon } from "../../../../Svgs";
 import UploadPlaylistDialog from "../../../../components/UploadPlaylistDialog";
 import UploadAlbumDialog from "../../../../components/UploadAlbumDialog";
 import UserOptionsMenu from "./UserOptionsMenu";
+import { DEFAULT_USER_IMAGE_URL } from "../../../../constants";
 
 const RightSection = () => {
     /* ---------- Internal Hooks ---------- */
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     /* ---------- Local States ---------- */
     const [userMenuOptions, setUserMenuOptions] = useState<MenuOptions>([]);
@@ -81,7 +82,6 @@ const RightSection = () => {
                     hasTopBorder: true
                 },
             ])
-
         } else {
             setUserMenuOptions([
                 {
@@ -156,15 +156,10 @@ const RightSection = () => {
                                 } as React.CSSProperties}
                                 onClick={() => setIsUserMenuOpen(true)}
                             >
-                                {
-                                    currentUser?.avatarUrl ? (
-                                        <img src={currentUser?.avatarUrl} className="w-8 h-8 rounded-full" />
-                                    ) : (
-                                        <button className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-black font-bold text-sm cursor-pointer">
-                                            {currentUser?.displayName?.[0].toUpperCase()}
-                                        </button>
-                                    )
-                                }
+                                <img
+                                    src={currentUser?.avatarUrl || DEFAULT_USER_IMAGE_URL}
+                                    className="w-8 h-8 rounded-full"
+                                />
                             </div>
 
                             {/* User Menu Dropdown */}
