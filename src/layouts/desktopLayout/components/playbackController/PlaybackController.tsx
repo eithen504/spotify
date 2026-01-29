@@ -33,7 +33,7 @@ const PlaybackController = () => {
     const handlePlayPauseTrack = () => {
         setTrackDetails({ isPlaying: !trackDetails.isPlaying })
     }
-// make the button disable is loading 9818181737
+    // make the button disable is loading 9818181737
     const handlePlayNextTrack = () => {
         const hasNext = activeEntityQueueListNode?.next?.value || customQueue.head.next?.value;
 
@@ -189,12 +189,12 @@ const PlaybackController = () => {
         const audio = audioRef.current;
         if (!audio || !trackDetails._id) return;
 
-        if ((trackDetails.isPlaying)) {
-            audio.play();
-        } else if (!trackDetails.isPlaying) {
-            audio.pause();;
+        if (trackDetails.isPlaying) {
+            audio.play().catch(() => { });
+        } else {
+            audio.pause();
         }
-    }, [trackDetails]);
+    }, [trackDetails.isPlaying, trackDetails._id]);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -216,7 +216,7 @@ const PlaybackController = () => {
 
         const handleAudioEnd = () => {
             if (hasTrackInRepeat) {
-                setTrackDetails({ isPlaying: true })
+                setTrackDetails({ isPlaying: true });
                 return;
             }
             handlePlayNextTrack()
@@ -235,7 +235,7 @@ const PlaybackController = () => {
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.removeEventListener('ended', handleAudioEnd);
         };
-    }, [trackDetails]);
+    }, [trackDetails._id]);
 
     useEffect(() => {
         const audio = audioRef.current

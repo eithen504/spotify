@@ -393,7 +393,7 @@ const PlaylistPageSkeleton = () => {
 
             {/* Playlist Tracks */}
             <div className="px-1 md:px-6">
-                {[...Array(5)].map((_, index) => (
+                {[...Array(10)].map((_, index) => (
                     <div
                         key={index}
                         className="flex items-center text-sm py-2.5 px-3 md:px-4 animate-pulse"
@@ -516,7 +516,7 @@ const CollectionTracksPageSkeleton = () => {
 
             {/* Collection Tracks */}
             <div className="px-1 md:px-6">
-                {[...Array(5)].map((_, index) => (
+                {[...Array(10)].map((_, index) => (
                     <div
                         key={index}
                         className="flex items-center text-sm py-2.5 px-3 md:px-4 animate-pulse"

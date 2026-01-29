@@ -6,6 +6,7 @@ import { Toaster } from 'sonner'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+// login/logout library
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
