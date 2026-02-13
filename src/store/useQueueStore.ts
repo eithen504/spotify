@@ -84,28 +84,26 @@ export const useQueueStore = create<QueueStore>((set, get) => ({
         }
 
         // for custom queue
-        let current = customQueue.head.next;
+        let current = customQueue.head.next; // h -> 1 -> 2 -> t
         while (current != null) {
-            const temp = current.next;
+            const nextNode = current.next;
+            const prevNode = current.prev;
+
             if (current.value) {
-                console.log("newQueueMap", newQueueMap);
-                
-                console.log("current,vak", current.value._id);
-                
                 if (!newQueueMap[current.value._id]) {
                     newQueueMap = {
                         ...newQueueMap,
                         [current.value._id]: current
                     }
                 } else {
-                    customQueue.head.next = temp;
-                    temp!.prev = customQueue.head;
+                    prevNode!.next = nextNode;
+                    nextNode!.prev = prevNode;
 
                     current.next = null;
                     current.prev = null;
                 }
             }
-            current = temp;
+            current = nextNode;
         }
 
         set((state) => ({

@@ -16,7 +16,7 @@ interface EntityInfo {
 interface EntityInfoSectionProps {
     entity: EntityInfo;
     dominateColor: string;
-    onEditEntity?: () => void;
+    onEntityImageClick?: () => void;
 }
 
 const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
@@ -29,7 +29,7 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
         isOwnEntity
     },
     dominateColor,
-    onEditEntity
+    onEntityImageClick
 }) => {
     const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
@@ -38,7 +38,7 @@ const EntityInfoSection: React.FC<EntityInfoSectionProps> = ({
         <div style={{ background: dominateColor }}>
             <div className={`relative flex flex-col md:flex-row items-center gap-6 p-6 max-w-[90rem] mx-auto`}>
                 {/* Conditional :- Entity Cover Or Entity Cover Placeholder */}
-                <div onClick={onEditEntity}>
+                <div onClick={onEntityImageClick}>
                     {
                         imgUrl ? (
                             <div

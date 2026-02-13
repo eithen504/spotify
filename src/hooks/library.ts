@@ -1,13 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import type { LibraryTab } from "../types";
+import { useCheckAuth } from "./auth";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const useGetCurrentUserLibraryItems = (activeTab: LibraryTab) => {
+    const { data: currentUser } = useCheckAuth();
+
     if (activeTab == "Playlists") {
         return useQuery({
             queryKey: ["getCurrentUserPlaylists"],
             queryFn: async () => {
+                if (!currentUser) return [];
+
                 const res = await fetch(`${baseUrl}/api/v1/playlist/me`, {
                     method: "GET", // or POST, PUT, etc.
                     credentials: "include", // IMPORTANT: send cookies along
@@ -27,6 +32,8 @@ const useGetCurrentUserLibraryItems = (activeTab: LibraryTab) => {
         return useQuery({
             queryKey: ["getCurrentUserSavePlaylists"],
             queryFn: async () => {
+                if (!currentUser) return [];
+
                 const res = await fetch(`${baseUrl}/api/v1/savePlaylist`, {
                     method: "GET", // or POST, PUT, etc.
                     credentials: "include", // IMPORTANT: send cookies along
@@ -46,6 +53,8 @@ const useGetCurrentUserLibraryItems = (activeTab: LibraryTab) => {
         return useQuery({
             queryKey: ["getCurrentUserSaveAlbums"],
             queryFn: async () => {
+                if (!currentUser) return [];
+
                 const res = await fetch(`${baseUrl}/api/v1/saveAlbum`, {
                     method: "GET", // or POST, PUT, etc.
                     credentials: "include", // IMPORTANT: send cookies along
@@ -64,6 +73,8 @@ const useGetCurrentUserLibraryItems = (activeTab: LibraryTab) => {
     return useQuery({
         queryKey: ["getCurrentUserFolders"],
         queryFn: async () => {
+            if (!currentUser) return [];
+
             const res = await fetch(`${baseUrl}/api/v1/folder/me`, {
                 method: "GET", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along

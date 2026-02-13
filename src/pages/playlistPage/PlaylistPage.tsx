@@ -33,6 +33,7 @@ import { useAddItemToFolder, useUploadFolder } from "../../hooks/folder";
 import { useTableColumnVisibilityStore } from "../../store/useTableColumnVisibilityStore";
 import { PlaylistPageSkeleton } from "../../components/Skeletons";
 import { RECENT_PLAYLISTS_KEY } from "../../constants";
+import EntityImageDialog from "../../components/EntityImageDialog";
 
 /* ---------- Constants ---------- */
 const adminId = import.meta.env.VITE_ADMIN_ID;
@@ -58,6 +59,7 @@ const PlaylistPage = () => {
         track: null
     });
     const [isEditPlaylistDialogOpen, setIsEditPlaylistDialogOpen] = useState(false);
+    const [isPlaylistImageDialogOpen, setIsPlaylistImageDialogOpen] = useState(false);
     const [isPreviewPlaylistModalOpen, setIsPreviewPlaylistModalOpen] = useState(false);
     const [isAuthRequiredModalOpen, setIsAuthRequiredModalOpen] = useState(false);
     const [playlistTableColumnOptions, setPlaylistTableColumnOptions] = useState<MenuOptions>([])
@@ -80,7 +82,7 @@ const PlaylistPage = () => {
     const { getTrackLikeStatus } = useTrackLikeStatus();
     const { mutateAsync: uploadPlaylist } = useUploadPlaylist();
     const { mutateAsync: updatePlaylist, isPending } = useUpdatePlaylist();
-    const { mutateAsync: addItemsToPlaylist } = useAddItemsToPlaylist();
+    const { mutateAsync: addItemsToPlaylist, isPending: isAddingItemsToPlaylist } = useAddItemsToPlaylist();
     const { mutateAsync: savePlaylist } = useSavePlaylist();
     const { mutateAsync: uploadFolder } = useUploadFolder();
     const { mutateAsync: addItemToFolder } = useAddItemToFolder();
@@ -218,7 +220,7 @@ const PlaylistPage = () => {
                     ? playlists.map((playlist: Playlist) => ({
                         label: playlist.title,
                         action: () => {
-                            if (!currentMenuTrack) return;
+                            if (!currentMenuTrack || isAddingItemsToPlaylist) return;
 
                             addItemsToPlaylist({
                                 playlistId: playlist._id,
@@ -361,7 +363,7 @@ const PlaylistPage = () => {
                 setActiveEntityQueueListNode("Playlist", id || "", track._id);
             }
         }
-    } 
+    }
 
     const handleUpdatePlaylist = (payload: { title: string, coverImageUrl: string }) => {
         const { title, coverImageUrl } = payload;
@@ -370,9 +372,12 @@ const PlaylistPage = () => {
         updatePlaylist(payload);
     }
 
-    const onEditPlaylist = () => {
-        if (!isOwnPlaylist) return;
-        setIsEditPlaylistDialogOpen(true);
+    const onPlaylistImageClick = () => {
+        if (isOwnPlaylist) {
+            setIsEditPlaylistDialogOpen(true);
+        } else {
+            setIsPlaylistImageDialogOpen(true);
+        }
     }
 
     const handlers: Handlers = {
@@ -490,7 +495,7 @@ const PlaylistPage = () => {
                     }
                 }
                 dominateColor={dominantColor || "#3C3C3C"}
-                onEditEntity={onEditPlaylist}
+                onEntityImageClick={onPlaylistImageClick}
             />
 
             {
@@ -565,6 +570,14 @@ const PlaylistPage = () => {
                     }}
                     isPending={isPending}
                     handleUpdateEntity={handleUpdatePlaylist}
+                />
+            }
+
+            {
+                isPlaylistImageDialogOpen &&
+                <EntityImageDialog
+                    imageUrl={imgUrl}
+                    onClose={() => setIsPlaylistImageDialogOpen(false)}
                 />
             }
         </div>

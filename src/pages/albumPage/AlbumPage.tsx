@@ -312,7 +312,7 @@ const AlbumPage = () => {
         updateAlbum(payload);
     }
 
-    const onEditAlbum = () => {
+    const onAlbumImageClick = () => {
         if (isOwnAlbum) {
             setIsEditAlbumDialogOpen(true);
         } else {
@@ -417,7 +417,7 @@ const AlbumPage = () => {
                     }
                 }
                 dominateColor={dominantColor || "#3C3C3C"}
-                onEditEntity={onEditAlbum}
+                onEntityImageClick={onAlbumImageClick}
             />
 
             {
