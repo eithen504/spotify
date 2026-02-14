@@ -17,6 +17,8 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ leftPanelSize }) => {
     const { openedFolder } = useUIPreferencesStore();
     const { id: openedFolderId } = openedFolder;
 
+    console.log("log");
+    
     useEffect(() => {
         const sidebarEl = sidebarRef.current
         if (!sidebarEl) return

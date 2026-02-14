@@ -53,8 +53,12 @@ const UserOptionsSidePanel: React.FC<UserOptionsSidePanelProps> = ({ isOpen, opt
                     {/* Menu Options */}
                     <div className="flex-1 overflow-y-auto">
                         {
-                            options.map(({ label }) => (
-                                <button className="w-full text-left px-4 py-3 text-white hover:bg-[#282828] rounded transition">
+                            options.map(({ label, action }) => (
+                                <button
+                                    key={label}
+                                    className="w-full text-left px-4 py-3 text-white hover:bg-[#282828] rounded transition cursor-pointer"
+                                    onClick={action}
+                                >
                                     {label}
                                 </button>
                             ))

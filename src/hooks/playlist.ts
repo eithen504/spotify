@@ -21,7 +21,7 @@ const useGetPlaylistTracks = (id: string) => {
             });
 
             if (!res.ok) {
-                return null
+                return []
             }
             const data = await res.json()
 
@@ -40,7 +40,7 @@ const useGetFeedPlaylists = () => {
             });
 
             if (!res.ok) {
-                return null
+                return []
             }
             const data = await res.json()
 
@@ -64,17 +64,15 @@ const useGetRecentPlaylists = () => {
     return useQuery({
         queryKey: ["getRecentPlaylists"],
         queryFn: async () => {
-            if (!currentUser) {
-                return [];
-            }
-
+            if (!currentUser) return [];
+            
             const res = await fetch(`${baseUrl}/api/v1/playlist/recent?${params.toString()}`, {
                 method: "GET", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
             });
 
-            if (res.status != 200) {
-                return null
+            if (!res.ok) {
+                return []
             }
             const data = await res.json()
 
@@ -95,7 +93,7 @@ const useGetGenrePlaylists = (id: string) => {
             });
 
             if (!res.ok) {
-                return null
+                return []
             }
             const data = await res.json()
 

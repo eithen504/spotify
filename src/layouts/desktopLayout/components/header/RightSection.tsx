@@ -79,7 +79,7 @@ const RightSection = () => {
                 {
                     label: 'Log out',
                     action: () => { logoutUser() },
-                    hasTopBorder: true
+                    hasTopBorder: true 
                 },
             ])
         } else {

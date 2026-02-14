@@ -7,8 +7,10 @@ import PlaylistSectionItems from './components/PlaylistSectionItems';
 import RecentItems from './components/RecentItems';
 import TabsSection from './components/TabsSection';
 import { useDominantColor } from '../../hooks/color';
+import { useCheckAuth } from '../../hooks/auth';
 
 const HomePage = () => {
+    const { data: currentUser } = useCheckAuth();
     const { data: playlists, isLoading: isFetchingFeedPlaylists } = useGetFeedPlaylists();
     const { data: recentPlaylists, isLoading: isFetchingRecentPlaylists } = useGetRecentPlaylists();
     const [playlistCoverImageUrl, setPlaylistCoverImageUrl] = useState("");
@@ -38,20 +40,24 @@ const HomePage = () => {
             <TabsSection background={dominantColor || "#3C3C3C"} />
 
             {/* Recent Items */}
-            <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
+            {
+                currentUser && <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
+            }
 
-            {chunkedPlaylists.map((chunk, idx) => (
-                <div
-                    key={idx}
-                    className="pt-7 md:pt-10 relative max-w-[90rem] mx-auto"
-                >
-                    {/* PlaylistSection Header */}
-                    <PlaylistSectionHeader title="Good Morning" />
+            <div className={`${currentUser ? "pt-3" : "pt-16"} md:pt-0`}>
+                {chunkedPlaylists.map((chunk, idx) => (
+                    <div
+                        key={idx}
+                        className="pt-7 md:pt-10 relative max-w-[90rem] mx-auto"
+                    >
+                        {/* PlaylistSection Header */}
+                        <PlaylistSectionHeader title="Good Morning" />
 
-                    {/* PlaylistSection Items */}
-                    <PlaylistSectionItems playlists={chunk} />
-                </div>
-            ))}
+                        {/* PlaylistSection Items */}
+                        <PlaylistSectionItems playlists={chunk} />
+                    </div>
+                ))}
+            </div>
 
             <Footer />
         </div>

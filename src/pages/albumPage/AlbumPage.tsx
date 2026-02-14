@@ -309,7 +309,7 @@ const AlbumPage = () => {
         const { title, coverImageUrl } = payload;
         if (!title && !coverImageUrl) return toast.error("No Changes Detected!");
 
-        updateAlbum(payload);
+        updateAlbum(payload); 
     }
 
     const onAlbumImageClick = () => {

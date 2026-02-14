@@ -485,7 +485,7 @@ const PlaylistPage = () => {
             {/* Playlist Info Section */}
             <EntityInfoSection
                 entity={
-                    {
+                    { 
                         imgUrl,
                         displayType: "Public Playlist",
                         title: data.playlist.title,

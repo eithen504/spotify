@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { DEFAULT_USER_IMAGE_URL, HOMEPAGE_TABS } from '../../../constants'
 import { useScrollStore } from '../../../store/useScrollStore'
-import { useCheckAuth } from '../../../hooks/auth'
+import { useCheckAuth, useLogoutUser } from '../../../hooks/auth'
 import UserOptionsSidePanel from '../../../components/UserOptionsSidePanel'
 import type { MenuOptions } from '../../../types'
 import { ExternalLinkIcon, PlusIcon } from '../../../Svgs'
 import { useNavigate } from 'react-router-dom'
+import UploadTrackDialog from '../../../components/UploadTrackDialog'
+import UploadPlaylistDialog from '../../../components/UploadPlaylistDialog'
+import UploadAlbumDialog from '../../../components/UploadAlbumDialog'
 
 interface TabSectionProps {
     background: string
@@ -18,9 +21,14 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
     const [isUserSidePanelOpen, setIsUserSidePanelOpen] = useState(false);
     const [userSidePanelOptions, setUserSidePanelOptions] = useState<MenuOptions>([]);
 
+    const [isUploadTrackDialogOpen, setIsUploadTrackDialogOpen] = useState(false);
+    const [isUploadPlaylistDialogOpen, setIsUploadPlaylistDialogOpen] = useState(false);
+    const [isUploadAlbumDialogOpen, setIsUploadAlbumDialogOpen] = useState(false);
+
     const { scrollFromTop } = useScrollStore();
 
     const { data: currentUser } = useCheckAuth();
+    const { mutateAsync: logoutUser } = useLogoutUser();
 
     useEffect(() => {
         if (!currentUser) return;
@@ -43,24 +51,24 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Track',
                     action: () => {
-                        // setIsUploadTrackDialogOpen(true);
-                        // setIsUserMenuOpen(false);
+                        setIsUploadTrackDialogOpen(true);
+                        setIsUserSidePanelOpen(false);
                     }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Playlist',
                     action: () => {
-                        // setIsUploadPlaylistDialogOpen(true);
-                        // setIsUserMenuOpen(false);
+                        setIsUploadPlaylistDialogOpen(true);
+                        setIsUserSidePanelOpen(false);
                     }
                 },
                 {
                     icon: <PlusIcon width="16" height="16" />,
                     label: 'Upload Album',
                     action: () => {
-                        // setIsUploadAlbumDialogOpen(true);
-                        // setIsUserMenuOpen(false);
+                        setIsUploadAlbumDialogOpen(true);
+                        setIsUserSidePanelOpen(false);
                     }
                 },
                 {
@@ -69,11 +77,13 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
                 },
                 {
                     label: 'Log out',
-                    action: () => { },
+                    action: () => {
+                        logoutUser();
+                        setIsUserSidePanelOpen(false);
+                    },
                     hasTopBorder: true
                 },
             ])
-
         } else {
             setUserSidePanelOptions([
                 {
@@ -105,7 +115,10 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
                 },
                 {
                     label: 'Log out',
-                    action: () => { },
+                    action: () => {
+                        logoutUser();
+                        setIsUserSidePanelOpen(false);
+                    },
                     hasTopBorder: true
                 },
             ])
@@ -126,16 +139,20 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
 
                 {/* Tabs container - always fully opaque */}
                 <div className="relative flex items-center space-x-3 max-w-[90rem] mx-auto px-4 md:px-10 py-4">
-                    <div
-                        className="cursor-pointer flex-shrink-0 block md:hidden"
-                        onClick={() => setIsUserSidePanelOpen(true)}
-                    >
-                        <img
-                            src={currentUser?.avatarUrl || DEFAULT_USER_IMAGE_URL}
-                            alt="Liked Songs"
-                            className="w-8 h-8 rounded-full object-cover"
-                        />
-                    </div>
+                    {
+                        currentUser && (
+                            <div
+                                className="cursor-pointer flex-shrink-0 block md:hidden"
+                                onClick={() => setIsUserSidePanelOpen(true)}
+                            >
+                                <img
+                                    src={currentUser?.avatarUrl || DEFAULT_USER_IMAGE_URL}
+                                    alt="Liked Songs"
+                                    className="w-8 h-8 rounded-full object-cover"
+                                />
+                            </div>
+                        )
+                    }
 
                     {HOMEPAGE_TABS.map((tab) => (
                         <button
@@ -157,6 +174,18 @@ const TabsSection: React.FC<TabSectionProps> = ({ background }) => {
                 options={userSidePanelOptions}
                 onClose={() => setIsUserSidePanelOpen(false)}
             />
+
+            {
+                isUploadTrackDialogOpen && <UploadTrackDialog isOpen={isUploadTrackDialogOpen} onClose={() => setIsUploadTrackDialogOpen(false)} />
+            }
+
+            {
+                isUploadPlaylistDialogOpen && <UploadPlaylistDialog isOpen={isUploadPlaylistDialogOpen} onClose={() => setIsUploadPlaylistDialogOpen(false)} />
+            }
+
+            {
+                isUploadAlbumDialogOpen && <UploadAlbumDialog isOpen={isUploadAlbumDialogOpen} onClose={() => setIsUploadAlbumDialogOpen(false)} />
+            }
         </>
     )
 }

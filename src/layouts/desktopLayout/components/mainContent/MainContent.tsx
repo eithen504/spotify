@@ -19,7 +19,6 @@ const MainContent = () => {
     const [activeResizePanel, setActiveResizePanel] = useState<ResizePanel>(null);
     const [isResizing, setIsResizing] = useState<boolean>(false);
 
-
     /* ---------- Local References ---------- */
     const containerRef = useRef<HTMLDivElement>(null);
     const scrollSectionRef = useRef<HTMLDivElement>(null);
