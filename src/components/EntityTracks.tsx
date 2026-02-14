@@ -79,7 +79,7 @@ const EntityTracks: React.FC<EntityTracksProps> = ({
                 return (
                     <div
                         key={track._id}
-                        className="flex items-center text-sm py-2.5 px-3 md:px-4 dynamic-bg-hover transition rounded-none md:rounded-[5px] group"
+                        className={`${breakPoint != "sm" ? "dynamic-bg-hover" : "dynamic-scale-hover"} flex items-center text-sm py-2.5 px-3 md:px-4 transition rounded-none md:rounded-[5px] group`}
                         style={{
                             '--bgHoverColor': '#2A2A2A',
                         } as React.CSSProperties}

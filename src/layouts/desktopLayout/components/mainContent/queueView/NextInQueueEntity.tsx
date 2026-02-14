@@ -13,7 +13,7 @@ const NextInQueueEntity = () => {
     const { setPlaylistData } = usePlaylistStore();
     const { setAlbumData } = useAlbumStore();
 
-    /* ---------- Methods Or Functions ---------- */
+    /* ---------- Methods Or Functions ---------- */ 
     const handlePlayPause = (track: Track) => {
         const [activeEntityType, activeEntityId, activeTrackId] = activeEntityQueueListNode!.value!._id.split('-');
         const isActiveEntityQueueListNodeCustom = activeEntityId != queueEntityId;

@@ -38,7 +38,7 @@ const HomePage = () => {
 
             {/* Tabs Section */}
             <TabsSection background={dominantColor || "#3C3C3C"} />
-
+ 
             {/* Recent Items */}
             {
                 currentUser && <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
