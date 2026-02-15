@@ -36,7 +36,7 @@ const HomePageSkeleton = () => {
                 currentUser && (
                     <div className="pt-2 px-4 md:px-10 max-w-[90rem] mx-auto">
                         <div className={`grid grid-cols-2 ${leftPanelSize <= 28 ? "md:grid-cols-4" : "md:grid-cols-2"} gap-2`}>
-                            {Array.from({ length: 10 }).map((_, index) => (
+                            {[...Array(10)].map((_, index) => (
                                 <div
                                     key={index}
                                     className="relative bg-[#353535] backdrop-blur-sm rounded-[4px] overflow-hidden animate-pulse"
@@ -609,6 +609,84 @@ const CollectionTracksPageSkeleton = () => {
     )
 }
 
+const GenrePageSkeleton = () => {
+    const { leftSidebar, rightSidebar } = useUIPreferencesStore();
+    const { panelSize: leftPanelSize } = leftSidebar;
+    const { showNowPlayingView, showQueueView } = rightSidebar;
+    const { breakPoint } = useBreakPoint();
+
+    const getGridColsClass = () => {
+        if (breakPoint == "sm") return "grid-cols-3";
+
+        if (breakPoint == "md") {
+            if (leftPanelSize >= 7 && leftPanelSize <= 10) {
+                return "grid-cols-5";
+            } else if (leftPanelSize >= 32 && leftPanelSize <= 38) {
+                return "grid-cols-3";
+            } else {
+                return "grid-cols-4";
+            }
+        }
+
+        const isRightPanelHidden = !showNowPlayingView && !showQueueView;
+
+        if (leftPanelSize >= 7 && leftPanelSize <= 10) {
+            return (isRightPanelHidden || breakPoint == "md") ? "grid-cols-6" : "grid-cols-5";
+        }
+
+        if (leftPanelSize >= 32 && leftPanelSize <= 38) {
+            return (isRightPanelHidden || breakPoint == "md") ? "grid-cols-4" : "grid-cols-3";
+        }
+
+        return (isRightPanelHidden || breakPoint == "md") ? "grid-cols-5" : "grid-cols-4";
+    };
+
+    return (
+        <div className="relative text-white min-h-screen">
+
+            <div className="bg-[#353535]">
+                <div className="relative p-4 md:p-6 max-w-[90rem] mx-auto gap-4 flex flex-col animate-pulse">
+
+                    {/* Arrow Skeleton (mobile only) */}
+                    <div className="block md:hidden w-8 h-8 bg-[#4b4848] rounded" />
+
+                    {/* Title Skeleton */}
+                    <div
+                        className={`h-10 ${leftPanelSize < 25 ? "md:h-20 md:w-3/4" : "md:h-16 md:w-2/3"
+                            } w-1/2 bg-[#4b4848] rounded mt-18`}
+                    />
+                </div>
+            </div>
+
+            {/* ✅ Playlists Row */}
+            <div
+                className={`max-w-[90rem] mx-auto relative px-2 md:px-4 mt-7 md:mt-10 grid gap-y-6 md:gap-y-9 gap-x-2 ${getGridColsClass()}`}
+            >
+                {Array.from({ length: 8 }).map((_, index) => (
+                    <div
+                        key={index}
+                        className="rounded-[4px] p-3 transition relative w-full animate-pulse"
+                    >
+                        {/* Image Skeleton */}
+                        <div className="rounded-[4px] w-full aspect-square bg-[#353535]" />
+
+                        {/* Title Skeleton */}
+                        <div className="h-4 bg-[#353535] rounded mt-3 w-4/5" />
+
+                        {/* Subtitle Skeleton */}
+                        <div className="h-3 bg-[#353535] rounded mt-2 w-3/5" />
+
+                        {/* Play Button Skeleton */}
+                        <div className="absolute bottom-[80px] right-[20px] w-12 h-12 rounded-full bg-[#353535]" />
+                    </div>
+                ))}
+            </div>
+
+
+        </div>
+    )
+}
+
 function CompactListItemsSkeleton() {
     return (
         <div className="flex-1 px-3 mb-4">
@@ -729,6 +807,7 @@ export {
     TrackPageSkeleton,
     PlaylistPageSkeleton,
     CollectionTracksPageSkeleton,
+    GenrePageSkeleton,
     CompactListItemsSkeleton,
     DefaultListItemsSkeleton,
     CompactGridItemsSkeleton,
