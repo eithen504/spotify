@@ -23,7 +23,7 @@ const HomePage = () => {
         chunkedPlaylists.push(playlists?.slice(i, i + 8));
     }
 
-    if (true) return <HomePageSkeleton />;
+    if (isFetchingFeedPlaylists || isFetchingRecentPlaylists) return <HomePageSkeleton />;
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">

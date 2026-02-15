@@ -11,7 +11,7 @@ const LibraryItems = () => {
 
     const { isLoading } = useGetCurrentUserLibraryItems(libraryActiveTab);
 
-    if (true) {
+    if (isLoading) {
         if (leftPanelSize <= 10) {
             return <SmallScreenLibraryPanelSkelton />
         }
