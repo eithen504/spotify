@@ -100,7 +100,7 @@ const PlaylistPage = () => {
     const playlistUsername = adminId == data?.playlist?.userId ? "Spotify" : data?.playlist?.username;
     const playlistLength = `${data?.playlist?.tracks?.length} tracks`;
     const playlistDuration = formatTotalAsHMS(secondsArray || []);
-    const description = `${playlistUsername} . ${playlistLength} . ${playlistDuration} `
+    const description = `${playlistUsername} . ${playlistLength} . ${playlistDuration}`
 
     const { track: currentMenuTrack } = trackMenu;
     const hasLiked = getTrackLikeStatus({ hasLiked: currentMenuTrack?.hasLiked || false, trackId: currentMenuTrack?._id || "" });

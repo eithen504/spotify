@@ -30,11 +30,11 @@ const useGetPlaylistTracks = (id: string) => {
     })
 }
 
-const useGetFeedPlaylists = () => {
+const useGetFeedPlaylists = (page: number) => {
     return useQuery({
-        queryKey: ["getFeedPlaylists"],
+        queryKey: ["getFeedPlaylists", page],
         queryFn: async () => {
-            const res = await fetch(`${baseUrl}/api/v1/playlist/feed`, {
+            const res = await fetch(`${baseUrl}/api/v1/playlist/feed?page=${page}`, {
                 method: "GET", // or POST, PUT, etc.
                 credentials: "include", // IMPORTANT: send cookies along
             });

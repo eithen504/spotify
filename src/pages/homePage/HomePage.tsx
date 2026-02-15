@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
 import { HomePageSkeleton } from '../../components/Skeletons';
 import { useGetFeedPlaylists, useGetRecentPlaylists } from '../../hooks/playlist';
@@ -8,12 +8,16 @@ import RecentItems from './components/RecentItems';
 import TabsSection from './components/TabsSection';
 import { useDominantColor } from '../../hooks/color';
 import { useCheckAuth } from '../../hooks/auth';
+import { type Playlist } from '../../types';
 
 const HomePage = () => {
-    const { data: currentUser } = useCheckAuth();
-    const { data: playlists, isLoading: isFetchingFeedPlaylists } = useGetFeedPlaylists();
-    const { data: recentPlaylists, isLoading: isFetchingRecentPlaylists } = useGetRecentPlaylists();
+    const [page, setPage] = useState(1);
     const [playlistCoverImageUrl, setPlaylistCoverImageUrl] = useState("");
+    const [playlists, setPlaylists] = useState<Playlist[]>([]);
+
+    const { data: currentUser } = useCheckAuth();
+    const { data, isLoading: isFetchingFeedPlaylists } = useGetFeedPlaylists(page);
+    const { data: recentPlaylists, isLoading: isFetchingRecentPlaylists } = useGetRecentPlaylists();
 
     const { dominantColor } = useDominantColor(playlistCoverImageUrl);
 
@@ -23,7 +27,13 @@ const HomePage = () => {
         chunkedPlaylists.push(playlists?.slice(i, i + 8));
     }
 
-    if (isFetchingFeedPlaylists || isFetchingRecentPlaylists) return <HomePageSkeleton />;
+    useEffect(() => {
+        if (!Array.isArray(data)) return;
+
+        setPlaylists([...playlists, ...data]);
+    }, [data]);
+
+    if ((isFetchingFeedPlaylists || isFetchingRecentPlaylists) && page == 1) return <HomePageSkeleton />;
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -38,12 +48,12 @@ const HomePage = () => {
 
             {/* Tabs Section */}
             <TabsSection background={dominantColor || "#3C3C3C"} />
- 
+
             {/* Recent Items */}
             {
                 currentUser && <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
             }
- 
+
             <div className={`${currentUser ? "pt-3" : "pt-16"} md:pt-0`}>
                 {chunkedPlaylists.map((chunk, idx) => (
                     <div
@@ -57,6 +67,20 @@ const HomePage = () => {
                         <PlaylistSectionItems playlists={chunk} />
                     </div>
                 ))}
+            </div>
+
+            <div className="flex justify-center mt-8">
+                <button
+                    className="px-6 py-2 bg-[#353535] dynamic-bg-hover text-white rounded-full transition cursor-pointer"
+                    style={{
+                        '--bgHoverColor': '#4a4a4a',
+                    } as React.CSSProperties}
+                    onClick={() => setPage(page + 1)}
+                >
+                    {
+                        (isFetchingFeedPlaylists && page != 1) ? "Loading More...": "Load More"
+                    }
+                </button>
             </div>
 
             <Footer />

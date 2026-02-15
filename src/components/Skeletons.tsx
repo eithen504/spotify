@@ -25,7 +25,7 @@ const HomePageSkeleton = () => {
                     {[...Array(3)].map((_, index) => (
                         <button
                             key={index}
-                            className="cursor-pointer animate-pulse bg-[#353535] backdrop-blur-sm px-8 py-3 rounded-full"
+                            className="cursor-pointer animate-pulse bg-[#353535] backdrop-blur-sm px-8 py-3.5 rounded-full"
                         />
                     ))}
                 </div>
