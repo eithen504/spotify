@@ -23,7 +23,7 @@ const HomePage = () => {
         chunkedPlaylists.push(playlists?.slice(i, i + 8));
     }
 
-    if (isFetchingFeedPlaylists || isFetchingRecentPlaylists) return <HomePageSkeleton />;
+    if (true) return <HomePageSkeleton />;
 
     return (
         <div className="relative text-[#ffffff] min-h-screen">
@@ -43,7 +43,7 @@ const HomePage = () => {
             {
                 currentUser && <RecentItems playlists={recentPlaylists} setPlaylistCoverImageUrl={setPlaylistCoverImageUrl} />
             }
-
+ 
             <div className={`${currentUser ? "pt-3" : "pt-16"} md:pt-0`}>
                 {chunkedPlaylists.map((chunk, idx) => (
                     <div

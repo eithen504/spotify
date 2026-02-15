@@ -1,84 +1,104 @@
+import { useCheckAuth } from "../hooks/auth";
 import { useBreakPoint } from "../hooks/breakPoint";
 import { useTableColumnVisibilityStore } from "../store/useTableColumnVisibilityStore";
 import { useUIPreferencesStore } from "../store/useUIPreferenceStore";
 
 const HomePageSkeleton = () => {
+    const { data: currentUser } = useCheckAuth();
     const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
 
     return (
-        <div className="relative text-white min-h-screen">
-            {/* Content */}
-            <div className="text-white flex flex-col pt-0 relative z-10 max-w-[90rem] mx-auto">
-                <div className="pb-10 px-4 md:px-10 mt-6">
-                    <div className={`grid grid-cols-2 ${leftPanelSize >= 32 ? "md:grid md:grid-cols-2" : "md:grid md:grid-cols-4"} gap-2`}>
-                        {/* Skeleton for Liked Tracks item */}
-                        <div className="relative bg-[#272727] rounded-[4px] overflow-hidden">
-                            <div className="flex items-center animate-pulse">
-                                <div className="w-12 h-12 bg-[#353535] flex-shrink-0"></div>
-                                <div className="p-2 flex-1 min-w-0">
-                                    <div className="h-4 bg-[#353535] rounded w-3/4"></div>
-                                </div>
+        <div className="relative text-[#ffffff] min-h-screen">
+            {/* Tabs Section */}
+            <div className="top-0 left-0 w-full z-50">
+                {/* Tabs container - always fully opaque */}
+                <div className="relative flex items-center space-x-3 max-w-[90rem] mx-auto px-4 md:px-10 py-4">
+                    {
+                        currentUser && (
+                            <div className="flex-shrink-0 block md:hidden animate-pulse">
+                                <div className="w-8 h-8 rounded-full bg-[#353535]" />
                             </div>
-                        </div>
+                        )
+                    }
 
-                        {/* Skeleton for 7 more playlist items */}
-                        {[...Array(7)].map((_, i) => (
-                            <div key={i} className="relative bg-[#272727] rounded-[4px] overflow-hidden">
-                                <div className="flex items-center animate-pulse">
-                                    <div className="w-12 h-12 bg-[#353535] flex-shrink-0"></div>
-                                    <div className="p-2 flex-1 min-w-0">
-                                        <div className="h-4 bg-[#353535] rounded w-3/4"></div>
+                    {[...Array(3)].map((_, index) => (
+                        <button
+                            key={index}
+                            className="cursor-pointer animate-pulse bg-[#353535] backdrop-blur-sm px-8 py-3 rounded-full"
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Recent Items */}
+            {
+                currentUser && (
+                    <div className="pt-2 px-4 md:px-10 max-w-[90rem] mx-auto">
+                        <div className={`grid grid-cols-2 ${leftPanelSize <= 28 ? "md:grid-cols-4" : "md:grid-cols-2"} gap-2`}>
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <div
+                                    key={index}
+                                    className="relative bg-[#353535] backdrop-blur-sm rounded-[4px] overflow-hidden animate-pulse"
+                                >
+                                    <div className="flex items-center">
+
+                                        {/* Image Skeleton */}
+                                        <div className="w-12 h-12 bg-[#4b4848] flex-shrink-0" />
+
+                                        {/* Title Skeleton */}
+                                        <div className="p-2 flex-1">
+                                            <div className="h-4 bg-[#4b4848] rounded w-3/4" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+
+                        </div>
                     </div>
-                </div>
+                )
+            }
 
-                {[...Array(3)].map((_, sectionIndex) => (
+            <div className="pt-3 md:pt-0">
+                {[...Array(3)].map((_, index) => (
                     <div
-                        key={sectionIndex}
-                        className="pb-7 md:pb-10 relative mt-7 md:mt-0"
+                        key={index}
+                        className="pt-7 md:pt-10 relative max-w-[90rem] mx-auto"
                     >
-                        <div
-                            className={`${true ? "px-4 md:px-10" : "px-4 md:px-6"
-                                } flex justify-between items-center pb-2`}
-                        >
-                            {/* Title skeleton */}
-                            <div className="h-6 w-32 bg-[#272727] rounded animate-pulse"></div>
+                        {/* PlaylistSection Header */}
+                        <div className="px-4 md:px-10 flex justify-between items-center pb-2 animate-pulse">
+                            {/* Title Skeleton */}
+                            <div className="h-6 w-40 bg-[#353535] rounded" />
 
-                            {/* Show all button skeleton */}
-                            <div className="h-5 w-16 bg-[#272727] rounded animate-pulse"></div>
+                            {/* Show All Skeleton */}
+                            <div className="h-4 w-20 bg-[#353535] rounded" />
                         </div>
 
                         {/* PlaylistSection Items */}
                         <div className="relative">
-                            {/* Playlist items container */}
-                            <div
-                                className={`flex overflow-x-auto hide-scrollbar ${true ? "px-1 md:px-7" : "px-1 md:px-3"
-                                    }`}
-                            >
-                                {/* Skeleton playlist items (8 items) */}
-                                {[...Array(8)].map((_, index) => (
-                                    <div key={index} className="p-3 flex-none w-44">
-                                        <div className="animate-pulse">
-                                            {/* Cover image skeleton */}
-                                            <div className="bg-[#272727] w-full aspect-square rounded-sm"></div>
+                            <div className="flex overflow-x-auto hide-scrollbar px-1 md:px-7">
 
-                                            {/* Title skeleton */}
-                                            <div className="h-5 bg-[#272727] rounded mt-2 w-3/4"></div>
+                                {Array.from({ length: 10 }).map((_, index) => (
+                                    <div
+                                        key={index}
+                                        className="group rounded-sm p-3 flex-none w-44 animate-pulse"
+                                    >
+                                        {/* Image Skeleton */}
+                                        <div className="w-full aspect-square rounded-[4px] bg-[#353535]" />
 
-                                            {/* Metadata skeleton */}
-                                            <div className="h-4 bg-[#272727] rounded mt-1 w-1/2"></div>
-                                        </div>
+                                        {/* Title Skeleton */}
+                                        <div className="h-4 bg-[#353535] rounded mt-3 w-4/5" />
+
+                                        {/* Subtitle Skeleton */}
+                                        <div className="h-3 bg-[#353535] rounded mt-2 w-3/5" />
                                     </div>
                                 ))}
+
                             </div>
                         </div>
+
                     </div>
                 ))}
-
             </div>
         </div>
     )
@@ -100,14 +120,14 @@ const AlbumPageSkeleton = () => {
                         : leftPanelSize >= 32 && leftPanelSize <= 38
                             ? "md:w-35 md:h-35"
                             : "md:w-40 md:h-40"
-                        } bg-[#272727] animate-pulse rounded-[4px] shrink-0`}
+                        } bg-[#353535] animate-pulse rounded-[4px] shrink-0`}
                 />
 
                 {/* Album Info */}
                 <div className="min-w-0 w-full space-y-2">
-                    <div className="h-4 bg-[#272727] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-8 bg-[#272727] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-4 bg-[#272727] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-8 bg-[#353535] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
                 </div>
             </div>
 
@@ -117,38 +137,38 @@ const AlbumPageSkeleton = () => {
             >
                 {/* Play */}
                 <div
-                    className="p-[28px] hidden md:block rounded-full bg-[#272727] animate-pulse"
+                    className="p-[28px] hidden md:block rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Preview */}
                 <div
                     className={`${leftPanelSize <= 28 ? "w-[38px] h-[48px]" : "w-[36px] h-[46px]"
-                        } flex-shrink-none relative rounded-md group bg-[#272727] animate-pulse `}
+                        } flex-shrink-none relative rounded-md group bg-[#353535] animate-pulse `}
                 />
 
                 {/* Save */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Share */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* More */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* View */}
                 <div
-                    className="relative ml-auto items-center p-[13.5px] hidden md:flex rounded-full bg-[#272727] animate-pulse"
+                    className="relative ml-auto items-center p-[13.5px] hidden md:flex rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Play Small Screen */}
                 <div
-                    className="p-[28px] block md:hidden rounded-full bg-[#272727] animate-pulse ml-auto"
+                    className="p-[28px] block md:hidden rounded-full bg-[#353535] animate-pulse ml-auto"
                 />
             </div>
 
@@ -160,20 +180,20 @@ const AlbumPageSkeleton = () => {
                         className="flex items-center text-sm py-2.5 px-3 md:px-4 animate-pulse"
                     >
                         {/* Index */}
-                        <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
+                        <div className="w-6 h-6 rounded-full text-white/40 bg-[#353535] hidden md:block" />
 
                         {/* Title with Image */}
                         <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
                             {/* Track Title And Artist */}
                             <div className="min-w-0 space-y-1">
                                 {/* Track Title */}
-                                <div className="h-4 w-40 bg-[#272727] rounded-md" />
+                                <div className="h-4 w-40 bg-[#353535] rounded-md" />
 
                                 {
                                     tableView != "Compact List" && (
                                         <>
                                             {/* Track Artist */}
-                                            <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                            <div className="h-3 w-24 bg-[#353535] rounded-md" />
                                         </>
                                     )
                                 }
@@ -188,7 +208,7 @@ const AlbumPageSkeleton = () => {
                                         className={`flex-1 truncate ml-35 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"
                                             }`}
                                     >
-                                        <div className="h-3 w-20 bg-[#272727] rounded-md" />
+                                        <div className="h-3 w-20 bg-[#353535] rounded-md" />
                                     </div>
                                 </>
                             )
@@ -197,18 +217,18 @@ const AlbumPageSkeleton = () => {
                         {/* Like, Duration And More */}
                         <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
                             {/* Like */}
-                            <div className="w-4 h-4 bg-[#272727] rounded-full" />
+                            <div className="w-4 h-4 bg-[#353535] rounded-full" />
 
                             {/* Duration */}
-                            <div className="h-3 w-10 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-10 bg-[#353535] rounded-md" />
 
                             {/* More */}
-                            <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                            <div className="w-5 h-5 bg-[#353535] rounded-full" />
                         </div>
 
                         {/* More Icon For Small Screen */}
                         <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
-                            <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                            <div className="w-5 h-5 bg-[#353535] rounded-full" />
                         </div>
                     </div>
                 ))}
@@ -232,14 +252,14 @@ const TrackPageSkeleton = () => {
                         : leftPanelSize >= 32 && leftPanelSize <= 38
                             ? "md:w-35 md:h-35"
                             : "md:w-40 md:h-40"
-                        } bg-[#272727] animate-pulse rounded-[4px] shrink-0`}
+                        } bg-[#353535] animate-pulse rounded-[4px] shrink-0`}
                 />
 
                 {/* Track Info */}
                 <div className="min-w-0 w-full space-y-2">
-                    <div className="h-4 bg-[#272727] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-8 bg-[#272727] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-4 bg-[#272727] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-8 bg-[#353535] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
                 </div>
             </div>
 
@@ -249,35 +269,35 @@ const TrackPageSkeleton = () => {
             >
                 {/* Play */}
                 <div
-                    className="p-[28px] hidden md:block rounded-full bg-[#272727] animate-pulse"
+                    className="p-[28px] hidden md:block rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Save */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Share */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* More */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Play Small Screen */}
                 <div
-                    className="p-[28px] block md:hidden rounded-full bg-[#272727] animate-pulse ml-auto"
+                    className="p-[28px] block md:hidden rounded-full bg-[#353535] animate-pulse ml-auto"
                 />
             </div>
 
             <div className="relative max-w-[90rem] mx-auto">
                 {/* Recommended section */}
                 <div className="mb-4 px-4 md:px-6 mt-4 space-y-2">
-                    <div className="h-5 w-32 bg-[#272727] rounded-md animate-pulse" />
-                    <div className="h-3 w-40 bg-[#272727] rounded-md animate-pulse" />
+                    <div className="h-5 w-32 bg-[#353535] rounded-md animate-pulse" />
+                    <div className="h-3 w-40 bg-[#353535] rounded-md animate-pulse" />
                 </div>
 
 
@@ -289,30 +309,30 @@ const TrackPageSkeleton = () => {
                             className="flex items-center text-sm py-2.5 px-3 md:px-4 animate-pulse"
                         >
                             {/* Index */}
-                            <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
+                            <div className="w-6 h-6 rounded-full text-white/40 bg-[#353535] hidden md:block" />
 
                             {/* Cover and Titles */}
                             <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
                                 {/* Skeleton image */}
-                                <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                                <div className="bg-[#353535] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
                                 <div className="min-w-0 space-y-1">
                                     {/* Title skeleton */}
-                                    <div className="h-4 w-40 bg-[#272727] rounded-md" />
+                                    <div className="h-4 w-40 bg-[#353535] rounded-md" />
                                     {/* Artist skeleton */}
-                                    <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                    <div className="h-3 w-24 bg-[#353535] rounded-md" />
                                 </div>
                             </div>
 
                             {/* Action buttons + duration (desktop) */}
                             <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
-                                <div className="w-4 h-4 bg-[#272727] rounded-full" />
-                                <div className="h-3 w-10 bg-[#272727] rounded-md" />
-                                <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                                <div className="w-4 h-4 bg-[#353535] rounded-full" />
+                                <div className="h-3 w-10 bg-[#353535] rounded-md" />
+                                <div className="w-5 h-5 bg-[#353535] rounded-full" />
                             </div>
 
                             {/* More button (mobile) */}
                             <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
-                                <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                                <div className="w-5 h-5 bg-[#353535] rounded-full" />
                             </div>
                         </div>
                     ))}
@@ -338,14 +358,14 @@ const PlaylistPageSkeleton = () => {
                         : leftPanelSize >= 32 && leftPanelSize <= 38
                             ? "md:w-35 md:h-35"
                             : "md:w-40 md:h-40"
-                        } bg-[#272727] animate-pulse rounded-[4px] shrink-0`}
+                        } bg-[#353535] animate-pulse rounded-[4px] shrink-0`}
                 />
 
                 {/* playlist Info */}
                 <div className="min-w-0 w-full space-y-2">
-                    <div className="h-4 bg-[#272727] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-8 bg-[#272727] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-4 bg-[#272727] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-8 bg-[#353535] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
                 </div>
             </div>
 
@@ -355,38 +375,38 @@ const PlaylistPageSkeleton = () => {
             >
                 {/* Play */}
                 <div
-                    className="p-[28px] hidden md:block rounded-full bg-[#272727] animate-pulse"
+                    className="p-[28px] hidden md:block rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Preview */}
                 <div
                     className={`${leftPanelSize <= 28 ? "w-[38px] h-[48px]" : "w-[36px] h-[46px]"
-                        } flex-shrink-none relative rounded-md group bg-[#272727] animate-pulse `}
+                        } flex-shrink-none relative rounded-md group bg-[#353535] animate-pulse `}
                 />
 
                 {/* Save */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Share */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* More */}
                 <div
-                    className="p-[13.5px] rounded-full bg-[#272727] animate-pulse"
+                    className="p-[13.5px] rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* View */}
                 <div
-                    className="relative ml-auto items-center p-[13.5px] hidden md:flex rounded-full bg-[#272727] animate-pulse"
+                    className="relative ml-auto items-center p-[13.5px] hidden md:flex rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Play Small Screen */}
                 <div
-                    className="p-[28px] block md:hidden rounded-full bg-[#272727] animate-pulse ml-auto"
+                    className="p-[28px] block md:hidden rounded-full bg-[#353535] animate-pulse ml-auto"
                 />
             </div>
 
@@ -398,7 +418,7 @@ const PlaylistPageSkeleton = () => {
                         className="flex items-center text-sm py-2.5 px-3 md:px-4 animate-pulse"
                     >
                         {/* Index */}
-                        <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
+                        <div className="w-6 h-6 rounded-full text-white/40 bg-[#353535] hidden md:block" />
 
                         {/* Title with Image */}
                         <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
@@ -406,7 +426,7 @@ const PlaylistPageSkeleton = () => {
                                 tableView != "Compact List" && (
                                     <>
                                         {/* Track Image */}
-                                        <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                                        <div className="bg-[#353535] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
                                     </>
                                 )
                             }
@@ -414,13 +434,13 @@ const PlaylistPageSkeleton = () => {
                             {/* Track Title And Artist */}
                             <div className="min-w-0 space-y-1">
                                 {/* Track Title */}
-                                <div className="h-4 w-40 bg-[#272727] rounded-md" />
+                                <div className="h-4 w-40 bg-[#353535] rounded-md" />
 
                                 {
                                     tableView != "Compact List" && (
                                         <>
                                             {/* Track Artist */}
-                                            <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                            <div className="h-3 w-24 bg-[#353535] rounded-md" />
                                         </>
                                     )
                                 }
@@ -432,7 +452,7 @@ const PlaylistPageSkeleton = () => {
                             className={`flex-1 truncate ml-35 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
                         >
-                            <div className="h-3 w-20 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-20 bg-[#353535] rounded-md" />
                         </div>
 
                         {/* Date Added */}
@@ -440,24 +460,24 @@ const PlaylistPageSkeleton = () => {
                             className={`w-32 ml-5 ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
                         >
-                            <div className="h-3 w-20 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-20 bg-[#353535] rounded-md" />
                         </div>
 
                         {/* Like, Duration And More */}
                         <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
                             {/* Like */}
-                            <div className="w-4 h-4 bg-[#272727] rounded-full" />
+                            <div className="w-4 h-4 bg-[#353535] rounded-full" />
 
                             {/* Duration */}
-                            <div className="h-3 w-10 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-10 bg-[#353535] rounded-md" />
 
                             {/* More */}
-                            <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                            <div className="w-5 h-5 bg-[#353535] rounded-full" />
                         </div>
 
                         {/* More Icon For Small Screen */}
                         <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
-                            <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                            <div className="w-5 h-5 bg-[#353535] rounded-full" />
                         </div>
                     </div>
                 ))}
@@ -469,7 +489,7 @@ const PlaylistPageSkeleton = () => {
 const CollectionTracksPageSkeleton = () => {
     const { leftSidebar } = useUIPreferencesStore();
     const { panelSize: leftPanelSize } = leftSidebar;
-    const {tableView} = useTableColumnVisibilityStore();
+    const { tableView } = useTableColumnVisibilityStore();
 
     return (
         <div className="relative text-[#ffffff] min-h-screen max-w-[90rem] mx-auto">
@@ -482,14 +502,14 @@ const CollectionTracksPageSkeleton = () => {
                         : leftPanelSize >= 32 && leftPanelSize <= 38
                             ? "md:w-35 md:h-35"
                             : "md:w-40 md:h-40"
-                        } bg-[#272727] animate-pulse rounded-[4px] shrink-0`}
+                        } bg-[#353535] animate-pulse rounded-[4px] shrink-0`}
                 />
 
                 {/* Collection Info */}
                 <div className="min-w-0 w-full space-y-2">
-                    <div className="h-4 bg-[#272727] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-8 bg-[#272727] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
-                    <div className="h-4 bg-[#272727] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/6 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-8 bg-[#353535] rounded-md w-3/4 animate-pulse mx-auto md:mx-0" />
+                    <div className="h-4 bg-[#353535] rounded-md w-1/3 animate-pulse mx-auto md:mx-0" />
                 </div>
             </div>
 
@@ -499,17 +519,17 @@ const CollectionTracksPageSkeleton = () => {
             >
                 {/* Play */}
                 <div
-                    className="p-[28px] hidden md:block rounded-full bg-[#272727] animate-pulse"
+                    className="p-[28px] hidden md:block rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* View */}
                 <div
-                    className="relative ml-auto items-center p-[13.5px] hidden md:flex rounded-full bg-[#272727] animate-pulse"
+                    className="relative ml-auto items-center p-[13.5px] hidden md:flex rounded-full bg-[#353535] animate-pulse"
                 />
 
                 {/* Play Small Screen */}
                 <div
-                    className="p-[28px] block md:hidden rounded-full bg-[#272727] animate-pulse ml-auto"
+                    className="p-[28px] block md:hidden rounded-full bg-[#353535] animate-pulse ml-auto"
                 />
             </div>
 
@@ -521,7 +541,7 @@ const CollectionTracksPageSkeleton = () => {
                         className="flex items-center text-sm py-2.5 px-3 md:px-4 animate-pulse"
                     >
                         {/* Index */}
-                        <div className="w-6 h-6 rounded-full text-white/40 bg-[#272727] hidden md:block" />
+                        <div className="w-6 h-6 rounded-full text-white/40 bg-[#353535] hidden md:block" />
 
                         {/* Title with Image */}
                         <div className="flex-1 min-w-0 flex items-center gap-3 ml-2">
@@ -529,7 +549,7 @@ const CollectionTracksPageSkeleton = () => {
                                 tableView != "Compact List" && (
                                     <>
                                         {/* Track Image */}
-                                        <div className="bg-[#272727] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
+                                        <div className="bg-[#353535] w-[50px] h-[50px] md:w-[42px] md:h-[42px] rounded-[4px] flex-shrink-0" />
                                     </>
                                 )
                             }
@@ -537,13 +557,13 @@ const CollectionTracksPageSkeleton = () => {
                             {/* Track Title And Artist */}
                             <div className="min-w-0 space-y-1">
                                 {/* Track Title */}
-                                <div className="h-4 w-40 bg-[#272727] rounded-md" />
+                                <div className="h-4 w-40 bg-[#353535] rounded-md" />
 
                                 {
                                     tableView != "Compact List" && (
                                         <>
                                             {/* Track Artist */}
-                                            <div className="h-3 w-24 bg-[#272727] rounded-md" />
+                                            <div className="h-3 w-24 bg-[#353535] rounded-md" />
                                         </>
                                     )
                                 }
@@ -555,7 +575,7 @@ const CollectionTracksPageSkeleton = () => {
                             className={`flex-1 truncate ml-35 text-sm ${leftPanelSize <= 28 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
                         >
-                            <div className="h-3 w-20 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-20 bg-[#353535] rounded-md" />
                         </div>
 
                         {/* Date Added */}
@@ -563,24 +583,24 @@ const CollectionTracksPageSkeleton = () => {
                             className={`w-32 ml-5 ${leftPanelSize <= 25 ? "hidden md:block" : "hidden md:hidden"
                                 }`}
                         >
-                            <div className="h-3 w-20 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-20 bg-[#353535] rounded-md" />
                         </div>
 
                         {/* Like, Duration And More */}
                         <div className="w-23 text-right justify-end items-center gap-2 hidden md:flex">
                             {/* Like */}
-                            <div className="w-4 h-4 bg-[#272727] rounded-full" />
+                            <div className="w-4 h-4 bg-[#353535] rounded-full" />
 
                             {/* Duration */}
-                            <div className="h-3 w-10 bg-[#272727] rounded-md" />
+                            <div className="h-3 w-10 bg-[#353535] rounded-md" />
 
                             {/* More */}
-                            <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                            <div className="w-5 h-5 bg-[#353535] rounded-full" />
                         </div>
 
                         {/* More Icon For Small Screen */}
                         <div className="w-16 text-right text-white/70 justify-end items-center gap-1 flex md:hidden">
-                            <div className="w-5 h-5 bg-[#272727] rounded-full" />
+                            <div className="w-5 h-5 bg-[#353535] rounded-full" />
                         </div>
                     </div>
                 ))}
